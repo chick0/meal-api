@@ -8,4 +8,4 @@ if not path.exists("conf"):
 conf = ConfigParser()
 for conf_file in listdir(path.join("conf")):
     if conf_file.endswith(".ini"):
-        conf.read(path.join("conf", conf_file))
+        conf.read(path.join("conf", conf_file), "utf-8")
