@@ -11,7 +11,7 @@ import app
 
 
 # # # # # # # # # # # # # # #
-PORT = 5555
+PORT = 1365
 LOG_PATH = path.join("log")
 # # # # # # # # # # # # # # #
 if __name__ == "__main__":
