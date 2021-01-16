@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+{% block content %}
+        <section class="lf">
+            <h2>사용자용 도구 모음</h2>
+            <ul>
+                <li><button class="btn" id="tool_star">즐겨찾기 도구</button></li>
+            </ul>
+        </section>
+
+        <section class="lf">
+            <h2>관리자용 관리 패널</h2>
+            <ul>
+                <li><button class="btn" id="manage_cache">캐시 관리 패널</button></li>
+                <li><button class="btn" id="manage_poem">시 관리 패널</button></li>
+            </ul>
+        </section>
+
+        <section class="menu">
+            <button class="btn" id="root">학교 검색하러 가기</button>
+        </section>
+{% endblock %}
+{% block script %}
+        <script type="text/javascript">
+            btn("#tool_star", "{{ url_for('app.tool') }}");
+
+            btn("#manage_cache", "{{ url_for('cache.status') }}");
+            btn("#manage_poem", "{{ url_for('read_manage.index') }}");
+        </script>
+{% endblock %}

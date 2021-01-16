@@ -1,0 +1,62 @@
+{% extends 'layout.html' %}
+{% block content %}
+        <section class="nav">
+            <a class="btn" href="mailto:{{ g.email }}">문의하기</a>
+            <a class="btn ie" href="https://www.notion.so/e193f37b9d6a40a19cc8919756af48ae" target="_blank" rel="noreferrer">도움말</a>
+        </section>
+
+        <section class="message-box l">
+            <span class="s" style="padding-bottom: 3px;border-bottom: 0.7px solid #BCBCBC;">{{ day }}</span>
+            <p><span class="high">급식</span> 정보가 없습니다</p><br>
+        </section>
+
+        <section class="menu">
+            <div class="no-script">
+                <button class="btn" id="yesterday">← 어제 급식</button>
+                <button class="btn" id="tomorrow">내일 급식 →</button>
+            </div>
+            <noscript>
+                <a class="btn" href="{{ url_for('meal.show_custom_date', edu_code=edu_code, school_code=school_code, date=yesterday) }}">← 어제 급식</a>
+                <a class="btn" href="{{ url_for('meal.show_custom_date', edu_code=edu_code, school_code=school_code, date=tomorrow) }}">내일 급식 →</a>
+            </noscript>
+        </section>
+
+        <section class="nav-right-bottom">
+            <div class="no-script">
+            {% if not_today is true %}
+                <p class="ie" style="margin:0;margin-bottom:4px;"><button class="btn" data-micromodal-trigger="not_today">저기요?</button></p>
+            {% endif %}
+                <button class="btn" id="root">학교 검색하러 가기</button>
+            </div>
+            <noscript>
+                <a class="btn" href="{{ url_for('index.index') }}">학교 검색하러 가기</a>
+            </noscript>
+        </section>
+{% endblock %}
+{% block modal %}
+    {% if not_today is true %}
+        <section class="modal" id="not_today">
+            <div class="overlay" tabindex="-1" data-micromodal-close>
+                <div class="display">
+                    <p>지금 보고 있는 메뉴는 오늘의 급식이 아니네요...</p>
+                    <p>오늘의 메뉴를 확인하러 갈까요?</p><hr>
+                    <p style="text-align: center;">
+                        <button class="btn" id="today" style="width:45%;">그럼요</button>
+                        <button class="btn" style="width:45%;" data-micromodal-close>아니요</button>
+                    </p>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+{% endblock %}
+{% block script %}
+        <script src="{{ url_for('static', filename='js/meal.js') }}"></script>
+        <script type="text/javascript">
+            meal("{{ edu_code }}", "{{ school_code }}", "{{ yesterday }}", "{{ tomorrow }}");
+        </script>
+
+    {% if not_today is true and request.user_agent.browser != "msie" %}
+        <script src="{{ url_for('static', filename='js/micromodal.min.js') }}"></script>
+        <script type="text/javascript">MicroModal.init({disableFocus:true});</script>
+    {% endif %}
+{% endblock %}

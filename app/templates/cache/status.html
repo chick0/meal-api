@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+{% block content %}
+        <section class="lf">
+            <h2>캐시 정보</h2>
+            <p>- 총 <b class="high">{{ count }}</b>개의 급식이 데이터베이스에 캐싱 됨</p>
+            <hr>
+            <ul>
+            {% for cache in caches %}
+                <li><a class="high" href="{{ url_for('cache.get', idx=cache.idx) }}">{{ cache.idx }}</a></li>
+            {% endfor %}
+            </ul>
+        </section>
+
+        <section class="menu">
+            <button class="btn" id="root">학교 검색하러 가기</button>
+        </section>
+{% endblock %}

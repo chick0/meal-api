@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+{% block content %}
+        <section class="lf">
+            <h2>'{{ title }}'의 급식 정보</h2>
+            {% for meal in result: %}
+            <hr>
+            <table id="meal_{{ meal['MMEAL_SC_CODE'] }}">
+                <tr>
+                    <th>정보</th>
+                    <td>{{ day }} / {{ meal['MMEAL_SC_NM'] }}</td>
+                </tr>
+                <tr>
+                    <th>칼로리</th>
+                    <td><span class="high">{{ meal['CAL_INFO'] }}</span></td>
+                </tr>
+                <tr>
+                    <th class="copy" data-clipboard-target="#menu_{{ meal['MMEAL_SC_CODE'] }}">
+                        메뉴<br class="no-script">
+                        <span class="s high no-script">복사하기</span>
+                    </th>
+                    <td>
+                        <ul id="menu_{{ meal['MMEAL_SC_CODE'] }}">
+                        {% for menu in meal['DDISH_NM'].split("<br/>") %}
+                            <li>{{ menu }}</li>
+                        {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+        {% endfor %}
+        </section>
+
+        <section class="menu">
+            <a class="btn" href="{{ url_for('cache.status') }}" style="width:30%;">뒤로가기</a>
+        </section>
+{% endblock %}
+{% block script %}
+        <script src="{{ url_for('static', filename='js/clipboard.min.js') }}"></script>
+        <script type="text/javascript">
+            new ClipboardJS(".copy").on("success",function(){window.alert("복사되었습니다!"),window.getSelection().removeAllRanges();});
+        </script>
+{% endblock %}

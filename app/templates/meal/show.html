@@ -1,0 +1,158 @@
+{% extends 'layout.html' %}
+{% block content %}
+        <section class="lf">
+            <h2>'{{ title }}'의 급식 정보</h2>
+            <div class="no-script">
+                <button class="btn ie" data-micromodal-trigger="share">공유하기</button>
+                <button class="btn" id="star" style="display:none;">즐겨찾기</button>
+            </div>
+        {% for meal in result: %}
+            <hr style="margin-top:10px;margin-bottom:-1px">
+            <table id="meal_{{ meal['MMEAL_SC_CODE'] }}">
+                <tr>
+                    <th width="75px">정보</th>
+                    <td>{{ day }} / {{ meal['MMEAL_SC_NM'] }}</td>
+                </tr>
+                <tr>
+                    <th width="75px">칼로리</th>
+                    <td><span class="high">{{ meal['CAL_INFO'] }}</span></td>
+                </tr>
+                <tr>
+                    <th width="75px" class="copy" data-clipboard-target="#menu_{{ meal['MMEAL_SC_CODE'] }}">
+                        메뉴<br class="no-script">
+                        <span class="s high no-script">복사하기</span>
+                    </th>
+                    <td>
+                        <ul id="menu_{{ meal['MMEAL_SC_CODE'] }}">
+                        {% for menu in meal['DDISH_NM'].split("<br/>") %}
+                            <li>{{ menu|parse_menu }} <span class="allergy high">{{ menu|allergy }}</span></li>
+                        {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+                <tr class="no-script ie">
+                    <th width="75px">추가정보</th>
+                    <td>
+                        <button class="btn" data-micromodal-trigger="nutrients_{{ meal['MMEAL_SC_CODE'] }}">영양정보</button>
+                        <button class="btn" data-micromodal-trigger="origin_{{ meal['MMEAL_SC_CODE'] }}">원산지</button>
+                    </td>
+                </tr>
+            </table>
+        {% endfor %}
+        </section>
+
+        <section style="padding-top:100px;padding-bottom:160px;">
+            <button id="poem" class="no-script" style="font-size:16px;">—</button>
+        </section>
+
+        <section class="menu">
+            <div class="no-script">
+                <button class="btn" id="yesterday">← 어제 급식</button>
+                <button class="btn" id="tomorrow">내일 급식 →</button>
+            </div>
+            <noscript>
+                <a class="btn" href="{{ url_for('meal.show_custom_date', edu_code=edu_code, school_code=school_code, date=yesterday) }}">← 어제 급식</a>
+                <a class="btn" href="{{ url_for('meal.show_custom_date', edu_code=edu_code, school_code=school_code, date=tomorrow) }}">내일 급식 →</a>
+            </noscript>
+        </section>
+
+        <section class="nav-right-bottom">
+            <div class="no-script">
+            {% if not_today is true %}
+                <p class="ie" style="margin:0;margin-bottom:4px;"><button class="btn" data-micromodal-trigger="not_today">저기요?</button></p>
+            {% endif %}
+                <button class="btn" id="root">학교 검색하러 가기</button>
+            </div>
+            <noscript>
+                <a class="btn" href="{{ url_for('index.index') }}">학교 검색하러 가기</a>
+            </noscript>
+        </section>
+{% endblock %}
+{% block modal %}
+        <section class="modal" id="share">
+            <div class="overlay" tabindex="-1" data-micromodal-close>
+                <div class="display" style="width:300px;">
+                    <h2 style="margin-top:0;">공유하기</h2>
+                    <ul style="list-style:none;padding-left:0;">
+                        <li><button class="btn" id="kakao" style="width:100%;">카카오톡</button></li>
+                        <li><button class="btn" id="band" style="width:100%;">밴드</button></li>
+                        <li><button class="btn" id="twit" style="width:100%;">트위터</button></li>
+                        <li><button class="btn" id="fb" style="width:100%;">페이스북</button></li>
+                    </ul><br>
+                    <button class="btn" style="width:100%;" data-micromodal-close>닫기</button>
+                </div>
+            </div>
+        </section>
+    {% for meal in result: %}
+        <section class="modal" id="nutrients_{{ meal['MMEAL_SC_CODE'] }}">
+            <div class="overlay" tabindex="-1" data-micromodal-close>
+                <div class="display" style="width:300px;">
+                    <h2>영양정보 ({{ meal['MMEAL_SC_NM'] }})</h2>
+                    <hr style="margin-bottom:0">
+                    <ul style="max-height:220px;height:220px;margin:0;overflow-y:scroll;">
+                    {% for info in meal['NTR_INFO'].split("<br/>") %}
+                        <li>{{ info }}</li>
+                    {% endfor %}
+                    </ul>
+                    <hr style="margin-top:0">
+                    <button class="btn" style="width:100%" data-micromodal-close>화면 닫기</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="modal" id="origin_{{ meal['MMEAL_SC_CODE'] }}">
+            <div class="overlay" tabindex="-1" data-micromodal-close>
+                <div class="display" style="width:300px;">
+                    <h2 style="margin:0">원산지 정보 ({{ meal['MMEAL_SC_NM'] }})</h2>
+                    <hr style="margin-bottom:0">
+                    <ul style="max-height:220px;height:220px;margin:0;overflow-y:scroll;">
+                {% for from in meal['ORPLC_INFO'].split("<br/>") %}
+                    {% if not from|origin %}
+                        <li><span class="high">{{ from }}</span></li>
+                    {% else %}
+                        <li>{{ from }}</li>
+                    {% endif %}
+                {% endfor %}
+                    </ul>
+                    <hr style="margin-top:0">
+                    <button class="btn" style="width:100%" data-micromodal-close>화면 닫기</button>
+                </div>
+            </div>
+        </section>
+    {% endfor %}
+    {% if not_today is true %}
+        <section class="modal" id="not_today">
+            <div class="overlay" tabindex="-1" data-micromodal-close>
+                <div class="display">
+                    <p>지금 보고 있는 메뉴는 오늘의 급식이 아니네요...</p>
+                    <p>오늘의 메뉴를 확인하러 갈까요?</p><hr>
+                    <p style="text-align: center;">
+                        <button class="btn" id="today" style="width:45%;">그럼요</button>
+                        <button class="btn" style="width:45%;" data-micromodal-close>아니요</button>
+                    </p>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+{% endblock %}
+{% block script %}
+        <script src="{{ url_for('static', filename='js/poem.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/meal.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/star.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/star-btn.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/kakao.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/clipboard.min.js') }}"></script>
+        <script type="text/javascript">
+            new ClipboardJS(".copy").on("success",function(){window.alert("복사되었습니다!"),window.getSelection().removeAllRanges();});
+            meal("{{ edu_code }}", "{{ school_code }}", "{{ yesterday }}", "{{ tomorrow }}");
+            document.querySelector("#kakao").addEventListener("click",function(){
+                if(!Kakao.isInitialized()){Kakao.init("{{ g.k }}");}
+                Kakao.Link.sendCustom({templateId:39130,templateArgs:{name:"{{ title }}", path:"{{ edu_code }}/{{ school_code }}"}});
+            });share("{{ title }}");poem("{{ idx }}");star_btn("{{ title }}", "{{ url_for('meal.show_today', edu_code=edu_code, school_code=school_code) }}");
+            render_btn("{{ title }}"),document.querySelector("#star").style.display="inline-block";
+        </script>
+    {% if request.user_agent.browser != "msie" %}
+        <script src="{{ url_for('static', filename='js/micromodal.min.js') }}"></script>
+        <script type="text/javascript">MicroModal.init({ disableFocus:true });</script>
+    {% endif %}
+{% endblock %}

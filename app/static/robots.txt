@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /$
+Allow: /meal
+Allow: /static
+Allow: /read
+Disallow: /

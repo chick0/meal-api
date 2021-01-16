@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="utf-8">
+        <title>{{ title }}</title>
+
+        <meta name="author" content="chick_0">
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, shrink-to-fit=no">
+        <meta name="keywords" content="급식, 학교, 조회, 급식 확인, 급식 조회, 초중고, 초등학교, 중학교, 고등학교">
+        <meta name="description" content="초중고 급식 조회">
+
+        <meta property="og:type" content="website">
+        <meta property="og:locale" content="ko_KR">
+        <meta property="og:title" content="{{ title }}">
+        <meta property="og:description" content="초중고 급식 조회">
+        <meta property="og:url" content="{{ g.host }}">
+        <meta property="og:image" content="{{ url_for('static', filename='img/icon192.png') }}">
+
+        <link rel="canonical" href="{{ g.host }}{{ request.path }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">{% if use_modal == True %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">{% endif %}
+
+        <meta name="theme-color" content="#DBDBDB">
+        <link rel="shortcut icon" href="/favicon.ico">
+        <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/icon192.png') }}" sizes="192x192">
+        <link rel="manifest" href="/manifest.json">
+
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <meta name="apple-mobile-web-app-title" content="급식">
+
+        <link rel="apple-touch-icon" sizes="192x192" href="{{ url_for('static', filename='img/icon192.png') }}">
+        <link rel="apple-touch-icon" sizes="256x256" href="{{ url_for('static', filename='img/icon256.png') }}">
+        <link rel="apple-touch-icon" sizes="512x512" href="{{ url_for('static', filename='img/icon512.png') }}">
+
+        <link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" href="{{ url_for('static', filename='img/splash/iphone5_splash.png') }}">
+        <link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" href="{{ url_for('static', filename='img/splash/iphone6_splash.png') }}">
+        <link rel="apple-touch-startup-image" media="(device-width: 621px) and (device-height: 1104px) and (-webkit-device-pixel-ratio: 3)" href="{{ url_for('static', filename='img/splash/iphoneplus_splash.png') }}">
+        <link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" href="{{ url_for('static', filename='img/splash/iphonex_splash.png') }}">
+        <link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)" href="{{ url_for('static', filename='img/splash/iphonexr_splash.png') }}">
+        <link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)" href="{{ url_for('static', filename='img/splash/iphonexsmax_splash.png') }}">
+        <link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)" href="{{ url_for('static', filename='img/splash/ipad_splash.png') }}">
+        <link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)" href="{{ url_for('static', filename='img/splash/ipadpro1_splash.png') }}">
+        <link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)" href="{{ url_for('static', filename='img/splash/ipadpro3_splash.png') }}">
+        <link rel="apple-touch-startup-image" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)" href="{{ url_for('static', filename='img/splash/ipadpro2_splash.png') }}">
+
+        <noscript><style>.no-script {display: none;}</style></noscript>
+    {% if request.user_agent.browser == "msie" %}
+        <style>.ie{display: none;}</style>
+    {% endif %}
+        {% block head %}{% endblock %}
+    </head>
+    <body>
+    {% if request.user_agent.browser == "msie" %}
+        <section style="text-align:left;display:block;background-color:#82070F;padding: 10px;border: #BCBCBC 1px solid;">
+            <b style="display:block;color:#BCBCBC;">경고! 이 사이트는 인터넷 익스플로러 사용을 권장하지 않습니다!</b>
+        </section>
+    {% endif %}
+
+        <!-- 시작 -->{% block content %}{% endblock %}
+        <!-- 모달 팝업 구역 -->{% block modal %}{% endblock %}
+
+        <!-- 스크립트 구역 -->
+        <script src="{{ url_for('static', filename='js/chick_0.js') }}"></script>
+        <script>
+            init("{{ url_for('index.index') }}");
+        </script>
+
+        {% block script %}{% endblock %}
+    </body>
+</html>
