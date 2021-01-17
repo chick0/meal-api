@@ -1,11 +1,5 @@
 # [school.ch1ck.xyz](https://school.ch1ck.xyz/)
 
-## 개발동기
-> 기존에 있던 앱이 복잡하고 느려서 만듬
-
-## 개발목표
-> 단순하고, 간편하고, 광고없고
-
 ## 사용방법
 1. 학교를 검색하고
 2. 내 학교를 선택하고
@@ -17,5 +11,8 @@
 3. 즐겨찾기
 4. 시
 
+
 ---
-> [도움말](https://www.notion.so/e193f37b9d6a40a19cc8919756af48ae)
+- `production.py` 을 이용해 서버 시작
+- `flask db upgrade` 명령어를 통해 db테이블 생성
+- 설정 파일들은 `conf/` 풀더 안에 있음
