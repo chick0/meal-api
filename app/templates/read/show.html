@@ -4,7 +4,7 @@
             <h2>{{ title }}</h2>
             <p class="l" style="margin-top:-24px;">{{ ctx.author }}</p>
 
-        {% for line in ctx.content.split("#") %}
+        {% for line in ctx.content.split("\n") %}
             <span>{{ line|safe }}</span><br>
         {% endfor %}
         </section>

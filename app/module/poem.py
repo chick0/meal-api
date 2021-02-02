@@ -37,8 +37,8 @@ def get_random_ctx():
 
 # 미리보기용 한 구절 불러오는 함수
 def get_preview_from_ctx(ctx: Poem):
-    # `#`을 기준으로 줄 바꿈
-    content = ctx.content.split("#")
+    # `\n`을 기준으로 줄 바꿈
+    content = ctx.content.split("\n")
 
     # 작품에서 한 구절 랜점 추첨
     preview = content[randint(0, len(content) - 1)]
