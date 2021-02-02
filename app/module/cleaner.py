@@ -4,6 +4,7 @@ from json import loads, dumps
 
 def clean(json_str: str):
     json = loads(json_str)
+    print(json)
 
     allow_keys = [
         "SCHUL_NM",       # 학교 이름
@@ -16,8 +17,7 @@ def clean(json_str: str):
     ]
 
     for i in range(0, len(json)):
-        for key in list(json[i].keys()):
-            if key not in allow_keys:
-                del json[i][key]
+        for key in [key for key in json[i].keys() if key not in allow_keys]:
+            del json[i][key]
 
     return dumps(obj=json)
