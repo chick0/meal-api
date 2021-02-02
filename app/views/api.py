@@ -6,7 +6,6 @@ from flask import Response, redirect, url_for
 
 from sqlalchemy.exc import OperationalError
 
-from app.module.poem import get_list, get_ctx_by_metadata
 from app.module.poem import get_random_ctx, get_preview_from_ctx
 
 bp = Blueprint(
@@ -20,53 +19,6 @@ bp = Blueprint(
 def index():
     session['alert'] = "그 아이가 내게 옷걸이를 던졌다고요."
     return redirect(url_for("index.index"))
-
-
-@bp.route("/fetch/list")
-def fetch_poem_list():
-    try:
-        ctx = get_list()
-    except (OperationalError, Exception):  # DB 접속 실패
-        return Response(
-            status=500,
-            mimetype="application/json",
-            response="""{"msg": "database connection error"}"""
-        )
-
-    return Response(
-        status=200,
-        mimetype="application/json",
-        response=dumps(
-            obj=ctx
-        )
-    )
-
-
-@bp.route("/fetch/<string:author>/<string:title>")
-def fetch_poem(author, title):
-    try:
-        ctx = get_ctx_by_metadata(author=author, title=title)
-    except (OperationalError, Exception):  # DB 접속 실패
-        return Response(
-            status=500,
-            mimetype="application/json",
-            response="""{"msg": "database connection error"}"""
-        )
-
-    if ctx is not None:
-        status = 200
-        content = ctx.content.split("#")
-    else:
-        status = 404
-        content = []
-
-    return Response(
-        status=status,  # 200 or 404
-        mimetype="application/json",
-        response=dumps(
-            obj=content
-        )
-    )
 
 
 @bp.route("/get")
