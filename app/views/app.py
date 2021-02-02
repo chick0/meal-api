@@ -22,7 +22,7 @@ def no_network():
 def tool():
     return render_template(
         "app/tool.html",
-        title="🌟 즐겨찾기 도구"
+        title="🌟 즐겨찾기 관리자"
     )
 
 

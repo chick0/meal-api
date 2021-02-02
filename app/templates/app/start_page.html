@@ -2,12 +2,18 @@
 {% block content %}
         <section class="lf">
             <h2>{{ title }}</h2>
-            <ol class="list no-script" id="render_target">
-            </ol>
+            <div style="margin-top:-24px;margin-bottom:0;">
+                <a class="l" href="{{ url_for('app.tool') }}">즐겨찾기 관리자</a>
+            </div>
+        </section>
 
+        <section class="lf">
             <noscript>
                 <span class="high l">자바스크립트를 활성화해야 사용이 가능합니다</span>
             </noscript>
+
+            <ol class="list" id="render_target">
+            </ol>
         </section>
 
         <section class="nav-right-bottom">
