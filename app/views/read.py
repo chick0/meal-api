@@ -5,7 +5,7 @@ from flask import render_template, redirect, url_for
 
 from sqlalchemy.exc import OperationalError
 
-from app.module.poem import get_all_ctx, get_ctx_by_metadata
+from models import Poem
 
 
 bp = Blueprint(
@@ -36,8 +36,7 @@ def get_school_data(idx: str):
 @bp.route("/<string:idx>")
 def index(idx: str = None):
     try:
-        ctx = get_all_ctx()
-        ctx = sorted(ctx, key=lambda t: t.title)
+        ctx = sorted(Poem.query.all(), key=lambda t: t.title)
     except (OperationalError, Exception):  # DB 접속 실패
         ctx = []
 
@@ -58,7 +57,11 @@ def index(idx: str = None):
 @bp.route("/<string:author>/<string:title>")
 @bp.route("/<string:author>/<string:title>/<string:idx>")
 def show(author: str, title: str, idx: str = None):
-    ctx = get_ctx_by_metadata(author=author, title=title)
+    ctx = Poem.query.filter_by(
+        author=author,     # 작가
+        title=title        # 제목
+    ).first()
+
     if ctx is None:
         session['alert'] = "등록된 작품이 아닙니다"
         return redirect(url_for("index.index"))
