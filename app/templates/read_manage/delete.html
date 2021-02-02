@@ -1,18 +1,0 @@
-{% extends 'layout.html' %}
-{% block content %}
-        <section class="lf">
-            <h1>🔒 인증이 필요합니다</h1>
-        </section>
-
-        <section class="message-box l">
-            <form method="post" action="{{ url_for('read_manage.deleted',idx=idx) }}">
-                <div>
-                    <input type="password" name="password" placeholder="비밀번호">
-                    <input type="number" name="otp" placeholder="인증키">
-                </div><br>
-                <div>
-                    <button class="btn" type="submit">입력 완료</button>
-                </div>
-            </form>
-        </section>
-{% endblock %}
