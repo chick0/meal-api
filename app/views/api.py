@@ -88,7 +88,7 @@ def get_poem(idx: str = None):
     else:
         status = 404
         preview = "등록된 작품이 없습니다"
-        url = url_for("index.index")
+        url = "#"
 
     return Response(
         status=status,  # 200 or 404
