@@ -42,30 +42,21 @@
         </section>
 
         <section style="padding-top:100px;padding-bottom:160px;">
-            <button id="poem" class="no-script" style="font-size:16px;">—</button>
+            <a id="poem" href="no-script" style="font-size:16px;">—</a>
         </section>
 
         <section class="menu">
-            <div class="no-script">
-                <button class="btn" id="yesterday">← 어제 급식</button>
-                <button class="btn" id="tomorrow">내일 급식 →</button>
+        {% if not_today is true %}
+            <div>
+                <a class="high" href="{{ url_for('meal.show_today', edu_code=edu_code, school_code=school_code) }}">오늘 메뉴 보러가기</a>
             </div>
-            <noscript>
-                <a class="btn" href="{{ url_for('meal.show_custom_date', edu_code=edu_code, school_code=school_code, date=yesterday) }}">← 어제 급식</a>
-                <a class="btn" href="{{ url_for('meal.show_custom_date', edu_code=edu_code, school_code=school_code, date=tomorrow) }}">내일 급식 →</a>
-            </noscript>
+        {% endif %}
+            <a class="btn" href="{{ url_for('meal.show_custom_date', edu_code=edu_code, school_code=school_code, date=yesterday) }}">← 어제 급식</a>
+            <a class="btn" href="{{ url_for('meal.show_custom_date', edu_code=edu_code, school_code=school_code, date=tomorrow) }}">내일 급식 →</a>
         </section>
 
         <section class="nav-right-bottom">
-            <div class="no-script">
-            {% if not_today is true %}
-                <p class="ie" style="margin:0;margin-bottom:4px;"><button class="btn" data-micromodal-trigger="not_today">저기요?</button></p>
-            {% endif %}
-                <button class="btn" id="root">학교 검색하러 가기</button>
-            </div>
-            <noscript>
-                <a class="btn" href="{{ url_for('index.index') }}">학교 검색하러 가기</a>
-            </noscript>
+            <a class="btn" href="{{ url_for('index.index') }}">학교 검색하러 가기</a>
         </section>
 {% endblock %}
 {% block modal %}
@@ -120,20 +111,6 @@
             </div>
         </section>
     {% endfor %}
-    {% if not_today is true %}
-        <section class="modal" id="not_today">
-            <div class="overlay" tabindex="-1" data-micromodal-close>
-                <div class="display">
-                    <p>지금 보고 있는 메뉴는 오늘의 급식이 아니네요...</p>
-                    <p>오늘의 메뉴를 확인하러 갈까요?</p><hr>
-                    <p style="text-align: center;">
-                        <button class="btn" id="today" style="width:45%;">그럼요</button>
-                        <button class="btn" style="width:45%;" data-micromodal-close>아니요</button>
-                    </p>
-                </div>
-            </div>
-        </section>
-    {% endif %}
 {% endblock %}
 {% block script %}
         <script src="{{ url_for('static', filename='js/poem.js') }}"></script>
@@ -144,11 +121,12 @@
         <script src="{{ url_for('static', filename='js/clipboard.min.js') }}"></script>
         <script type="text/javascript">
             new ClipboardJS(".copy").on("success",function(){window.alert("복사되었습니다!"),window.getSelection().removeAllRanges();});
-            meal("{{ edu_code }}", "{{ school_code }}", "{{ yesterday }}", "{{ tomorrow }}");
             document.querySelector("#kakao").addEventListener("click",function(){
                 if(!Kakao.isInitialized()){Kakao.init("{{ g.k }}");}
                 Kakao.Link.sendCustom({templateId:39130,templateArgs:{name:"{{ title }}", path:"{{ edu_code }}/{{ school_code }}"}});
-            });share("{{ title }}");poem("{{ idx }}");star_btn("{{ title }}", "{{ url_for('meal.show_today', edu_code=edu_code, school_code=school_code) }}");
+            });
+            share("{{ title }}");poem("{{ idx }}");
+            star_btn("{{ title }}", "{{ url_for('meal.show_today', edu_code=edu_code, school_code=school_code) }}");
             render_btn("{{ title }}"),document.querySelector("#star").style.display="inline-block";
         </script>
     {% if request.user_agent.browser != "msie" %}

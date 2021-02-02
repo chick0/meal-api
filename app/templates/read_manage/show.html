@@ -10,16 +10,8 @@
         </section>
 
         <section class="menu">
-            <a class="btn" href="{{ url_for('read_manage.edit', idx=idx) }}" style="width:20%;">수정하기</a>
-            <a class="btn" href="{{ url_for('read_manage.delete', idx=idx) }}" style="width:20%;">삭제하기</a>
+            <a class="btn" href="{{ url_for('read_manage.edit', idx=idx) }}" style="width:10%;">수정</a>
+            <a class="btn" href="{{ url_for('read_manage.delete', idx=idx) }}" style="width:10%;">삭제</a>
+            <a class="btn no-script" href="{{ url_for('read_manage.index') }}" style="width:10%;">목록</a>
         </section>
-
-        <section class="nav-right-bottom">
-            <button class="btn no-script" id="back">뒤로 가기</button>
-        </section>
-{% endblock %}
-{% block script %}
-        <script type="text/javascript">
-            btn("#back","{{ url_for('read_manage.index') }}");
-        </script>
 {% endblock %}

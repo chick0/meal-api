@@ -32,33 +32,3 @@ function share(name){
         window.open("http://www.facebook.com/sharer/sharer.php?u="+document.URL);
     });
 }
-
-// 급식 날짜 이동 버튼 등록 함수
-function meal(edu, school, yesterday, tomorrow){
-    const base = "/meal/"+[edu,school].join("/");
-    document.querySelector('#yesterday').addEventListener('click',function(){
-        location.replace(base + "/" + yesterday);
-        console.log("[chick_0] 어제 급식으로 이동합니다");
-    });
-    document.querySelector('#tomorrow').addEventListener('click',function(){
-        location.replace(base + "/" +  tomorrow);
-        console.log("[chick_0] 내일 급식으로 이동합니다");
-    });
-
-    window.addEventListener("keydown", function(key){
-        if(key.key == "[" || key.key == "a" || key.key == "ArrowLeft"){
-            location.replace(base + "/" + yesterday);
-            console.log("[chick_0] 어제 급식으로 이동합니다");
-        }
-        else if(key.key == "]" || key.key == "d" || key.key == "ArrowRight"){
-            location.replace(base + "/" +  tomorrow);
-            console.log("[chick_0] 내일 급식으로 이동합니다");
-        }
-    });
-
-    try {
-        document.querySelector("#today").addEventListener("click",function(){
-            location.replace(base); console.log("[chick_0] 오늘 급식으로 이동합니다");
-        });
-    } catch(e) { console.log("-- Passed!\n" + e); }
-}

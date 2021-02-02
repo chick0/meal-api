@@ -2,23 +2,22 @@
 {% block content %}
         <section class="lf">
             <h2>{{ title }}</h2>
-            <button class="btn" id="add">시 추가하기</button>
+            <div style="margin-top:-24px;margin-bottom:0;">
+                <a class="l" href="{{ url_for('read_manage.add') }}">시 추가하기</a>
+            </div>
+        </section>
 
+        <section class="lf">
         {% for ctx in context %}
             <h3>
-                <button class="select l no-script" data-select="{{ url_for('read_manage.show', idx=ctx.idx) }}" style="padding-left:0;">{{ ctx.title }}</button>
+                <a class="l" href="{{ url_for('read_manage.show', idx=ctx.idx) }}" style="padding-left:0;">{{ ctx.title }}</a>
             </h3>
             <p style="margin-top:-24px;">{{ ctx.author }}</p>
         {% endfor %}
+            <br><br>
         </section>
 
         <section class="menu">
-            <button class="btn" id="root">학교 검색하러 가기</button>
+            <a class="btn" href="{{ url_for('index.index') }}">학교 검색하러 가기</a>
         </section>
-{% endblock %}
-{% block script %}
-        <script src="{{ url_for('static', filename='js/select.js') }}"></script>
-        <script type="text/javascript">
-            btn("#add","{{ url_for('read_manage.add') }}");
-        </script>
 {% endblock %}

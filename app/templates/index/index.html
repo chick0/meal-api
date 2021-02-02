@@ -3,7 +3,7 @@
         <section class="lf">
             <h1>급식</h1>
             <div style="margin-top:-24px;margin-bottom:0;">
-                <button id="poem" class="l no-script">시 읽기</button>
+                <a class="l" href="{{ url_for('read.index') }}">시 읽기</a>
             </div>
         </section>
 
@@ -17,16 +17,12 @@
         </section>
 
         <section class="nav-right-bottom" id="starBox">
-            <button class="btn no-script" id="star">즐겨찾기 확인하기</button>
-            <noscript>
-                <a class="btn" href="{{ url_for('app.start_page') }}">즐겨찾기 확인하기</a>
-            </noscript>
+            <a class="btn" href="{{ url_for('app.start_page') }}">즐겨찾기 확인하기</a>
         </section>
 {% endblock %}
 {% block script %}
         <script src="{{ url_for('static', filename='js/index.js') }}"></script>
         <script type="text/javascript">
-            {% if alert is not none %}window.alert("{{ alert }}"),{% endif %}star("{{ url_for('app.start_page') }}");
-            btn("#poem","{{ url_for('read.index') }}");
+            star();{% if alert is not none %}window.alert("{{ alert }}");{% endif %}
         </script>
 {% endblock %}

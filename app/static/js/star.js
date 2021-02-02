@@ -1,7 +1,7 @@
 "use strict";
 
 function get_star(){
-    var star = JSON.parse(localStorage.getItem("star"));
+    let star = JSON.parse(localStorage.getItem("star"));
 
     if(star == null){
         star = {};
@@ -13,7 +13,7 @@ function get_star(){
 }
 
 function add_star(school, url){
-    var star = get_star();
+    let star = get_star();
 
     star[school] = url;
     localStorage.setItem("star", JSON.stringify(star));
@@ -22,7 +22,7 @@ function add_star(school, url){
 }
 
 function del_star(school){
-    var star = get_star();
+    let star = get_star();
 
     delete star[school];
     localStorage.setItem("star", JSON.stringify(star));
@@ -31,13 +31,12 @@ function del_star(school){
 }
 
 function render_star(){
-    var base = '<li><button class="high l select" data-select="#url#">#school#</button></li>';
-    var star = get_star();
-    var keys = Object.keys(star);
-    var html = "";
+    const star = get_star();
+    const keys = Object.keys(star);
 
+    let html = "";
     for(var key in keys){
-        html += base.replace("#school#", keys[key]).replace("#url#", star[keys[key]]);
+        html += `<li><a class="high l select" href="${star[keys[key]]}">${keys[key]}</a></li>`;
         console.log("[chick_0] 목록에 추가함 : "+keys[key]);
     }
 

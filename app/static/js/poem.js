@@ -10,9 +10,7 @@ function poem(idx){
                 console.log("[ajax]Request Success");
                 const response = JSON.parse(xhr.responseText);
                 document.querySelector("#poem").innerHTML = response.preview;
-                document.querySelector("#poem").addEventListener('click',function(){
-                    location.replace(response.url);
-                });
+                document.querySelector("#poem").href = response.url;
             }
         }
     };

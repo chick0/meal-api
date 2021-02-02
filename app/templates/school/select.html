@@ -6,22 +6,13 @@
             {% for i in result %}
                 {% set sub = i['ATPT_OFCDC_SC_NM'].replace("교육청", "") %}
                 <li>
-                    <button class="btn select no-script" data-select="{{ url_for('meal.show_today', edu_code=i['ATPT_OFCDC_SC_CODE'], school_code=i['SD_SCHUL_CODE']) }}">({{ sub }}) {{ i['SCHUL_NM'] }}</button>
-                    <noscript>
-                        <a class="btn" href="{{ url_for('meal.show_today', edu_code=i['ATPT_OFCDC_SC_CODE'], school_code=i['SD_SCHUL_CODE']) }}">({{ sub }}) {{ i['SCHUL_NM'] }}</a>
-                    </noscript>
+                    <a class="btn" href="{{ url_for('meal.show_today', edu_code=i['ATPT_OFCDC_SC_CODE'], school_code=i['SD_SCHUL_CODE']) }}">({{ sub }}) {{ i['SCHUL_NM'] }}</a>
                 </li>
             {% endfor %}
             </ol>
         </section>
 
         <section class="nav-right-bottom">
-            <button class="btn no-script" id="root">학교 검색하러 가기</button>
-            <noscript>
-                <a class="btn" href="{{ url_for('index.index') }}">학교 검색하러 가기</a>
-            </noscript>
+            <a class="btn" href="{{ url_for('index.index') }}">학교 검색하러 가기</a>
         </section>
-{% endblock %}
-{% block script %}
-        <script src="{{ url_for('static', filename='js/select.js') }}"></script>
 {% endblock %}

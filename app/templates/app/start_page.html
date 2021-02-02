@@ -17,12 +17,7 @@
         </section>
 
         <section class="nav-right-bottom">
-            <div class="no-script">
-                <button class="btn" id="root">학교 검색하러 가기</button>
-            </div>
-            <noscript>
-                <a class="btn" href="{{ url_for('index.index') }}">학교 검색하러 가기</a>
-            </noscript>
+            <a class="btn" href="{{ url_for('index.index') }}">학교 검색하러 가기</a>
         </section>
 {% endblock %}
 {% block script %}
@@ -30,5 +25,4 @@
         <script type="text/javascript">
             render_star();
         </script>
-        <script src="{{ url_for('static', filename='js/select.js') }}"></script>
 {% endblock %}

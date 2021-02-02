@@ -9,9 +9,6 @@
         </section>
 
         <section class="menu">
-            <button class="btn no-script" id="root">학교 검색하러 가기</button>
-            <noscript>
-                <a class="btn" href="{{ url_for('index.index') }}">학교 검색하러 가기</a>
-            </noscript>
+            <a class="btn" href="{{ url_for('index.index') }}">학교 검색하러 가기</a>
         </section>
 {% endblock %}

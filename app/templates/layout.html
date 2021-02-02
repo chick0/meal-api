@@ -61,9 +61,8 @@
         <!-- 모달 팝업 구역 -->{% block modal %}{% endblock %}
 
         <!-- 스크립트 구역 -->
-        <script src="{{ url_for('static', filename='js/chick_0.js') }}"></script>
         <script>
-            init("{{ url_for('index.index') }}");
+            if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("/service-worker.js");});}
         </script>
 
         {% block script %}{% endblock %}
