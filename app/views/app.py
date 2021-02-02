@@ -18,14 +18,6 @@ def no_network():
     ), 200
 
 
-@bp.route("/option")
-def option():
-    return render_template(
-        "app/option.html",
-        title="옵션"
-    )
-
-
 @bp.route("/tool")
 def tool():
     return render_template(
