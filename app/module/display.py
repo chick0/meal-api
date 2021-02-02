@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
+from os import urandom
 from json import loads, dumps
-from uuid import uuid4
 from datetime import datetime, timedelta
 
 from flask import session
@@ -105,7 +105,7 @@ def return_meal(date: str or datetime, edu_code: str, school_code: str):
 
     if idx is None:  # 세션 재활용 실패
         # id 발급
-        idx = str(uuid4())
+        idx = urandom(4).hex()
 
     # 세션 정보 업데이트
     session[idx] = dict(
