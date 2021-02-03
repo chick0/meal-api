@@ -121,6 +121,7 @@ h1, h2 {
 .lf {
     text-align: left;
     margin-left: 5%;
+    margin-right: 5%;
 }
 
 
@@ -173,6 +174,7 @@ hr{
 
     .lf {
         margin-left: 20%;
+        margin-right: 20%;
     }
 
 
