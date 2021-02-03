@@ -18,7 +18,6 @@ def create_app():          # Flask 앱
     @app.before_request
     def set_global():
         g.host = conf['app']['host']
-        g.email = conf['app']['email']
         g.k = conf['api']['k']
 
     @app.after_request
