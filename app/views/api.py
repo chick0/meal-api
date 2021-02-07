@@ -30,6 +30,11 @@ def get_preview_from_ctx(ctx: Poem):
         return get_preview_from_ctx(ctx=ctx)
 
 
+@bp.route("/ok")
+def ok():
+    return "OK", 200
+
+
 @bp.route("/")
 def index():
     session['alert'] = "그 아이가 내게 옷걸이를 던졌다고요."
