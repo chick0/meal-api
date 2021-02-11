@@ -14,6 +14,8 @@ import app
 PORT = 1365
 LOG_PATH = path.join("log")
 # # # # # # # # # # # # # # #
+
+
 if __name__ == "__main__":
     if not path.isdir(path.join(LOG_PATH)):
         mkdir(LOG_PATH)
