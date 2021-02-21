@@ -8,10 +8,10 @@ from waitress import serve
 from paste.translogger import TransLogger
 
 import app
+from conf import conf
 
 
 # # # # # # # # # # # # # # #
-PORT = 1365
 LOG_PATH = path.join("log")
 # # # # # # # # # # # # # # #
 
@@ -36,5 +36,5 @@ if __name__ == "__main__":
             application=app,
             setup_console_handler=True
         ),
-        port=PORT
+        port=conf['server']['port']
     )
