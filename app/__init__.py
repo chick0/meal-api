@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from flask import Flask, request, g
-from flask_migrate import Migrate
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask
+from flask import request, g
 
 from app.module import error, template_filter
 from conf import conf
@@ -38,13 +37,6 @@ def create_app():          # Flask 앱
 
         response.headers['X-Powered-By'] = "chick_0"
         return response
-
-    # DB 모델 등록
-    __import__("models")
-
-    # ORM 초기화
-    db.init_app(app)
-    migrate.init_app(app, db)
 
     # 템플릿 필터 등록
     app.add_template_filter(template_filter.origin)
