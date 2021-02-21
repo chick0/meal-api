@@ -11,10 +11,7 @@ import app
 from conf import conf
 
 
-# # # # # # # # # # # # # # #
 LOG_PATH = path.join("log")
-# # # # # # # # # # # # # # #
-
 
 if __name__ == "__main__":
     if not path.isdir(path.join(LOG_PATH)):
