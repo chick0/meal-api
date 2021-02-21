@@ -2,9 +2,9 @@
 {% block content %}
         <section class="lf">
             <h2>{{ title }}</h2>
-            <p class="l" style="margin-top:-24px;">{{ ctx.author }}</p>
+            <p class="l" style="margin-top:-24px;">{{ ctx.AUTHOR }}</p>
 
-        {% for line in ctx.content.split("\n") %}
+        {% for line in ctx.CONTENT %}
             <span>{{ line|safe }}</span><br>
         {% endfor %}
         </section>

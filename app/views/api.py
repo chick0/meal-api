@@ -2,12 +2,11 @@
 from json import dumps
 from random import choice
 
-from flask import Blueprint, session
+from flask import Blueprint
+from flask import request, session
 from flask import Response, redirect, url_for
 
-from sqlalchemy.exc import OperationalError
-
-from models import Poem
+import read
 
 
 bp = Blueprint(
@@ -17,17 +16,14 @@ bp = Blueprint(
 )
 
 
-def get_preview_from_ctx(ctx: Poem):
-    # `\n`을 기준으로 줄 바꿈
-    content = ctx.content.split("\n")
-
+def get_preview(content: list):
     # 작품에서 한 구절 랜점 추첨
-    preview = choice(content)
+    preview = choice(content).replace("&nbsp;", "")
 
     if len(preview.strip()) != 0:  # 공백이 아닐 경우
         return preview
     else:                          # 공백이면 다시 추첨
-        return get_preview_from_ctx(ctx=ctx)
+        return get_preview(content)
 
 
 @bp.route("/")
@@ -37,28 +33,17 @@ def index():
 
 
 @bp.route("/get")
-@bp.route("/get/<string:idx>")
-def get_poem(idx: str = None):
-    try:
-        ctx = choice(Poem.query.all())
-    except (OperationalError, Exception):  # DB 접속 실패
-        return Response(
-            status=500,
-            mimetype="application/json",
-            response="""{"msg": "database connection error"}"""
-        )
+def get_poem():
+    ctx = getattr(read, choice(read.__all__))
 
-    if ctx is not None:
-        status = 200
-        preview = get_preview_from_ctx(ctx=ctx)
-        url = url_for("read.show", author=ctx.author, title=ctx.title, idx=idx)
-    else:
-        status = 404
-        preview = "등록된 작품이 없습니다"
-        url = "#"
+    preview = get_preview(content=ctx.CONTENT)
+    url = url_for("read.show", author=ctx.AUTHOR, title=ctx.TITLE)
+
+    if request.args.get("idx") is not None:
+        url += "?idx=" + request.args.get("idx")
 
     return Response(
-        status=status,  # 200 or 404
+        status=200,
         mimetype="application/json",
         response=dumps(
             dict(

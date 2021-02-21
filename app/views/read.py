@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from flask import Blueprint, session
+from flask import Blueprint
+from flask import request, session
 from flask import render_template, redirect, url_for
 
-from sqlalchemy.exc import OperationalError
-
-from models import Poem
+import read
 
 
 bp = Blueprint(
@@ -33,20 +32,26 @@ def get_school_data(idx: str):
 
 
 @bp.route("/")
-@bp.route("/<string:idx>")
-def index(idx: str = None):
-    try:
-        ctx = sorted(Poem.query.all(), key=lambda t: t.title)
-    except (OperationalError, Exception):  # DB 접속 실패
-        ctx = []
+def index():
+    context = []
+    for _id in read.__all__:
+        context.append(getattr(read, _id))
 
+    context = sorted(context, key=lambda r: r.TITLE)
+
+    idx = request.args.get("idx")
     button, target = get_school_data(idx=idx)
+
+    if idx is None:
+        idx = ""
+    else:
+        idx = f"?idx={idx}"
 
     return render_template(
         "read/index.html",
         title="시",
 
-        context=ctx,       # 작품들
+        context=context,   # 작품들
 
         idx=idx,           # 세션 ID
         button=button,     # 뒤로가기 버튼 텍스트
@@ -55,22 +60,23 @@ def index(idx: str = None):
 
 
 @bp.route("/<string:author>/<string:title>")
-@bp.route("/<string:author>/<string:title>/<string:idx>")
-def show(author: str, title: str, idx: str = None):
-    ctx = Poem.query.filter_by(
-        author=author,     # 작가
-        title=title        # 제목
-    ).first()
+def show(author: str, title: str):
+    ctx = None
+    for _id in read.__all__:
+        context = getattr(read, _id)
+        if context.AUTHOR == author and context.TITLE == title:
+            ctx = context
 
     if ctx is None:
         session['alert'] = "등록된 작품이 아닙니다"
         return redirect(url_for("index.index"))
 
-    button, target = get_school_data(idx=idx)
+    idx = request.args.get("idx")
+    button, target = get_school_data(idx)
 
     return render_template(
         "read/show.html",
-        title=ctx.title,   # 제목
+        title=ctx.TITLE,   # 제목
 
         ctx=ctx,           # 시 [제목, 작가, 본문]
 

@@ -5,9 +5,9 @@
 
         {% for ctx in context %}
             <h3>
-                <a class="l" href="{{ url_for('read.show', author=ctx.author, title=ctx.title, idx=idx) }}">{{ ctx.title }}</a>
+                <a class="l" href="{{ url_for('read.show', author=ctx.AUTHOR, title=ctx.TITLE) }}{{ idx }}">{{ ctx.TITLE }}</a>
             </h3>
-            <p style="margin-top:-24px;">{{ ctx.author }}</p>
+            <p style="margin-top:-24px;">{{ ctx.AUTHOR }}</p>
         {% endfor %}
             <br><br>
         </section>
