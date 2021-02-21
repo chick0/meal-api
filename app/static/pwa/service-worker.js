@@ -1,6 +1,6 @@
 "use strict";
 
-const CACHE_VER = "2021-02-21_v24";
+const CACHE_VER = "2021-02-21_v25";
 
 const FILES_TO_CACHE = [
     "/app",
