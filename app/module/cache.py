@@ -1,30 +1,29 @@
 # -*- coding: utf-8 -*-
 
-from app import db
-from app.module.cleaner import clean
+from redis.exceptions import ConnectionError
 
-from models import Meal
+from app import redis
+from app.module.cleaner import clean
 
 
 # 교육청 코드와 학교 코드와 날짜 정보로 캐시 불러오는 함수
 def get_cache_by_data(edu: str, school: str, date: str):
-    return Meal.query.filter_by(
-        edu=edu,                # 교육청 코드
-        school=school,          # 학교 코드
-        date=date               # 날짜 정보
-    ).first()
+    name = f"{edu}#{school}#{date}"
+
+    try:
+        json = redis.get(name)
+    except ConnectionError:
+        json = None
+
+    return json
 
 
 # 캐시 저장하는 함수
 def add_cache(edu: str, school: str, date: int, json: str):
+    name = f"{edu}#{school}#{date}"
     json = clean(json_str=json)
 
-    m = Meal(
-        edu=edu,                # 교육청 코드
-        school=school,          # 학교 코드
-        date=date,              # 날짜 정보
-
-        json=json               # 급식 정보
-    )
-    db.session.add(m)    # 급식 정보 DB 세션에 추가
-    db.session.commit()  # 변경 사항 저장
+    try:
+        redis.set(name, json)
+    except ConnectionError:
+        pass

@@ -6,8 +6,6 @@ from datetime import datetime, timedelta
 from flask import session
 from flask import render_template, redirect, url_for
 
-from sqlalchemy.exc import OperationalError
-
 from app.module.api import search_meal_by_codes
 from app.module.cache import add_cache, get_cache_by_data
 
@@ -28,14 +26,11 @@ def return_meal(date: str or datetime, edu_code: str, school_code: str):
             return redirect(url_for("index.index"))
 
     # DB에 저장된 캐시 검색
-    try:
-        result = get_cache_by_data(
-            edu=edu_code,
-            school=school_code,
-            date=date.strftime('%Y%m%d')
-        )
-    except (OperationalError, Exception):  # DB 접속 실패
-        result = None
+    result = get_cache_by_data(
+        edu=edu_code,
+        school=school_code,
+        date=date.strftime('%Y%m%d')
+    )
 
     # DB 에서 발견된 캐시가 있나 검사
     if result is None:
@@ -72,25 +67,22 @@ def return_meal(date: str or datetime, edu_code: str, school_code: str):
                     school_code=school_code   # 학교 코드
                 )
 
-            try:
-                # DB 캐싱하기
-                add_cache(
-                    edu=edu_code,
-                    school=school_code,
-                    date=int(date.strftime('%Y%m%d')),
-                    json=dumps(
-                        obj=result
-                    )
+            # DB 캐싱하기
+            add_cache(
+                edu=edu_code,
+                school=school_code,
+                date=int(date.strftime('%Y%m%d')),
+                json=dumps(
+                    obj=result
                 )
-            except (OperationalError, Exception):  # DB 접속 실패
-                pass
+            )
 
         else:  # 에러 페이지로 보내기
             session['alert'] = "급식 정보를 불러오는 데 실패했습니다"
             return redirect(url_for("index.index"))
 
     else:  # 캐시가 있음
-        result = loads(result.json)
+        result = loads(result)
 
     # 쿠키 저장용 세션 생성
     idx = None
