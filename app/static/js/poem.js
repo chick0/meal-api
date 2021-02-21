@@ -1,7 +1,7 @@
 "use strict";
 
 function poem(idx){
-    const url = "/api/get/" + idx;
+    const url = "/api/get?idx=" + idx;
     const xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
         console.log("[ajax]readyState: " + xhr.readyState);
