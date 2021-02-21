@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 
+from conf import conf
+
 # # # # # # # # # # # # # # # # # # # # # #
+
+# Redis 데이터베이스 - https://redis.io/
+REDIS_URL = conf['redis']['url']
 
 # # # # # # # # # # # # # # # # # # # # # #
 

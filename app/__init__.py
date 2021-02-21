@@ -2,16 +2,16 @@
 
 from flask import Flask
 from flask import request, g
+from flask_redis import FlaskRedis
 
 from app.module import error, template_filter
 from conf import conf
 
-db = SQLAlchemy()
-migrate = Migrate()
+redis = FlaskRedis()
 
 
-def create_app():          # Flask 앱
-    app = Flask(__name__)  # 앱 만들기
+def create_app():
+    app = Flask(__name__)
     app.config.from_object(obj=__import__("config"))
 
     @app.before_request
@@ -37,6 +37,9 @@ def create_app():          # Flask 앱
 
         response.headers['X-Powered-By'] = "chick_0"
         return response
+
+    # Redis 초기화
+    redis.init_app(app)
 
     # 템플릿 필터 등록
     app.add_template_filter(template_filter.origin)
