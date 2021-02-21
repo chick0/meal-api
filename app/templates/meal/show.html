@@ -113,21 +113,45 @@
     {% endfor %}
 {% endblock %}
 {% block script %}
-        <script src="{{ url_for('static', filename='js/poem.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/meal.js') }}"></script>
         <script src="{{ url_for('static', filename='js/star.js') }}"></script>
         <script src="{{ url_for('static', filename='js/star-btn.js') }}"></script>
         <script src="{{ url_for('static', filename='js/kakao.min.js') }}"></script>
         <script src="{{ url_for('static', filename='js/clipboard.min.js') }}"></script>
         <script type="text/javascript">
             new ClipboardJS(".copy").on("success",function(){window.alert("복사되었습니다!"),window.getSelection().removeAllRanges();});
-            document.querySelector("#kakao").addEventListener("click",function(){
-                if(!Kakao.isInitialized()){Kakao.init("{{ g.k }}");}
-                Kakao.Link.sendCustom({templateId:39130,templateArgs:{name:"{{ title }}", path:"{{ edu_code }}/{{ school_code }}"}});
-            });
-            share("{{ title }}");poem("{{ idx }}");
             star_btn("{{ title }}", "{{ url_for('meal.show_today', edu_code=edu_code, school_code=school_code) }}");
-            render_btn("{{ title }}"),document.querySelector("#star").style.display="inline-block";
+            render_btn("{{ title }}"),document.getElementById("star").style.display="inline-block";
+        </script>
+        <script type="text/javascript">
+            let xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        let response = JSON.parse(xhr.responseText);
+                        document.getElementById("poem").innerHTML = response.preview;
+                        document.getElementById("poem").href = response.url;
+                    }
+                }
+            };
+            xhr.open("GET", "/api/get?idx={{idx}}", true); xhr.send(null);
+        </script>
+        <script type="text/javascript">
+            document.getElementById("kakao").addEventListener("click",function(){
+                if(!Kakao.isInitialized()){Kakao.init("{{ g.k }}");}
+                Kakao.Link.sendCustom({templateId:39130, templateArgs:{name:"{{ title }}", path:"{{ edu_code }}/{{ school_code }}"}});
+            });
+            document.getElementById("band").addEventListener("click",function(){
+                window.open(`https://band.us/plugin/share?body='{{ title }}'의 급식 정보 ${document.URL}&route=${document.domain}`);
+            });
+            document.getElementById("twit").addEventListener("click",function(){
+                window.open(`https://twitter.com/intent/tweet?text='{{ title }}'의 급식 정보&url=${document.URL}`);
+            });
+            document.getElementById("fb").addEventListener("click",function(){
+                window.open(`https://www.facebook.com/sharer/sharer.php?u=${document.URL}`);
+            });
+            window.addEventListener("keydown", function(key){
+                if(Number(key.key) > 0){ try{ window.scrollTo({top: window.pageYOffset + document.getElementById("meal_"+key.key).getBoundingClientRect().top, behavior: 'smooth'}); } catch{} }
+            });
         </script>
     {% if request.user_agent.browser != "msie" %}
         <script src="{{ url_for('static', filename='js/micromodal.min.js') }}"></script>

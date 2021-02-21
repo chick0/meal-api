@@ -48,23 +48,14 @@
     {% if request.user_agent.browser == "msie" %}
         <style>.ie{display: none;}</style>
     {% endif %}
-        {% block head %}{% endblock %}
     </head>
     <body>
-    {% if request.user_agent.browser == "msie" %}
-        <section style="text-align:left;display:block;background-color:#82070F;padding: 10px;border: #BCBCBC 1px solid;">
-            <b style="display:block;color:#BCBCBC;">경고! 이 사이트는 인터넷 익스플로러 사용을 권장하지 않습니다!</b>
-        </section>
-    {% endif %}
+        {% block content %}{% endblock %}
+        {% block modal %}{% endblock %}
 
-        <!-- 시작 -->{% block content %}{% endblock %}
-        <!-- 모달 팝업 구역 -->{% block modal %}{% endblock %}
-
-        <!-- 스크립트 구역 -->
         <script>
             if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("/service-worker.js");});}
         </script>
-
         {% block script %}{% endblock %}
     </body>
 </html>
