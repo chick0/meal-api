@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from io import StringIO
 
 from flask import Blueprint, send_file
 
@@ -28,8 +29,8 @@ def robots():
 @bp.route("/favicon.ico")
 def favicon():
     return send_file(
-        "static/img/favicon.ico",
-        mimetype="image/x-icon"
+        mimetype="image/x-icon",
+        filename_or_fp="static/img/favicon.ico"
     )
 
 
@@ -37,14 +38,14 @@ def favicon():
 @bp.route("/manifest.json")
 def pwa_manifest():
     return send_file(
-        "static/pwa/manifest.json",
-        mimetype="application/json"
+        mimetype="application/json",
+        filename_or_fp="static/pwa/manifest.json"
     )
 
 
 @bp.route("/service-worker.js")
 def pwa_service_worker():
     return send_file(
-        "static/pwa/service-worker.js",
-        mimetype="application/javascript"
+        mimetype="application/javascript",
+        filename_or_fp="static/pwa/service-worker.js"
     )
