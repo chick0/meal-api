@@ -37,10 +37,9 @@ def get_poem():
     ctx = getattr(read, choice(read.__all__))
 
     preview = get_preview(content=ctx.CONTENT)
-    url = url_for("read.show", author=ctx.AUTHOR, title=ctx.TITLE)
 
-    if request.args.get("idx") is not None:
-        url += "?idx=" + request.args.get("idx")
+    idx = request.args.get("idx", "none")
+    url = url_for("read.show", author=ctx.AUTHOR, title=ctx.TITLE, idx=idx)
 
     return Response(
         status=200,

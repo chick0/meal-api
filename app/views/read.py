@@ -39,13 +39,8 @@ def index():
 
     context = sorted(context, key=lambda r: r.TITLE)
 
-    idx = request.args.get("idx")
+    idx = request.args.get("idx", "none")
     button, target = get_school_data(idx=idx)
-
-    if idx is None:
-        idx = ""
-    else:
-        idx = f"?idx={idx}"
 
     return render_template(
         "read/index.html",
@@ -71,8 +66,8 @@ def show(author: str, title: str):
         session['alert'] = "등록된 작품이 아닙니다"
         return redirect(url_for("index.index"))
 
-    idx = request.args.get("idx")
-    button, target = get_school_data(idx)
+    idx = request.args.get("idx", "none")
+    button, target = get_school_data(idx=idx)
 
     return render_template(
         "read/show.html",
