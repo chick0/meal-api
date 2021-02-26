@@ -31,7 +31,7 @@ def get_school_data(idx: str):
         return "학교 검색하러 가기", url_for("index.index")
 
 
-@bp.route("/")
+@bp.route("")
 def index():
     context = []
     for _id in read.__all__:
