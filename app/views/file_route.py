@@ -13,8 +13,14 @@ bp = Blueprint(
 @bp.route("/robots.txt")
 def robots():
     return send_file(
-        "static/robots.txt",
-        mimetype="text/plain"
+        mimetype="text/plain",
+        filename_or_fp=StringIO("\n".join([
+            "User-agent: *",
+            "Allow: /$",
+            "Allow: /static",
+            "Allow: /read",
+            "Disallow: /",
+        ]))
     )
 
 
