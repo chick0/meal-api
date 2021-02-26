@@ -26,10 +26,8 @@ def select():
     if request.referrer is None or request.method != "POST":
         abort(405)
 
-    # 요청에 검색어가 포함되었는지 검사
-    try:
-        school_name = request.form['school_name'].replace(" ", "")
-    except KeyError:
+    # 검색어가 없는 경우
+    if school_name is None or len(school_name) == 0:
         return alert(msg="검색어를 입력해주세요")
 
     # ----------------------------------------------------------- #
