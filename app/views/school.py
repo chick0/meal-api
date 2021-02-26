@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from re import findall
 
-from flask import abort
 from flask import Blueprint, request, session
 from flask import render_template
 from flask import redirect, url_for
@@ -20,11 +19,10 @@ def alert(msg: str):
     return redirect(url_for("index.index"))
 
 
-@bp.route("/select", methods=['GET', 'POST'])
+@bp.route("/select", methods=['POST'])
 def select():
-    # 출발지 검사 & HTTP 메소드 검사
-    if request.referrer is None or request.method != "POST":
-        abort(405)
+    # 요청에서 학교 이름 가져오고 없으면 `None` 가져오기
+    school_name = request.form.get("school_name", None)
 
     # 검색어가 없는 경우
     if school_name is None or len(school_name) == 0:
