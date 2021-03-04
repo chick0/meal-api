@@ -162,7 +162,7 @@ def meal_data_not_found(date, not_today: bool, edu_code: str, school_code: str):
 
     # 급식 정보 불러오기 실패
     return render_template(
-        "error/meal_data_not_found.html",
+        "meal/not_found.html",
         title="정보 없음",
         use_modal=True,
 
@@ -174,4 +174,4 @@ def meal_data_not_found(date, not_today: bool, edu_code: str, school_code: str):
         tomorrow=tomorrow,            # 내일
 
         not_today=not_today           # 오늘 메뉴인지 검사용
-    )
+    ), 404
