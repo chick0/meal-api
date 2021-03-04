@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from os import urandom
-from json import loads, dumps
 from datetime import datetime, timedelta
 
 from flask import session
@@ -59,7 +58,7 @@ def return_meal(date: str or datetime, edu_code: str, school_code: str):
                             break
             except (KeyError, Exception):
                 # 급식 정보 불러오기 실패
-                return meal_data_not_found(
+                return not_found(
                     date=date,                # 날짜 정보
                     not_today=not_today,      # 오늘 메뉴인지 검사용
 
@@ -72,17 +71,12 @@ def return_meal(date: str or datetime, edu_code: str, school_code: str):
                 edu=edu_code,
                 school=school_code,
                 date=int(date.strftime('%Y%m%d')),
-                json=dumps(
-                    obj=result
-                )
+                json=result
             )
 
         else:  # 에러 페이지로 보내기
             session['alert'] = "급식 정보를 불러오는 데 실패했습니다"
             return redirect(url_for("index.index"))
-
-    else:  # 캐시가 있음
-        result = loads(result)
 
     # 쿠키 저장용 세션 생성
     idx = None
@@ -108,7 +102,7 @@ def return_meal(date: str or datetime, edu_code: str, school_code: str):
     )
 
     # 급식 출력하기
-    return show_meal(
+    return show(
         date=date,                        # 날짜 정보
         not_today=not_today,              # 오늘 메뉴인지 검사용
 
@@ -121,15 +115,12 @@ def return_meal(date: str or datetime, edu_code: str, school_code: str):
     )
 
 
-def show_meal(date: datetime, not_today: bool, edu_code: str, school_code: str, result: list, idx: str):
-    # 표기 날짜
-    day = date.strftime('%Y년 %m월 %d일')
-
+def show(date: datetime, not_today: bool, edu_code: str, school_code: str, result: list, idx: str):
     # 내일 이동 버튼을 위한 값
-    tomorrow = int((date + timedelta(days=1)).strftime('%Y%m%d'))
+    tomorrow = (date + timedelta(days=1)).strftime('%Y%m%d')
 
     # 어제 이동 버튼을 위한 값
-    yesterday = int((date - timedelta(days=1)).strftime('%Y%m%d'))
+    yesterday = (date - timedelta(days=1)).strftime('%Y%m%d')
 
     # 급식 표시하기
     return render_template(
@@ -137,7 +128,7 @@ def show_meal(date: datetime, not_today: bool, edu_code: str, school_code: str, 
         title=result[0]['SCHUL_NM'],  # 학교 이름
         use_modal=True,
 
-        day=day,                      # ----년 --월 --일
+        day=date.strftime('%Y년 %m월 %d일'),
         result=result,                # 급식 조회 결과
 
         edu_code=edu_code,            # 교육청 코드
@@ -150,15 +141,12 @@ def show_meal(date: datetime, not_today: bool, edu_code: str, school_code: str, 
     )
 
 
-def meal_data_not_found(date, not_today: bool, edu_code: str, school_code: str):
-    # 표기 날짜
-    day = date.strftime('%Y년 %m월 %d일')
-
+def not_found(date, not_today: bool, edu_code: str, school_code: str):
     # 내일 이동 버튼을 위한 값
-    tomorrow = int((date + timedelta(days=1)).strftime('%Y%m%d'))
+    tomorrow = (date + timedelta(days=1)).strftime('%Y%m%d')
 
     # 어제 이동 버튼을 위한 값
-    yesterday = int((date - timedelta(days=1)).strftime('%Y%m%d'))
+    yesterday = (date - timedelta(days=1)).strftime('%Y%m%d')
 
     # 급식 정보 불러오기 실패
     return render_template(
@@ -166,7 +154,7 @@ def meal_data_not_found(date, not_today: bool, edu_code: str, school_code: str):
         title="정보 없음",
         use_modal=True,
 
-        day=day,                      # ----년 --월 --일
+        day=date.strftime('%Y년 %m월 %d일'),
 
         edu_code=edu_code,            # 교육청 코드
         school_code=school_code,      # 학교 코드
