@@ -17,9 +17,9 @@ def get_json(url: str, payload: dict):
         if resp.status == 200:  # 웹 서버 응답이 200인 경우
             # 헤더 값에서 응답을 `json`이 아니라 `html`로 주기에
             # json 모듈을 통해 딕셔너리로 전환
-            return loads(resp.read()), 200
+            return loads(resp.read())
         else:  # 아닌 경우
-            return False, resp.status
+            return None
 
 
 def search_school_by_name(school_name: str):

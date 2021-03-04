@@ -6,7 +6,7 @@
             {% for i in result %}
                 {% set sub = i['ATPT_OFCDC_SC_NM'].replace("교육청", "") %}
                 <li>
-                    <a class="btn" href="{{ url_for('meal.show_today', edu_code=i['ATPT_OFCDC_SC_CODE'], school_code=i['SD_SCHUL_CODE']) }}">({{ sub }}) {{ i['SCHUL_NM'] }}</a>
+                    <a class="btn" href="{{ url_for('meal.show', edu_code=i['ATPT_OFCDC_SC_CODE'], school_code=i['SD_SCHUL_CODE']) }}">({{ sub }}) {{ i['SCHUL_NM'] }}</a>
                 </li>
             {% endfor %}
             </ol>

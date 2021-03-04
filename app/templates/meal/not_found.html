@@ -8,11 +8,11 @@
         <section class="menu">
         {% if not_today is true %}
             <div style="padding-bottom:1px">
-                <a class="high" href="{{ url_for('meal.show_today', edu_code=edu_code, school_code=school_code) }}" style="padding:5px;border-radius:0.3rem;">오늘 메뉴 보러가기</a>
+                <a class="high" href="{{ url_for('meal.show', edu_code=edu_code, school_code=school_code) }}" style="padding:5px;border-radius:0.3rem;">오늘 메뉴 보러가기</a>
             </div>
         {% endif %}
-            <a class="btn" href="{{ url_for('meal.show_custom_date', edu_code=edu_code, school_code=school_code, date=yesterday) }}">← 어제 급식</a>
-            <a class="btn" href="{{ url_for('meal.show_custom_date', edu_code=edu_code, school_code=school_code, date=tomorrow) }}">내일 급식 →</a>
+            <a class="btn" href="{{ url_for('meal.show', edu_code=edu_code, school_code=school_code, date=yesterday) }}">← 어제 급식</a>
+            <a class="btn" href="{{ url_for('meal.show', edu_code=edu_code, school_code=school_code, date=tomorrow) }}">내일 급식 →</a>
         </section>
 
         <section class="nav-right-bottom">

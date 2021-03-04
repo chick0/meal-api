@@ -8,7 +8,7 @@ from app import redis
 
 
 def clean(json: list):
-    allow_keys = [
+    allow_keys = [  # 남길 것들
         "SCHUL_NM",       # 학교 이름
         "MMEAL_SC_CODE",  # 식사 코드 (  1 /  2 /  3 )
         "MMEAL_SC_NM",    # 식사 명   (조식/중식/석식)
@@ -38,7 +38,7 @@ def get_cache_by_data(edu: str, school: str, date: str):
 
 
 # 캐시 저장하는 함수
-def add_cache(edu: str, school: str, date: int, json: list):
+def add_cache(edu: str, school: str, date: str, json: list):
     try:
         redis.set(
             name=f"{edu}#{school}#{date}",

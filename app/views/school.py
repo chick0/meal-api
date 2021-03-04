@@ -47,20 +47,19 @@ def select():
 
     # 검색어로 학교 찾기
     try:
-        school_list, status_code = search_school_by_name(
+        school_list = search_school_by_name(
             school_name=school_name
         )
     except (ValueError, Exception):
         return alert(msg="학교 목록을 불러오는 데 실패했습니다")
 
-    if status_code == 200:  # API 서버에서 200응답을 받았다면?
-        try:                           # 검색 결과가 있으면 학교 선택
-            return render_template(
-                "school/select.html",
-                title="학교 선택",
-                result=school_list['schoolInfo'][1]['row']
-            )
-        except (KeyError, Exception):  # 없으면 검색 결과가 없음
-            return alert(msg="검색 결과가 없습니다")
-    else:                   # 아니면, API 오류!
-        return alert(msg="학교 목록을 불러오는 데 실패했습니다")
+    try:
+        # 검색 결과가 있으면 학교 선택
+        return render_template(
+            "school/select.html",
+            title="학교 선택",
+            result=school_list['schoolInfo'][1]['row']
+        )
+    except (KeyError, Exception):
+        # API 서버에서 받은 정보에 학교 정보가 없으면
+        return alert(msg="검색 결과가 없습니다")

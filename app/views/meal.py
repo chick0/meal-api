@@ -1,11 +1,16 @@
 # -*- coding: utf-8 -*-
-
-from datetime import datetime
+from os import urandom
+from urllib.error import HTTPError
+from datetime import datetime, timedelta
 
 from flask import Blueprint
+from flask import session
+from flask import render_template
 from flask import redirect, url_for
 
-from app.module import display
+from app.module.api import search_meal_by_codes
+from app.module.cache import add_cache, get_cache_by_data
+
 
 bp = Blueprint(
     name=__name__.split(".")[-1],
@@ -14,37 +19,121 @@ bp = Blueprint(
 )
 
 
-@bp.route("/<string:edu_code>/<string:school_code>")
-def show_today(edu_code: str, school_code: str):
-    # 오늘 날짜 가져오기 - 서버 기준
-    today = datetime.today()
+def _session(edu: str, school: str, date: str, name: str):
+    try:
+        idx = [s for s in session
+               if len(s) == 5 and session[s]['edu'] == edu and session[s]['school'] == school][0]
+    except IndexError:
+        idx = None
 
-    # 급식 출력하기
-    return display.return_meal(
-        date=today,                # 날짜 형식 YYYY MM DD 로 변환
-        edu_code=edu_code,        # 교육청 코드
-        school_code=school_code,  # 학교 코드
+    if idx is None:
+        idx = f"s{urandom(2).hex()}"
+
+    # 세션 정보 업데이트
+    session[idx] = dict(
+        edu=edu,
+        school=school,
+        name=name,
+        date=date
     )
 
+    return idx
 
+
+@bp.route("/<string:edu_code>/<string:school_code>/", defaults={"date": datetime.today().strftime("%Y%m%d")})
 @bp.route("/<string:edu_code>/<string:school_code>/<string:date>")
-def show_custom_date(edu_code: str, school_code: str, date: str):
-    # 오늘 날짜 가져오기 - 서버 기준
-    today = datetime.today()
+def show(edu_code: str, school_code: str, date: str):
+    try:
+        # 날짜 불러오기
+        day = datetime.strptime(date, "%Y%m%d")
 
-    # 오늘 급식은 이 뷰 포인트 이용 안함!
-    if date == today.strftime('%Y%m%d'):
-        return redirect(
-            url_for(
-                ".show_today",
+        not_today = True
+        if datetime.today().strftime("%Y%m%d") == date:
+            not_today = False
+    except ValueError:
+        return redirect(url_for(".show", edu_code=edu_code, school_code=school_code))
+
+    # 내일 이동 버튼을 위한 값
+    tomorrow = (day + timedelta(days=1)).strftime("%Y%m%d")
+
+    # 어제 이동 버튼을 위한 값
+    yesterday = (day - timedelta(days=1)).strftime("%Y%m%d")
+
+    # Redis 에 저장된 캐시 검색
+    result = get_cache_by_data(
+        edu=edu_code,
+        school=school_code,
+        date=date
+    )
+
+    if result is None:  # 발견된 캐시 없음
+        try:
+            # 교육청 서버에서 가져오기
+            result = search_meal_by_codes(
                 edu_code=edu_code,
-                school_code=school_code
+                school_code=school_code,
+                date=date
             )
+
+            # 데이터 분해하기
+            result = result['mealServiceDietInfo']
+
+            # `row` 찾기
+            for i in result:
+                for j in i.keys():
+                    if j == "row":
+                        result = i[j]
+                        break
+        except KeyError:
+            return render_template(
+                "meal/not_found.html",
+                title="정보 없음",
+                use_modal=True,
+
+                day=day.strftime('%Y년 %m월 %d일'),
+
+                edu_code=edu_code,        # 교육청 코드
+                school_code=school_code,  # 학교 코드
+                yesterday=yesterday,      # 어제
+                tomorrow=tomorrow,        # 내일
+
+                not_today=not_today       # 오늘 메뉴인지 검사용
+            )
+        except HTTPError:
+            # 교육청 점검 or 타임아웃 처리 단계
+            session['alert'] = "급식 정보를 불러오는 데 실패했습니다"
+            return redirect(url_for("index.index"))
+
+        # Redis 에 급식 정보 캐싱
+        add_cache(
+            edu=edu_code,
+            school=school_code,
+            date=date,
+            json=result
         )
 
+    # 세션 아이디 설정
+    idx = _session(
+        edu=edu_code,
+        school=school_code,
+        name="dd",
+        date=date
+    )
+
     # 급식 출력하기
-    return display.return_meal(
-        date=date,                # 날짜 값 그대로 전송
-        edu_code=edu_code,        # 교육청 코드
-        school_code=school_code,  # 학교 코드
+    return render_template(
+        "meal/show.html",
+        title=result[0]['SCHUL_NM'],  # 학교 이름
+        use_modal=True,
+
+        day=day.strftime('%Y년 %m월 %d일'),
+        result=result,                # 급식 조회 결과
+
+        edu_code=edu_code,            # 교육청 코드
+        school_code=school_code,      # 학교 코드
+        yesterday=yesterday,          # 어제
+        tomorrow=tomorrow,            # 내일
+
+        not_today=not_today,          # 오늘 메뉴인지 검사용
+        idx=idx                       # 세션 정보
     )
