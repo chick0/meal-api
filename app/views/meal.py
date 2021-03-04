@@ -116,7 +116,7 @@ def show(edu_code: str, school_code: str, date: str):
     idx = _session(
         edu=edu_code,
         school=school_code,
-        name="dd",
+        name=result[0]['SCHUL_NM'],
         date=date
     )
 

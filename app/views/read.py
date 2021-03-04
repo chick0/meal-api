@@ -23,7 +23,7 @@ def get_school_data(idx: str):
 
         date = session[idx]['date']      # 날짜 정보
 
-        return name, url_for("meal.show_custom_date",
+        return name, url_for("meal.show",
                              edu_code=edu,
                              school_code=school,
                              date=date)
