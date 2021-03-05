@@ -47,10 +47,12 @@ def show(edu_code: str, school_code: str, date: str):
         # 날짜 불러오기
         day = datetime.strptime(date, "%Y%m%d")
 
+        # 조회 날짜가 오늘인지 확인
         not_today = True
         if datetime.today().strftime("%Y%m%d") == date:
             not_today = False
     except ValueError:
+        # 전달받은 날짜로 날짜를 불러오지 못함
         return redirect(url_for(".show", edu_code=edu_code, school_code=school_code))
 
     # 내일 이동 버튼을 위한 값
@@ -100,7 +102,7 @@ def show(edu_code: str, school_code: str, date: str):
                 not_today=not_today       # 오늘 메뉴인지 검사용
             )
         except HTTPError:
-            # 교육청 점검 or 타임아웃 처리 단계
+            # 교육청 점검 or 타임아웃
             session['alert'] = "급식 정보를 불러오는 데 실패했습니다"
             return redirect(url_for("index.index"))
 

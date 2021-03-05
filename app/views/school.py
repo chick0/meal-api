@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from re import findall
+from urllib.error import HTTPError
 
 from flask import Blueprint, request, session
 from flask import render_template
@@ -45,12 +46,13 @@ def select():
     if school_name in ["초등", "초등학교", "중", "중학교", "고등", "고등학교", "학교"]:
         return alert(msg="해당 검색어는 사용이 불가능 합니다")
 
-    # 검색어로 학교 찾기
     try:
+        # 검색어로 학교 찾기
         school_list = search_school_by_name(
             school_name=school_name
         )
-    except (ValueError, Exception):
+    except HTTPError:
+        # 교육청 점검 or 타임아웃
         return alert(msg="학교 목록을 불러오는 데 실패했습니다")
 
     try:
