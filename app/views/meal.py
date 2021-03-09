@@ -40,9 +40,9 @@ def _session(edu: str, school: str, date: str, name: str):
     return idx
 
 
-@bp.route("/<string:edu_code>/<string:school_code>/", defaults={"date": datetime.today().strftime("%Y%m%d")})
+@bp.route("/<string:edu_code>/<string:school_code>/")
 @bp.route("/<string:edu_code>/<string:school_code>/<string:date>")
-def show(edu_code: str, school_code: str, date: str):
+def show(edu_code: str, school_code: str, date: str = datetime.today().strftime("%Y%m%d")):
     try:
         # 날짜 불러오기
         day = datetime.strptime(date, "%Y%m%d")
