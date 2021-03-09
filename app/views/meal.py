@@ -4,7 +4,7 @@ from urllib.error import HTTPError
 from datetime import datetime, timedelta
 
 from flask import Blueprint
-from flask import session
+from flask import session, request
 from flask import render_template
 from flask import redirect, url_for
 
@@ -51,6 +51,10 @@ def show(edu_code: str, school_code: str, date: str = datetime.today().strftime(
         not_today = True
         if datetime.today().strftime("%Y%m%d") == date:
             not_today = False
+
+            # 요청 주소에 오늘 날짜가 포함되어 있으면 날짜를 제거한 링크로 이동
+            if date in request.path:
+                return redirect(url_for(".show", edu_code=edu_code, school_code=school_code))
     except ValueError:
         # 전달받은 날짜로 날짜를 불러오지 못함
         return redirect(url_for(".show", edu_code=edu_code, school_code=school_code))
