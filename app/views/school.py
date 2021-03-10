@@ -8,6 +8,7 @@ from flask import redirect, url_for
 
 from app.module.api import search_school_by_name
 
+
 bp = Blueprint(
     name=__name__.split(".")[-1],
     import_name=__name__,

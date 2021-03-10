@@ -3,6 +3,7 @@
 from flask import Blueprint
 from flask import render_template
 
+
 bp = Blueprint(
     name=__name__.split(".")[-1],
     import_name=__name__,

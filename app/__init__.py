@@ -9,6 +9,7 @@ from flask_redis import FlaskRedis
 from app.module import error, template_filter
 from conf import conf
 
+
 redis = FlaskRedis()
 
 

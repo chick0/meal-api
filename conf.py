@@ -2,8 +2,10 @@
 from os import path, mkdir, listdir
 from configparser import ConfigParser
 
+
 BASE_DIR = path.dirname(__file__)
 CONF_DIR = path.join(BASE_DIR, "conf")
+
 
 if not path.exists(CONF_DIR):
     mkdir(CONF_DIR)
