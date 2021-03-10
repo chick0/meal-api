@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from os import path
+from re import compile
 from io import StringIO
 
 from flask import Flask
@@ -40,6 +42,19 @@ def create_app():
                 "Disallow: /",
             ]))
         )
+
+    @app.before_first_request
+    def set_pwa_service_worker_version():
+        try:
+            with open(path.join("app", "static", "pwa", "service-worker.js"), mode="r", encoding="utf-8") as fp:
+                js = fp.read()
+
+                pattern = compile(r"const CACHE_VER = \"([0-9]{4}-[0-9]{2}-[0-9]{2}_v[0-9]{2,})\";")
+                worker_version = pattern.findall(js)[0]
+        except FileNotFoundError:
+            worker_version = "undefined"
+
+        redis.set("pwa_service_worker_version", worker_version)
 
     @app.before_request
     def set_global():
