@@ -3,6 +3,8 @@
 from flask import Blueprint
 from flask import render_template
 
+from app import redis
+
 
 bp = Blueprint(
     name=__name__.split(".")[-1],
@@ -24,6 +26,18 @@ def tool():
     return render_template(
         "app/tool.html",
         title="🌟 즐겨찾기 관리자"
+    )
+
+
+@bp.route("/cache")
+def cache():
+    # 첫 번째 요청에서 확인한 PWA 서비스 워커 버전 정보 불러오기
+    ver = redis.get("pwa_service_worker_version").decode()
+
+    return render_template(
+        "app/cache.html",
+        title="서비스워커 캐시 버전",
+        ver_server=ver
     )
 
 
