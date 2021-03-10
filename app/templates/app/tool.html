@@ -9,14 +9,13 @@
 
         <section class="lf">
             <h2>내보내기</h2>
-            <textarea id="output" style="width:60%;" readonly="readonly"></textarea><br>
-            <button class="btn" id="export">내보내기</button>
-            <button class="btn copy" data-clipboard-target="#output">복사하기</button>
+            <button class="btn" id="download_ready">즐겨찾기 다운로드</button>
+            <a id="download" style="display:none;"></a>
         </section>
 
         <section class="lf">
             <h2>가져오기</h2>
-            <textarea id="input" style="width:60%;"></textarea><br>
+            <input type="file" id="fake_upload">
             <button class="btn" id="import">가져오기</button>
         </section>
 
@@ -26,10 +25,40 @@
 {% endblock %}
 {% block script %}
         <script src="{{ url_for('static', filename='js/star.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/clipboard.min.js') }}"></script>
         <script type="text/javascript">
-            new ClipboardJS(".copy").on("success",function(){window.alert("복사되었습니다!");});
-            document.querySelector("#export").addEventListener('click',function(){document.querySelector("#output").value = JSON.stringify(get_star());});
-            document.querySelector("#import").addEventListener('click',function(){var star=JSON.parse(document.querySelector("#input").value);var keys=Object.keys(star);for(var key in keys){add_star(keys[key], star[keys[key]]);}window.alert("완료");});
+            document.getElementById("import").addEventListener('click',function(){
+                var fake_upload = document.getElementById("fake_upload").files[0];
+
+                if(typeof fake_upload != "undefined"){
+                    console.log(fake_upload);
+
+                    const reader = new FileReader();
+                    reader.addEventListener('load', function(){
+                        try{
+                            var star = JSON.parse(reader.result);
+                            var keys = Object.keys(star);
+
+                            for(var key in keys){
+                                add_star(keys[key], star[keys[key]]);
+                            }
+                            window.alert("완료");
+                        }
+                        catch{
+                            window.alert("즐겨찾기 정보가 저장된 파일이 아닙니다");
+                        }
+                    });
+                    reader.readAsText(fake_upload);
+                }
+                else{
+                    window.alert("파일을 선택해야 합니다.");
+                }
+            });
+            document.getElementById("download_ready").addEventListener('click',function(){
+                var download = document.getElementById("download");
+
+                download.setAttribute("href", "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(get_star())));
+                download.setAttribute("download", "즐겨찾기_백업.json");
+                download.click();
+            });
         </script>
 {% endblock %}
