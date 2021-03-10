@@ -11,7 +11,7 @@ bp = Blueprint(
 
 
 @bp.route("/manifest.json")
-def pwa_manifest():
+def manifest():
     return send_file(
         mimetype="application/json",
         filename_or_fp="static/pwa/manifest.json"
@@ -19,7 +19,7 @@ def pwa_manifest():
 
 
 @bp.route("/service-worker.js")
-def pwa_service_worker():
+def service_worker():
     return send_file(
         mimetype="application/javascript",
         filename_or_fp="static/pwa/service-worker.js"
