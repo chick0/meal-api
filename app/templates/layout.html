@@ -21,9 +21,9 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">{% endif %}
 
         <meta name="theme-color" content="#DBDBDB">
-        <link rel="shortcut icon" href="/favicon.ico">
+        <link rel="shortcut icon" href="{{ url_for('favicon') }}">
         <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/icon192.png') }}" sizes="192x192">
-        <link rel="manifest" href="/manifest.json">
+        <link rel="manifest" href="{{ url_for('pwa_files.manifest') }}">
 
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -54,7 +54,7 @@
         {% block modal %}{% endblock %}
 
         <script>
-            if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("/service-worker.js");});}
+            if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("{{ url_for('pwa_files.service_worker') }}");});}
         </script>
         {% block script %}{% endblock %}
     </body>
