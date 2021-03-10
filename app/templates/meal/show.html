@@ -138,7 +138,7 @@
         <script type="text/javascript">
             document.getElementById("kakao").addEventListener("click",function(){
                 if(!Kakao.isInitialized()){Kakao.init("{{ g.k }}");}
-                Kakao.Link.sendCustom({templateId:39130, templateArgs:{name:"{{ title }}", path:"{{ edu_code }}/{{ school_code }}"}});
+                Kakao.Link.sendCustom({templateId:{{ g.tid }}, templateArgs:{name:"{{ title }}", path:"{{ edu_code }}/{{ school_code }}"}});
             });
             document.getElementById("band").addEventListener("click",function(){
                 window.open(`https://band.us/plugin/share?body='{{ title }}'의 급식 정보 ${document.URL}&route=${document.domain}`);

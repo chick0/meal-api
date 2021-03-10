@@ -18,6 +18,7 @@ def create_app():
     def set_global():
         g.host = conf['app']['host']
         g.k = conf['api']['k']
+        g.tid = conf['api']['tid']
 
     @app.after_request
     def set_header(response):
