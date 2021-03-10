@@ -34,8 +34,10 @@ def index():
 
 @bp.route("/get")
 def get_poem():
+    # 등록된 시 중에서 한 가지 추출
     ctx = getattr(read, choice(read.__all__))
 
+    # 추천한 시에서 미리보기 추출
     preview = get_preview(content=ctx.CONTENT)
 
     idx = request.args.get("idx", "none")
