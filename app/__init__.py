@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+from io import StringIO
 
 from flask import Flask
 from flask import request, g
+from flask import send_file
 from flask_redis import FlaskRedis
 
 from app.module import error, template_filter
@@ -13,6 +15,30 @@ redis = FlaskRedis()
 def create_app():
     app = Flask(__name__)
     app.config.from_object(obj=__import__("config"))
+
+    @app.route("/ok")
+    def ok():
+        return "200 OK", 200
+
+    @app.route("/favicon.ico")
+    def favicon():
+        return send_file(
+            "static/img/favicon.ico",
+            mimetype="image/x-icon"
+        )
+
+    @app.route("/robots.txt")
+    def robots():
+        return send_file(
+            mimetype="text/plain",
+            filename_or_fp=StringIO("\n".join([
+                "User-agent: *",
+                "Allow: /$",
+                "Allow: /static",
+                "Allow: /read",
+                "Disallow: /",
+            ]))
+        )
 
     @app.before_request
     def set_global():

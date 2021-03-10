@@ -11,11 +11,6 @@ bp = Blueprint(
 )
 
 
-@bp.route("/ok")
-def ok():
-    return "OK", 200
-
-
 @bp.route("/")
 def index():
     try:
