@@ -46,7 +46,7 @@
         </section>
 
         <section class="menu">
-        {% if not_today is true %}
+        {% if today is false %}
             <div style="padding-bottom:1px">
                 <a class="high" href="{{ url_for('meal.show', edu_code=edu_code, school_code=school_code) }}" style="padding:5px;border-radius:0.3rem;">오늘 메뉴 보러가기</a>
             </div>

@@ -4,7 +4,7 @@ from urllib.error import HTTPError
 from datetime import datetime, timedelta
 
 from flask import Blueprint
-from flask import session, request
+from flask import session
 from flask import render_template
 from flask import redirect, url_for
 
@@ -42,22 +42,26 @@ def _session(edu: str, school: str, date: str, name: str):
 
 @bp.route("/<string:edu_code>/<string:school_code>/")
 @bp.route("/<string:edu_code>/<string:school_code>/<string:date>")
-def show(edu_code: str, school_code: str, date: str = datetime.today().strftime("%Y%m%d")):
-    try:
-        # 날짜 불러오기
-        day = datetime.strptime(date, "%Y%m%d")
+def show(edu_code: str, school_code: str, date: str = "today"):
+    today = False
 
-        # 조회 날짜가 오늘인지 확인
-        not_today = True
-        if datetime.today().strftime("%Y%m%d") == date:
-            not_today = False
+    if date == "today":
+        # 오늘 날짜 불러오기
+        day = datetime.today()
+        date = day.strftime("%Y%m%d")
 
-            # 요청 주소에 오늘 날짜가 포함되어 있으면 날짜를 제거한 링크로 이동
-            if date in request.path:
+        today = True
+    else:
+        try:
+            # 날짜 불러오기
+            day = datetime.strptime(date, "%Y%m%d")
+
+            # 불러온 날짜가 오늘이면 날짜 제거하기
+            if datetime.today().strftime("%Y%m%d") == date:
                 return redirect(url_for(".show", edu_code=edu_code, school_code=school_code))
-    except ValueError:
-        # 전달받은 날짜로 날짜를 불러오지 못함
-        return redirect(url_for(".show", edu_code=edu_code, school_code=school_code))
+        except ValueError:
+            # 전달받은 날짜로 날짜를 불러오지 못함
+            return redirect(url_for(".show", edu_code=edu_code, school_code=school_code))
 
     # 내일 이동 버튼을 위한 값
     tomorrow = (day + timedelta(days=1)).strftime("%Y%m%d")
@@ -103,7 +107,7 @@ def show(edu_code: str, school_code: str, date: str = datetime.today().strftime(
                 yesterday=yesterday,      # 어제
                 tomorrow=tomorrow,        # 내일
 
-                not_today=not_today       # 오늘 메뉴인지 검사용
+                today=today               # 오늘 메뉴인지 검사용
             )
         except HTTPError:
             # 교육청 점검 or 타임아웃
@@ -140,6 +144,6 @@ def show(edu_code: str, school_code: str, date: str = datetime.today().strftime(
         yesterday=yesterday,          # 어제
         tomorrow=tomorrow,            # 내일
 
-        not_today=not_today,          # 오늘 메뉴인지 검사용
+        today=today,                  # 오늘 메뉴인지 검사용
         idx=idx                       # 세션 정보
     )
