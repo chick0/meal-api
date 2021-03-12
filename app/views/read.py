@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from random import choice
 
 from flask import Blueprint
 from flask import request, session
@@ -78,4 +79,16 @@ def show(author: str, title: str):
         idx=idx,           # 세션 ID
         button=button,     # 뒤로가기 버튼 텍스트
         target=target      # 뒤로가기 버튼 목적지
+    )
+
+
+@bp.route("/random")
+def random():
+    # 등록된 시 중에서 한 가지 추출
+    ctx = getattr(read, choice(read.__all__))
+
+    return render_template(
+        "read/random.html",
+        title=ctx.TITLE,
+        ctx=ctx
     )
