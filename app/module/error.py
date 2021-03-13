@@ -26,7 +26,7 @@ def method_not_allowed(error):
         "error/error.html",
         title="잘못된 요청",
 
-        message="순서가 잘못되었습니다"
+        message="해당 요청 방식은 사용할 수 없습니다"
     ), getattr(error, "code")
 
 
