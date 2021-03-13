@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 {% block content %}
         <section class="lf">
-            <h2>{{ title }}</h2>
+            <a href="{{ url_for('read.random') }}"><h2>{{ title }}</h2></a>
 
         {% for ctx in context %}
             <h3>
