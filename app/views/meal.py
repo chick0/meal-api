@@ -57,6 +57,9 @@ def show(edu_code: str, school_code: str, date: str = "today"):
             # 날짜 불러오기
             day = datetime.strptime(date, "%Y%m%d")
 
+            # 오늘 날짜면 today 링크로 리다이렉트
+            if day.date() == datetime.today().date():
+                return redirect(url_for(".show", edu_code=edu_code, school_code=school_code, date="today"))
         except ValueError:
             # 전달받은 날짜로 날짜를 불러오지 못함
             return abort(400)
