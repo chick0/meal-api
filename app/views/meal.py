@@ -76,7 +76,8 @@ def show(edu_code: str, school_code: str, date: str = "today"):
         date=date
     )
 
-    if result is None:  # 발견된 캐시 없음
+    # 발견된 캐시 없음
+    if result is None:
         try:
             # 교육청 서버에서 가져오기
             result = search_meal_by_codes(
@@ -95,20 +96,8 @@ def show(edu_code: str, school_code: str, date: str = "today"):
                         result = i[j]
                         break
         except KeyError:
-            return render_template(
-                "meal/not_found.html",
-                title="정보 없음",
-                use_modal=True,
-
-                day=day.strftime('%Y년 %m월 %d일'),
-
-                edu_code=edu_code,        # 교육청 코드
-                school_code=school_code,  # 학교 코드
-                yesterday=yesterday,      # 어제
-                tomorrow=tomorrow,        # 내일
-
-                today=today               # 오늘 메뉴인지 검사용
-            )
+            # 급식 없는 날 / 주말 또는 휴교일
+            result = []
         except HTTPError:
             # 교육청 점검 or 타임아웃
             session['alert'] = "급식 정보를 불러오는 데 실패했습니다"
@@ -120,6 +109,23 @@ def show(edu_code: str, school_code: str, date: str = "today"):
             school=school_code,
             date=date,
             json=result
+        )
+
+    # 급식 없는 날 / 주말 또는 휴교일
+    if len(result) == 0:
+        return render_template(
+            "meal/not_found.html",
+            title="정보 없음",
+            use_modal=True,
+
+            day=day.strftime('%Y년 %m월 %d일'),
+
+            edu_code=edu_code,        # 교육청 코드
+            school_code=school_code,  # 학교 코드
+            yesterday=yesterday,      # 어제
+            tomorrow=tomorrow,        # 내일
+
+            today=today               # 오늘 메뉴인지 검사용
         )
 
     # 세션 아이디 설정
