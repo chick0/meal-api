@@ -99,6 +99,7 @@ def create_app():
             print(f"[!] '{view_point}' 는 뷰 포인트가 아닙니다")
 
     # 오류 핸들러
+    app.register_error_handler(400, error.bad_request)
     app.register_error_handler(403, error.page_not_found)
     app.register_error_handler(404, error.page_not_found)
     app.register_error_handler(405, error.method_not_allowed)

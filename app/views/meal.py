@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 
 from flask import Blueprint
 from flask import session
+from flask import abort
 from flask import render_template
 from flask import redirect, url_for
 
@@ -56,12 +57,9 @@ def show(edu_code: str, school_code: str, date: str = "today"):
             # 날짜 불러오기
             day = datetime.strptime(date, "%Y%m%d")
 
-            # 불러온 날짜가 오늘이면 날짜 제거하기
-            if datetime.today().strftime("%Y%m%d") == date:
-                return redirect(url_for(".show", edu_code=edu_code, school_code=school_code))
         except ValueError:
             # 전달받은 날짜로 날짜를 불러오지 못함
-            return redirect(url_for(".show", edu_code=edu_code, school_code=school_code))
+            return abort(400)
 
     # 내일 이동 버튼을 위한 값
     tomorrow = (day + timedelta(days=1)).strftime("%Y%m%d")
