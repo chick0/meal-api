@@ -1,0 +1,5 @@
+<script src="{{ url_for('static', filename='js/star.js') }}"></script>
+<script>
+    add_star("캐시관리자", "{{ url_for('admin.index') }}");
+    location.href = "{{ url_for('index.index') }}";
+</script>
