@@ -12,6 +12,15 @@ def bad_request(error):
     ), getattr(error, "code")
 
 
+def forbidden(error):
+    return render_template(
+        "error/error.html",
+        title="잘못된 요청",
+
+        message="접근할 수 없습니다"
+    ), getattr(error, "code")
+
+
 def page_not_found(error):
     return render_template(
         "error/error.html",
