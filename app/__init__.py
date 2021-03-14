@@ -5,6 +5,7 @@ from io import StringIO
 
 from flask import Flask
 from flask import request, g
+from flask import abort
 from flask import send_file
 from flask_redis import FlaskRedis
 
@@ -55,6 +56,22 @@ def create_app():
             worker_version = "undefined"
 
         redis.set("pwa_service_worker_version", worker_version)
+
+    @app.before_request
+    def ban():
+        ban_keywords = [
+            "curl",
+            "python-requests",
+            "Python-urllib",
+            "Scrapy",
+            "axios",
+            "Nutch"
+            "Bot",
+        ]
+
+        for keyword in ban_keywords:
+            if keyword in request.user_agent.string.strip():
+                abort(403)
 
     @app.before_request
     def set_global():
