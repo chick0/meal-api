@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 {% block content %}
-        <section class="lf">
+        <section class="lf" style="padding-bottom:60px;">
             <h1>{{ title }}</h1>
             <div style="margin-top:-24px;margin-bottom:0;">
                 <a class="l" href="{{ url_for('admin.delete') }}">캐시 삭제하기</a>
@@ -16,5 +16,9 @@
                 </li>
             {% endfor %}
             </ol>
+        </section>
+
+        <section class="nav-right-bottom">
+            <a class="btn" href="{{ url_for('index.index') }}">학교 검색하러 가기</a>
         </section>
 {% endblock %}
