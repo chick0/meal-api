@@ -9,7 +9,7 @@
                 <b>{{ keys|length }}</b>개의 급식이 캐싱됨
             </p>
             <ol class="list">
-            {% for key in keys %}
+            {% for key in keys[:25] %}
                 {% set k = key.split("#") %}
                 <li>
                     <a class="btn" href="{{ url_for('meal.show', edu_code=k[0], school_code=k[1], date=k[2]) }}" target="_blank">{{ k[0] }}&nbsp;{{ k[1] }}&nbsp;{{ k[2][:4] }}-{{ k[2][4:6] }}-{{ k[2][6:] }}</a>
