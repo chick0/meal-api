@@ -66,7 +66,8 @@ def create_app():
             "Scrapy",
             "axios",
             "Nutch"
-            "Bot",
+
+            "AhrefsBot",
         ]
 
         for keyword in ban_keywords:
