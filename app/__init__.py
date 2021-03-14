@@ -65,14 +65,21 @@ def create_app():
             "Python-urllib",
             "Scrapy",
             "axios",
-            "Nutch"
+            "Nutch",
+            "Go-http-client",
 
+            # 알려진 봇
             "AhrefsBot",
         ]
 
+        # 유저 에이전트 차단
         for keyword in ban_keywords:
             if keyword in request.user_agent.string.strip():
                 abort(403)
+
+        # 파일 확장자 차단
+        if request.path.endswith(".php"):
+            abort(403)
 
     @app.before_request
     def set_global():
