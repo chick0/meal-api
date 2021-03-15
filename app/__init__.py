@@ -20,10 +20,6 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(obj=__import__("config"))
 
-    @app.route("/ok")
-    def ok():
-        return "200 OK", 200
-
     @app.route("/favicon.ico")
     def favicon():
         return send_file(
@@ -56,6 +52,11 @@ def create_app():
             worker_version = "undefined"
 
         redis.set("pwa_service_worker_version", worker_version)
+
+    @app.before_request
+    def for_uptime_bot():
+        if "Uptime" in request.user_agent.string:
+            return "OK", 200
 
     @app.before_request
     def ban():
