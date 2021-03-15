@@ -59,6 +59,9 @@ def create_app():
 
     @app.before_request
     def ban():
+        if request.path.startswith("/.") or request.path.endswith(".php"):
+            abort(502)
+
         ban_keywords = [
             "curl",
             "python-requests",
@@ -67,9 +70,6 @@ def create_app():
             "axios",
             "Nutch",
             "Go-http-client",
-
-            # 알려진 봇
-            "AhrefsBot",
         ]
 
         # 유저 에이전트 차단
@@ -77,9 +77,8 @@ def create_app():
             if keyword in request.user_agent.string.strip():
                 abort(403)
 
-        # 파일 확장자 차단
-        if request.path.endswith(".php"):
-            abort(403)
+        if "AhrefsBot" in request.user_agent.string:
+            return "NOPE", 403
 
     @app.before_request
     def set_global():
