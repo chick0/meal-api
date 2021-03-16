@@ -23,7 +23,7 @@ bp = Blueprint(
 def _session(edu: str, school: str, name: str, date: str):
     try:
         # 조회중인 학교와 같은 세션 아이디를 찾음
-        idx = [s for s in session
+        idx = [s for s in session.keys()
                if len(s) == 5 and session[s]['edu'] == edu and session[s]['school'] == school][0]
     except IndexError:
         # 없다면 생성하기, s로 시작 & 랜덤 4자
