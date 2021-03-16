@@ -86,8 +86,6 @@ def create_app():
     @app.after_request
     def set_header(response):
         response.headers['X-Frame-Options'] = "deny"  # Clickjacking
-        response.headers['X-XSS-Protection'] = "1"    # Cross-site scripting
-
         response.headers['X-Powered-By'] = "chick_0"
         return response
 
