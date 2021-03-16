@@ -13,14 +13,14 @@ bp = Blueprint(
 @bp.route("/manifest.json")
 def manifest():
     return send_file(
-        mimetype="application/json",
-        filename_or_fp="static/pwa/manifest.json"
+        "static/pwa/manifest.json",
+        mimetype="application/json"
     )
 
 
 @bp.route("/service-worker.js")
 def service_worker():
     return send_file(
-        mimetype="application/javascript",
-        filename_or_fp="static/pwa/service-worker.js"
+        "static/pwa/service-worker.js",
+        mimetype="application/javascript"
     )
