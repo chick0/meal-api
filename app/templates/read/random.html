@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 {% block content %}
         <section class="lf">
-            <a href="javascript:location.reload()"><h2>{{ title }}</h2></a>
+            <a href="{{ url_for('index.index') }}"><h2>{{ title }}</h2></a>
             <p class="l" style="margin-top:-24px;">{{ ctx.AUTHOR }}</p>
 
         {% for line in ctx.CONTENT %}
