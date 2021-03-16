@@ -56,7 +56,7 @@ def select():
 
     try:
         # 검색어로 학교 찾기
-        school_list = search_school_by_name(
+        result = search_school_by_name(
             school_name=school_name
         )
     except HTTPError:
@@ -64,11 +64,19 @@ def select():
         return alert(msg="학교 목록을 불러오는 데 실패했습니다")
 
     try:
+        # 학교 목록
+        school_list = [
+            {
+                "name": f"({school['LCTN_SC_NM']}) {school['SCHUL_NM']}",
+                "url": url_for("meal.show", edu_code=school['ATPT_OFCDC_SC_CODE'], school_code=school['SD_SCHUL_CODE'])
+            } for school in result['schoolInfo'][1]['row']
+        ]
+
         # 검색 결과가 있으면 학교 선택
         return render_template(
             "school/select.html",
             title="학교 선택",
-            result=school_list['schoolInfo'][1]['row']
+            result=school_list
         )
     except (KeyError, Exception):
         # API 서버에서 받은 정보에 학교 정보가 없으면

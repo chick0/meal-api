@@ -1,18 +1,26 @@
 {% extends 'layout.html' %}
 {% block content %}
-        <section class="lf" style="padding-bottom: 120px;">
+        <section class="lf">
             <h1>학교를 선택해주세요</h1>
-            <ol class="list">
-            {% for i in result %}
-                {% set sub = i['ATPT_OFCDC_SC_NM'].replace("교육청", "") %}
-                <li>
-                    <a class="btn" href="{{ url_for('meal.show', edu_code=i['ATPT_OFCDC_SC_CODE'], school_code=i['SD_SCHUL_CODE']) }}">({{ sub }}) {{ i['SCHUL_NM'] }}</a>
-                </li>
-            {% endfor %}
-            </ol>
-        </section>
-
-        <section class="nav-right-bottom">
-            <a class="btn" href="{{ url_for('index.index') }}">학교 검색하러 가기</a>
+            <div style="margin-top:-24px;margin-bottom:0;">
+                <a class="l" href="{{ url_for('index.index') }}">돌아가기</a>
+            </div>
+            <ol class="list" id="display"></ol>
         </section>
 {% endblock %}
+{% block script %}
+        <script>
+            const list = {{ result|safe }};
+            for(key in list){
+                var li = document.createElement("li");
+                var a = document.createElement("a");
+
+                a.setAttribute("class", "btn");
+                a.setAttribute("href", list[key]['url']);
+                a.appendChild(document.createTextNode(list[key]['name']));
+
+                li.appendChild(a);
+                document.getElementById("display").appendChild(li);
+            }
+        </script>
+{% endblock%}
