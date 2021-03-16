@@ -20,14 +20,13 @@ bp = Blueprint(
 )
 
 
-def _session(edu: str, school: str, date: str, name: str):
+def _session(edu: str, school: str, name: str, date: str):
     try:
+        # 조회중인 학교와 같은 세션 아이디를 찾음
         idx = [s for s in session
                if len(s) == 5 and session[s]['edu'] == edu and session[s]['school'] == school][0]
     except IndexError:
-        idx = None
-
-    if idx is None:
+        # 없다면 생성하기, s로 시작 & 랜덤 4자
         idx = f"s{urandom(2).hex()}"
 
     # 세션 정보 업데이트
