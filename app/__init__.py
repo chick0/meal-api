@@ -58,22 +58,6 @@ def create_app():
             return "OK", 200
 
     @app.before_request
-    def ban():
-        ban_keywords = [
-            "curl",
-            "python-requests",
-            "Python-urllib",
-            "Scrapy",
-            "axios",
-            "Nutch",
-            "Go-http-client",
-        ]
-
-        for keyword in ban_keywords:
-            if keyword in request.user_agent.string:
-                return "", 200
-
-    @app.before_request
     def set_global():
         # 웹사이트 도메인
         g.host = conf['app']['host']
