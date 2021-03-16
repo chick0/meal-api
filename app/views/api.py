@@ -24,14 +24,18 @@ def get_poem():
     # 작품에서 한 구절 랜점 추첨
     preview = choice([text for text in ctx.CONTENT if len(text) != 0]).replace("&nbsp;", "")
 
-    idx = request.args.get("idx", None)
-    url = url_for("read.show", author=ctx.AUTHOR, title=ctx.TITLE, idx=idx)
+    # 급식 세션 아이디 가져오기
+    idx = request.args.get("idx", "none")
+
+    # 해당 세션 아이디가 규칙을 따르는지 검사 ( s로 시작하는가 , 5자 인가 )
+    if not idx.startswith("s") or len(idx) != 5:
+        idx = None
 
     return Response(
         status=200,
         mimetype="application/json",
         response=dumps({
-            "url": url,
+            "url": url_for("read.show", author=ctx.AUTHOR, title=ctx.TITLE, idx=idx),
             "preview": preview
         })
     )

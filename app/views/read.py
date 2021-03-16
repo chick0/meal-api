@@ -16,20 +16,25 @@ bp = Blueprint(
 
 
 def get_school_data(idx: str):
-    try:
-        name = session[idx]['name']      # 학교 이름
+    # 해당 세션 아이디가 규칙을 따르는지 검사 ( s로 시작하는가 , 5자 인가 )
+    if idx.startswith("s") and len(idx) == 5:
+        try:
+            name = session[idx]['name']      # 학교 이름
 
-        edu = session[idx]['edu']        # 교육청 코드
-        school = session[idx]['school']  # 학교 코드
+            edu = session[idx]['edu']        # 교육청 코드
+            school = session[idx]['school']  # 학교 코드
 
-        date = session[idx]['date']      # 날짜 정보
+            date = session[idx]['date']      # 날짜 정보
 
-        return name, url_for("meal.show",
-                             edu_code=edu,
-                             school_code=school,
-                             date=date)
-    except (KeyError, Exception):
-        return "학교 검색하러 가기", url_for("index.index")
+            return name, url_for("meal.show",
+                                 edu_code=edu,
+                                 school_code=school,
+                                 date=date)
+        except (KeyError, Exception):
+            pass
+
+    # 등록된 세션 아이디가 아닌경우
+    return "학교 검색하러 가기", url_for("index.index")
 
 
 @bp.route("")
