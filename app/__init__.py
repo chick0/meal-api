@@ -5,7 +5,6 @@ from io import StringIO
 
 from flask import Flask
 from flask import request, g
-from flask import abort
 from flask import send_file
 from flask_redis import FlaskRedis
 
@@ -60,9 +59,6 @@ def create_app():
 
     @app.before_request
     def ban():
-        if request.path.startswith("/.") or request.path.endswith(".php"):
-            abort(502)
-
         ban_keywords = [
             "curl",
             "python-requests",
@@ -73,13 +69,9 @@ def create_app():
             "Go-http-client",
         ]
 
-        # 유저 에이전트 차단
         for keyword in ban_keywords:
-            if keyword in request.user_agent.string.strip():
-                abort(403)
-
-        if "AhrefsBot" in request.user_agent.string:
-            return "NOPE", 403
+            if keyword in request.user_agent.string:
+                return "", 200
 
     @app.before_request
     def set_global():
