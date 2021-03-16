@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from os import path
-from re import compile
 from io import StringIO
 
 from flask import Flask
@@ -42,11 +41,13 @@ def create_app():
     @app.before_first_request
     def set_pwa_service_worker_version():
         try:
+            # 서비스 워커 스크립트 읽어오기
             with open(path.join("app", "static", "pwa", "service-worker.js"), mode="r", encoding="utf-8") as fp:
-                js = fp.read()
+                # 1,2 번줄은 스킵
+                fp.readline(), fp.readline()
 
-                pattern = compile(r"const CACHE_VER = \"([0-9]{4}-[0-9]{2}-[0-9]{2}_v[0-9]{2,})\";")
-                worker_version = pattern.findall(js)[0]
+                # 3 번째 줄에서 버전 정보 읽어오기
+                worker_version = fp.readline().split('const CACHE_VER = "')[-1][:-3]
         except FileNotFoundError:
             worker_version = "undefined"
 
