@@ -29,14 +29,14 @@ def create_app():
     @app.route("/robots.txt")
     def robots():
         return send_file(
-            mimetype="text/plain",
-            filename_or_fp=StringIO("\n".join([
+            StringIO("\n".join([
                 "User-agent: *",
-                "Allow: /$",
-                "Allow: /static",
-                "Allow: /read",
-                "Disallow: /",
-            ]))
+                "Allow: /$",       # 메인 페이지
+                "Allow: /static",  # js, css, img 같은 동적 파일들
+                "Allow: /read",    # 시
+                "Disallow: /",     # 위를 제외한 나머지 다
+            ])),
+            mimetype="text/plain"
         )
 
     @app.before_first_request
