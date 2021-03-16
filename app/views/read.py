@@ -34,12 +34,10 @@ def get_school_data(idx: str):
 
 @bp.route("")
 def index():
-    context = []
-    for _id in read.__all__:
-        context.append(getattr(read, _id))
+    # 시 목록 불러오고, 제목순으로 정렬
+    context = sorted([getattr(read, _id) for _id in read.__all__], key=lambda r: r.TITLE)
 
-    context = sorted(context, key=lambda r: r.TITLE)
-
+    # `idx`를 가져오고, 가져온 `idx`로 세션에 저장된 학교 정보 불러옴
     idx = request.args.get("idx", "none")
     button, target = get_school_data(idx=idx)
 
@@ -57,16 +55,15 @@ def index():
 
 @bp.route("/<string:author>/<string:title>")
 def show(author: str, title: str):
-    ctx = None
-    for _id in read.__all__:
-        context = getattr(read, _id)
-        if context.AUTHOR == author and context.TITLE == title:
-            ctx = context
-
-    if ctx is None:
+    try:
+        # 작품 검색
+        ctx = [ctx for ctx in [getattr(read, _id) for _id in read.__all__]
+               if ctx.AUTHOR == author and ctx.TITLE == title][0]
+    except IndexError:
         session['alert'] = "등록된 작품이 아닙니다"
         return redirect(url_for("index.index"))
 
+    # `idx`를 가져오고, 가져온 `idx`로 세션에 저장된 학교 정보 불러옴
     idx = request.args.get("idx", "none")
     button, target = get_school_data(idx=idx)
 
