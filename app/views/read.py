@@ -15,36 +15,25 @@ bp = Blueprint(
 )
 
 
-def get_school_data(idx: str):
-    # 해당 세션 아이디가 규칙을 따르는지 검사 ( s로 시작하는가 , 5자 인가 )
-    if idx.startswith("s") and len(idx) == 5:
-        try:
-            name = session[idx]['name']      # 학교 이름
-
-            edu = session[idx]['edu']        # 교육청 코드
-            school = session[idx]['school']  # 학교 코드
-
-            date = session[idx]['date']      # 날짜 정보
-
-            return name, url_for("meal.show",
-                                 edu_code=edu,
-                                 school_code=school,
-                                 date=date)
-        except (KeyError, Exception):
-            pass
-
-    # 등록된 세션 아이디가 아닌경우
-    return "학교 검색하러 가기", url_for("index.index")
-
-
 @bp.route("")
 def index():
     # 시 목록 불러오고, 제목순으로 정렬
     context = sorted([getattr(read, _id) for _id in read.__all__], key=lambda r: r.TITLE)
 
-    # `idx`를 가져오고, 가져온 `idx`로 세션에 저장된 학교 정보 불러옴
+    # 급식 조회중인 학교 세션 아이디로 정보 불러오기
     idx = request.args.get("idx", "none")
-    button, target = get_school_data(idx=idx)
+
+    # 해당 세션 아이디가 규칙을 따르는지 검사 ( s로 시작하는가 , 5자 인가 )
+    if idx.startswith("s") and len(idx) == 5 and idx in session.keys():
+        button = session[idx]['name']
+        target = url_for("meal.show",
+                         edu_code=session[idx]['edu'],        # 교육청 코드
+                         school_code=session[idx]['school'],  # 학교 코드
+                         date=session[idx]['date'])           # 날짜 정보
+    else:
+        button = "학교 검색하러 가기"
+        target = url_for("index.index")
+        idx = None
 
     return render_template(
         "read/index.html",
@@ -68,9 +57,20 @@ def show(author: str, title: str):
         session['alert'] = "등록된 작품이 아닙니다"
         return redirect(url_for("index.index"))
 
-    # `idx`를 가져오고, 가져온 `idx`로 세션에 저장된 학교 정보 불러옴
+    # 급식 조회중인 학교 세션 아이디로 정보 불러오기
     idx = request.args.get("idx", "none")
-    button, target = get_school_data(idx=idx)
+
+    # 해당 세션 아이디가 규칙을 따르는지 검사 ( s로 시작하는가 , 5자 인가 )
+    if idx.startswith("s") and len(idx) == 5 and idx in session.keys():
+        button = session[idx]['name']
+        target = url_for("meal.show",
+                         edu_code=session[idx]['edu'],        # 교육청 코드
+                         school_code=session[idx]['school'],  # 학교 코드
+                         date=session[idx]['date'])           # 날짜 정보
+    else:
+        button = "학교 검색하러 가기"
+        target = url_for("index.index")
+        idx = None
 
     return render_template(
         "read/show.html",
