@@ -104,7 +104,7 @@ def show(edu_code: str, school_code: str, date: str = "today"):
             return redirect(url_for("index.index"))
 
         # Redis 에 급식 정보 캐싱
-        add_cache(
+        result = add_cache(
             edu=edu_code,
             school=school_code,
             date=date,
@@ -132,14 +132,14 @@ def show(edu_code: str, school_code: str, date: str = "today"):
     idx = _session(
         edu=edu_code,
         school=school_code,
-        name=result[0]['SCHUL_NM'],
+        name=result[0]['school'],
         date=date
     )
 
     # 급식 출력하기
     return render_template(
         "meal/show.html",
-        title=result[0]['SCHUL_NM'],  # 학교 이름
+        title=result[0]['school'],  # 학교 이름
         use_modal=True,
 
         day=day.strftime('%Y년 %m월 %d일'),
