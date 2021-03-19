@@ -7,7 +7,7 @@ from flask import request, g
 from flask import send_file
 from flask_redis import FlaskRedis
 
-from app.module import error, template_filter
+from app.module import error
 from conf import conf
 
 
@@ -77,10 +77,16 @@ def create_app():
     # Redis 초기화
     redis.init_app(app)
 
-    # 템플릿 필터 등록
-    app.add_template_filter(template_filter.origin)
-    app.add_template_filter(template_filter.parse_menu)
-    app.add_template_filter(template_filter.allergy)
+    # 국내산 확인용 필터
+    # 1) 텍스트에서 ':'을 기준으로 식재료와 원산지 정보로 분리
+    # 2) 원산지 정보에서 '국내산' 제거
+    # 3) 제거된 원산진 정보에서 '산' 이 있는지 확인
+    # 4-1) 있다면, 수입산이 포함된 식재료
+    # 4-2) 없다면, 국내산만 포함된 식재료
+    app.add_template_filter(
+        lambda s: s.split(":")[-1].replace("국내산", "").find("산") == -1,
+        name="origin"
+    )
 
     from app import views
     for view_point in views.__all__:
