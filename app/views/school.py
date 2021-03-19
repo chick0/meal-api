@@ -35,9 +35,6 @@ def select():
         session['alert'] = "(~˘▾˘)~♫•*¨*•.¸¸♪"
         return redirect(url_for("index.index"))
 
-    if school_name == "캐시버전":
-        return redirect(url_for("app.cache"))
-
     if school_name == "캐시관리자":
         session['alert'] = "캐시관리자를 즐겨찾기에 추가했습니다"
         return redirect(url_for("app.admin"))

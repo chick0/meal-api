@@ -29,18 +29,6 @@ def tool():
     )
 
 
-@bp.route("/cache")
-def cache():
-    # 첫 번째 요청에서 확인한 PWA 서비스 워커 버전 정보 불러오기
-    ver = redis.get("pwa_service_worker_version").decode()
-
-    return render_template(
-        "app/cache.html",
-        title="서비스워커 캐시 버전",
-        ver_server=ver
-    )
-
-
 @bp.route("")
 def start_page():
     return render_template(
