@@ -9,15 +9,15 @@ from app import redis
 
 def reformat(json: list):
     table = {
-        "1": "달걀",     "10": "돼지고기",
-        "2": "복숭아",   "11": "우유",
-        "3": "메밀",     "12": "토마토",
-        "4": "아황산염", "13": "땅콩",
-        "5": "대두",     "14": "호두",
-        "6": "닭고기",   "15": "밀",
-        "7": "고등어",   "16": "쇠고기",
-        "8": "오징어",   "17": "게",
-        "9": "새우",     "18": "조개"
+        1: "달걀",     10: "돼지고기",
+        2: "복숭아",   11: "우유",
+        3: "메밀",     12: "토마토",
+        4: "아황산염", 13: "땅콩",
+        5: "대두",     14: "호두",
+        6: "닭고기",   15: "밀",
+        7: "고등어",   16: "쇠고기",
+        8: "오징어",   17: "게",
+        9: "새우",     18: "조개"
     }
 
     new_json = []
@@ -25,17 +25,16 @@ def reformat(json: list):
     for item in json:
         menu_list = []
         for menu in item['DDISH_NM'].split("<br/>"):
-            code = ""
-            for char in menu:
-                if char in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."]:
-                    code += char
+            code = []
 
-            menu = menu.replace(code, "")
-            code = code.split(".")
+            for key in sorted(table.keys(), reverse=True):
+                if menu.endswith(f"{key}."):
+                    code.append(key)
+                    menu = menu.replace(f"{key}.", "")
 
             menu_list.append({
                 "name": menu,
-                "allergy": [table[key] for key in code if key in table]
+                "allergy": [table[key] for key in sorted(code)]
             })
 
         new_json.append({
