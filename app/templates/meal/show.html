@@ -140,7 +140,8 @@
                     }
                 }
             };
-            xhr.open("GET", "{{ url_for('api.get_poem', idx=idx) }}", true); xhr.send(null);
+            xhr.open("GET", "{{ url_for('read.get', idx=idx) }}", true);
+            xhr.send(null);
         </script>
         <script type="text/javascript">
             document.getElementById("kakao").addEventListener("click",function(){
