@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from io import StringIO
+from io import BytesIO
 
 from flask import Flask
 from flask import request, g
@@ -27,12 +27,12 @@ def create_app():
     @app.route("/robots.txt")
     def robots():
         return send_file(
-            StringIO("\n".join([
-                "User-agent: *",
-                "Allow: /$",       # 메인 페이지
-                "Allow: /static",  # js, css, img 같은 동적 파일들
-                "Allow: /read",    # 시
-                "Disallow: /",     # 위를 제외한 나머지 다
+            BytesIO(b"\n".join([
+                b"User-agent: *",
+                b"Allow: /$",       # 메인 페이지
+                b"Allow: /static",  # js, css, img 같은 동적 파일들
+                b"Allow: /read",    # 시
+                b"Disallow: /",     # 위를 제외한 나머지 다
             ])),
             mimetype="text/plain"
         )
