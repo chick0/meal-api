@@ -15,7 +15,22 @@ redis = FlaskRedis()
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_object(obj=__import__("config"))
+
+    # Redis 데이터베이스
+    app.config['REDIS_URL'] = conf['redis']['url']
+
+    # 세션 용 시크릿 키
+    try:
+        app.config['SECRET_KEY'] = open(".SECRET_KEY", mode="rb").read()
+    except FileNotFoundError:
+        from secrets import token_bytes
+        app.config['SECRET_KEY'] = token_bytes(32)
+        open(".SECRET_KEY", mode="wb").write(app.config['SECRET_KEY'])
+
+    # 세션 쿠키 설정
+    app.config['SESSION_COOKIE_NAME'] = "s"
+    app.config['SESSION_COOKIE_HTTPONLY'] = True
+    app.config['SESSION_COOKIE_SAMESITE'] = "Strict"
 
     @app.route("/favicon.ico")
     def favicon():
