@@ -55,7 +55,7 @@ def create_app():
     @app.before_request
     def for_uptime_bot():
         if "Uptime" in request.user_agent.string:
-            return "OK", 200
+            return "", 200
 
     @app.before_request
     def set_global():
@@ -89,12 +89,9 @@ def create_app():
 
     from app import views
     for view_point in views.__all__:
-        try:
-            app.register_blueprint(   # 블루프린트 등록시도
-                blueprint=getattr(getattr(views, view_point), "bp")
-            )
-        except AttributeError:        # 블루프린트 객체가 없다면
-            print(f"[!] '{view_point}' 는 뷰 포인트가 아닙니다")
+        app.register_blueprint(
+            blueprint=getattr(getattr(views, view_point), "bp")
+        )
 
     # 오류 핸들러
     app.register_error_handler(400, error.bad_request)
