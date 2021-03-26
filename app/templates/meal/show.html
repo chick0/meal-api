@@ -3,7 +3,7 @@
         <section class="lf">
             <h2>'{{ title }}'의 급식 정보</h2>
             <div class="no-script">
-                <button class="btn ie" data-micromodal-trigger="share">공유하기</button>
+                <button class="btn" id="share">카카오톡 공유</button>
                 <button class="btn" id="star" style="display:none;">즐겨찾기</button>
             </div>
         {% for meal in result: %}
@@ -67,20 +67,6 @@
         </section>
 {% endblock %}
 {% block modal %}
-        <section class="modal" id="share">
-            <div class="overlay" tabindex="-1" data-micromodal-close>
-                <div class="display" style="width:300px;">
-                    <h2 style="margin-top:0;">공유하기</h2>
-                    <ul style="list-style:none;padding-left:0;">
-                        <li><button class="btn" id="kakao" style="width:100%;">카카오톡</button></li>
-                        <li><button class="btn" id="band" style="width:100%;">밴드</button></li>
-                        <li><button class="btn" id="twit" style="width:100%;">트위터</button></li>
-                        <li><button class="btn" id="fb" style="width:100%;">페이스북</button></li>
-                    </ul><br>
-                    <button class="btn" style="width:100%;" data-micromodal-close>닫기</button>
-                </div>
-            </div>
-        </section>
     {% for meal in result: %}
         <section class="modal" id="nutrients_{{ meal['code'][0] }}">
             <div class="overlay" tabindex="-1" data-micromodal-close>
@@ -124,12 +110,12 @@
         <script src="{{ url_for('static', filename='js/star-btn.js') }}"></script>
         <script src="{{ url_for('static', filename='js/kakao.min.js') }}"></script>
         <script src="{{ url_for('static', filename='js/clipboard.min.js') }}"></script>
-        <script type="text/javascript">
+        <script>
             new ClipboardJS(".copy").on("success",function(){window.alert("복사되었습니다!"),window.getSelection().removeAllRanges();});
             star_btn("{{ title }}", "{{ url_for('meal.show', edu_code=edu_code, school_code=school_code) }}");
             render_btn("{{ title }}"),document.getElementById("star").style.display="inline-block";
         </script>
-        <script type="text/javascript">
+        <script>
             let xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
@@ -143,19 +129,10 @@
             xhr.open("GET", "{{ url_for('read.get', idx=idx) }}", true);
             xhr.send(null);
         </script>
-        <script type="text/javascript">
-            document.getElementById("kakao").addEventListener("click",function(){
+        <script>
+            document.getElementById("share").addEventListener("click",function(){
                 if(!Kakao.isInitialized()){Kakao.init("{{ g.k }}");}
                 Kakao.Link.sendCustom({templateId:{{ g.tid }}, templateArgs:{name:"{{ title }}", path:"{{ edu_code }}/{{ school_code }}"}});
-            });
-            document.getElementById("band").addEventListener("click",function(){
-                window.open(`https://band.us/plugin/share?body='{{ title }}'의 급식 정보 ${document.URL}&route=${document.domain}`);
-            });
-            document.getElementById("twit").addEventListener("click",function(){
-                window.open(`https://twitter.com/intent/tweet?text='{{ title }}'의 급식 정보&url=${document.URL}`);
-            });
-            document.getElementById("fb").addEventListener("click",function(){
-                window.open(`https://www.facebook.com/sharer/sharer.php?u=${document.URL}`);
             });
             window.addEventListener("keydown", function(key){
                 if(Number(key.key) > 0){ try{ window.scrollTo({top: window.pageYOffset + document.getElementById("meal_"+key.key).getBoundingClientRect().top, behavior: 'smooth'}); } catch{} }
@@ -163,6 +140,6 @@
         </script>
     {% if request.user_agent.browser != "msie" %}
         <script src="{{ url_for('static', filename='js/micromodal.min.js') }}"></script>
-        <script type="text/javascript">MicroModal.init({ disableFocus:true });</script>
+        <script>MicroModal.init({ disableFocus:true });</script>
     {% endif %}
 {% endblock %}
