@@ -45,8 +45,7 @@ def create_app():
             BytesIO(b"\n".join([
                 b"User-agent: *",
                 b"Allow: /$",       # 메인 페이지
-                b"Allow: /static",  # js, css, img 같은 동적 파일들
-                b"Allow: /read",    # 시
+                b"Allow: /static",  # js, css, img 같은 정적 파일들
                 b"Disallow: /",     # 위를 제외한 나머지 다
             ])),
             mimetype="text/plain"
