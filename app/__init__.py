@@ -78,8 +78,7 @@ def create_app():
     redis.init_app(app)
 
     with open(path.join("conf", "read.json"), mode="r", encoding="utf-8") as fp:
-        context = loads(fp.read())
-        for i, x in enumerate(context):
+        for i, x in enumerate(loads(fp.read())):
             redis.set(f"api_read_{i}", dumps(x, ensure_ascii=False))
 
     # 국내산 확인용 필터
