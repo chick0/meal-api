@@ -3,8 +3,6 @@
 from flask import Blueprint
 from flask import render_template
 
-from app import redis
-
 
 bp = Blueprint(
     name=__name__.split(".")[-1],
