@@ -20,10 +20,6 @@ def index():
     except KeyError:
         alert = None
 
-    # 모든 학교 세션 아이디 삭제
-    for key in [key for key in session.keys() if key.startswith("s")]:
-        del session[key]
-
     return render_template(
         "index/index.html",
         title="급식",

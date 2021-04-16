@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from os import urandom
 from urllib.error import HTTPError
 from datetime import datetime, timedelta
 
@@ -18,26 +17,6 @@ bp = Blueprint(
     import_name=__name__,
     url_prefix=f"/{__name__.split('.')[-1]}"
 )
-
-
-def _session(edu: str, school: str, name: str, date: str):
-    try:
-        # 조회중인 학교와 같은 세션 아이디를 찾음
-        idx = [s for s in session.keys()
-               if len(s) == 5 and session[s]['edu'] == edu and session[s]['school'] == school][0]
-    except IndexError:
-        # 없다면 생성하기, s로 시작 & 랜덤 4자
-        idx = f"s{urandom(2).hex()}"
-
-    # 세션 정보 업데이트
-    session[idx] = dict(
-        edu=edu,
-        school=school,
-        name=name,
-        date=date
-    )
-
-    return idx
 
 
 @bp.route("/<string:edu_code>/<string:school_code>/")
@@ -128,14 +107,6 @@ def show(edu_code: str, school_code: str, date: str = "today"):
             today=today               # 오늘 메뉴인지 검사용
         )
 
-    # 세션 아이디 설정
-    idx = _session(
-        edu=edu_code,
-        school=school_code,
-        name=result[0]['school'],
-        date=date
-    )
-
     # 급식 출력하기
     return render_template(
         "meal/show.html",
@@ -151,5 +122,4 @@ def show(edu_code: str, school_code: str, date: str = "today"):
         tomorrow=tomorrow,            # 내일
 
         today=today,                  # 오늘 메뉴인지 검사용
-        idx=idx                       # 세션 정보
     )
