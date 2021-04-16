@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
+from os import path
 from io import BytesIO
+from json import loads, dumps
 
 from flask import Flask
 from flask import request, g
@@ -74,6 +76,11 @@ def create_app():
 
     # Redis 초기화
     redis.init_app(app)
+
+    with open(path.join("conf", "read.json"), mode="r", encoding="utf-8") as fp:
+        context = loads(fp.read())
+        for i, x in enumerate(context):
+            redis.set(f"api_read_{i}", dumps(x, ensure_ascii=False))
 
     # 국내산 확인용 필터
     # 1) 텍스트에서 ':'을 기준으로 식재료와 원산지 정보로 분리

@@ -47,7 +47,7 @@
         </section>
 
         <section style="padding-top:100px;padding-bottom:160px;">
-            <a id="poem" href="no-script" style="font-size:16px;">—</a>
+            <span id="read" style="font-size:16px;">—</span>
         </section>
 
         <section class="menu">
@@ -121,12 +121,12 @@
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
                         let response = JSON.parse(xhr.responseText);
-                        document.getElementById("poem").innerHTML = response.preview;
-                        document.getElementById("poem").href = response.url;
+                        document.getElementById("read").innerText = response.a;
+                        document.getElementById("read").addEventListener("click",function(){window.alert(response.b);});
                     }
                 }
             };
-            xhr.open("GET", "{{ url_for('read.get', idx=idx) }}", true);
+            xhr.open("GET", "{{ url_for('api.read') }}", true);
             xhr.send(null);
         </script>
         <script>
