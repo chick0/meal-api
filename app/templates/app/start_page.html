@@ -27,7 +27,9 @@
             let star = get_star();
             if(Object.keys(star).length == 0){
                 alert("저장된 즐겨찾기가 없습니다!");
-                location.replace("{{ url_for('index.index') }}");
+                if(confirm("학교 검색 화면으로 이동할까요?")){
+                    location.replace("{{ url_for('index.index') }}");
+                }
             }
             if(Object.keys(star).length == 1){
                 let school_key = Object.keys(star)[0];
