@@ -1,7 +1,7 @@
 "use strict";
 
-const CACHE_VER = "2021-05-08_v27";
-
+// 2021-05-09
+const CACHE_VER = "c16015397b3278bd84477e89ee481f58";
 const FILES_TO_CACHE = [
     "/app",
     "/app/tool",
