@@ -31,11 +31,5 @@
                     location.replace("{{ url_for('index.index') }}");
                 }
             }
-            if(Object.keys(star).length == 1){
-                let school_key = Object.keys(star)[0];
-                if(confirm(`${school_key}의 메뉴 화면으로 이동할까요?`)){
-                    location.replace(star[school_key]);
-                }
-            }
         </script>
 {% endblock %}
