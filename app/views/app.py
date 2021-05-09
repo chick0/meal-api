@@ -11,7 +11,7 @@ bp = Blueprint(
 )
 
 
-@bp.route("/no-network.page")  # PWA 오프라인시 보이는 화면
+@bp.route("/no-network")  # 오프라인 화면
 def no_network():
     return render_template(
         "app/no_network.html",
