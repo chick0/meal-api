@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from re import findall
 from json import loads, dumps
 from json import JSONDecodeError
 
@@ -25,15 +26,14 @@ def reformat(json: list):
     for item in json:
         menu_list = []
         for menu in item['DDISH_NM'].split("<br/>"):
-            code = []
+            code = [int(code) for code in "".join(findall(r"[0-9.]", menu)).split(".") if len(code) != 0]
+            code = sorted(code, reverse=True)
 
-            for key in sorted(table.keys(), reverse=True):
-                if menu.endswith(f"{key}."):
-                    code.append(key)
-                    menu = menu.replace(f"{key}.", "")
+            for cd in code:
+                menu = menu.replace(str(cd), "")
 
             menu_list.append({
-                "name": menu,
+                "name": menu.replace(".", ""),
                 "allergy": [table[key] for key in sorted(code)]
             })
 
