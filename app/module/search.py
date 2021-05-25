@@ -54,7 +54,7 @@ def get_school_data_by_query(query: str) -> list:
     result = fetch_from_redis()
 
     if result is None:
-        def fetch_from_api() -> list or bool:
+        def fetch_from_api() -> dict or list or bool or None:
             try:
                 return search_school_by_name(
                     school_name=query
@@ -63,16 +63,21 @@ def get_school_data_by_query(query: str) -> list:
                 return False
 
         result = fetch_from_api()
-        try:
-            result = [
-                {
-                    "name": f"({school['LCTN_SC_NM']}) {school['SCHUL_NM']}",
-                    "url": url_for("meal.show", edu_code=school['ATPT_OFCDC_SC_CODE'], school_code=school['SD_SCHUL_CODE'])
-                } for school in result['schoolInfo'][1]['row']
-            ]
+        if isinstance(result, dict):
+            try:
+                result = [
+                    {
+                        "name": f"({school['LCTN_SC_NM']}) {school['SCHUL_NM']}",
+                        "url": url_for(
+                            "meal.show",
+                            edu_code=school['ATPT_OFCDC_SC_CODE'],
+                            school_code=school['SD_SCHUL_CODE']
+                        )
+                    } for school in result['schoolInfo'][1]['row']
+                ]
 
-            add_cache(query, result)
-        except (KeyError, Exception):
-            result = None
+                add_cache(query, result)
+            except (KeyError, Exception):
+                result = None
 
     return result
