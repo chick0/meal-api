@@ -33,11 +33,3 @@ def start_page():
         "app/start_page.html",
         title="🌟 즐겨찾기"
     )
-
-
-# # # # # # # # # # # # # # # # # # #
-@bp.route("/admin")
-def admin():
-    return render_template(
-        "app/admin.html"
-    )
