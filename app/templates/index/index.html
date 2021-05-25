@@ -5,27 +5,58 @@
         </section>
 
         <section class="message-box l">
-            <form method="post" action="{{ url_for('school.select') }}">
+            <form onsubmit="return search()">
                 <p>
                     <label for="school_name">학교 찾기</label>
                 </p>
-                <input type="text" name="school_name" id="school_name" placeholder="{{ placeholder }}" size="15" maxlength="10">
+                <input type="text" id="school_name" placeholder="{{ placeholder }}" size="15" maxlength="10">
             </form>
         </section>
 
-        <section class="nav-right-bottom" id="starBox">
+        <section class="lf message-box" id="result_display">
+            <ol class="list" id="display" style="list-style:none;"></ol>
+        </section>
+
+        <section class="nav-right-bottom">
             <a class="btn" href="{{ url_for('app.start_page') }}">즐겨찾기 확인하기</a>
         </section>
 {% endblock %}
 {% block script %}
+        <script src="{{ url_for('static', filename='js/axios.min.js') }}"></script>
         <script type="text/javascript">
-            const box = document.getElementById("starBox");
-            const input = document.getElementById("school_name");
-
-            input.addEventListener("focus",function(){ box.setAttribute("style", "visibility: hidden;");  });
-            input.addEventListener("blur",function(){  box.setAttribute("style", "visibility: visible;"); });
         {% if alert is not none %}
             window.alert("{{ alert }}");
         {% endif %}
+
+            function search(){
+                document.getElementById("display").innerHTML = "";
+                axios({
+                    method: "GET",
+                    url: "{{ url_for('api.school') }}",
+                    params: {
+                        school_name: document.getElementById("school_name").value
+                    }
+                }).then(function(resp){
+                    for(key in resp.data){
+                        var li = document.createElement("li");
+                        var a = document.createElement("a");
+
+                        a.setAttribute("class", "btn");
+                        a.setAttribute("href", resp.data[key]['url']);
+                        a.appendChild(document.createTextNode(resp.data[key]['name']));
+
+                        li.appendChild(a);
+                        document.getElementById("display").appendChild(li);
+                    }
+                    document.getElementById("school_name").blur();
+                    document.getElementById("result_display").setAttribute("style", "margin-bottom:100%;");
+                    window.scrollTo({top: window.pageYOffset + document.getElementById("result_display").getBoundingClientRect().top, behavior: 'smooth'});
+                }).catch(function(err){
+                    window.alert(err.response.data.message);
+                    document.getElementById("school_name").value = "";
+                    document.getElementById("school_name").focus();
+                    document.getElementById("result_display").setAttribute("style", "");
+                }); return false;
+            }
         </script>
 {% endblock %}
