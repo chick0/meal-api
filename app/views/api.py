@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from re import findall
-from json import loads, dumps
-from random import choice
+from json import dumps
 from datetime import datetime
 from urllib.error import HTTPError
 
@@ -29,13 +28,11 @@ def dump_to_return(json: dict or list):
 
 @bp.route("/read")
 def read():
-    ctx = loads(redis.get(choice(redis.keys("api_read_*"))))
+    a, b = redis.srandmember("api:read", 1)[0].decode().split("::")
     return Response(
         status=200,
         mimetype="application/json",
-        response=dump_to_return(dict(
-            a=ctx.get("a"), b=ctx.get("b")
-        ))
+        response=dump_to_return({"a": a, "b": b})
     )
 
 

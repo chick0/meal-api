@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from os import path
 from io import BytesIO
-from json import loads, dumps
+from json import load
 
 from flask import Flask
 from flask import request, g
@@ -20,6 +20,7 @@ def create_app():
 
     # Redis 데이터베이스
     app.config['REDIS_URL'] = conf['redis']['url']
+    redis.init_app(app)
 
     # 세션 용 시크릿 키
     try:
@@ -74,13 +75,6 @@ def create_app():
         response.headers['X-Powered-By'] = "chick_0"
         return response
 
-    # Redis 초기화
-    redis.init_app(app)
-
-    with open(path.join("conf", "read.json"), mode="r", encoding="utf-8") as fp:
-        for i, x in enumerate(loads(fp.read())):
-            redis.set(f"api_read_{i}", dumps(x, ensure_ascii=False))
-
     # 국내산 확인용 필터
     # 1) 텍스트에서 ':'을 기준으로 식재료와 원산지 정보로 분리
     # 2) 원산지 정보에서 '국내산' 제거
@@ -105,5 +99,9 @@ def create_app():
     app.register_error_handler(405, error.method_not_allowed)
 
     app.register_error_handler(500, error.internal_server_error)
+
+    redis.delete("api:read")
+    for ctx in load(open(path.join("conf", "read.json"), mode="r", encoding="utf-8")):
+        redis.sadd("api:read", f"{ctx['a']}::{ctx['b']}")
 
     return app
