@@ -19,7 +19,7 @@ def get_json(url: str, payload: dict):
     )
 
     # 요청 전송하기
-    resp = urlopen(req)
+    resp = urlopen(req, timeout=2)
     return loads(resp.read())
 
 
