@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
-from re import findall
-from urllib.error import HTTPError
 
 from flask import Blueprint, request, session
 from flask import render_template
 from flask import redirect, url_for
 
-from app.module.api import search_school_by_name
+from app.module.search import query_filter
+from app.module.search import get_school_data_by_query
 
 
 bp = Blueprint(
@@ -23,54 +22,26 @@ def alert(msg: str):
 
 @bp.route("/select", methods=['POST'])
 def select():
-    # 요청에서 학교 이름 가져오고 없으면 `None` 가져오기
-    school_name = request.form.get("school_name", None)
+    # 학교 이름 가져오고 검색어 필터링
+    status, school_name = query_filter(school_name=request.form.get("school_name", ""))
 
-    # 검색어가 없는 경우
-    if school_name is None or len(school_name) == 0:
-        return alert(msg="검색어를 입력해주세요")
-
-    # ----------------------------------------------------------- #
-    if school_name == "chick_0" or school_name == "ch1ck_0":
-        session['alert'] = "(~˘▾˘)~♫•*¨*•.¸¸♪"
-        return redirect(url_for("index.index"))
-    # ----------------------------------------------------------- #
-
-    # 필터링
-    school_name = "".join(findall("[가-힣]", school_name))
-
-    # 필터링후 검색어가 0글자 이면, 공백 검색어로 분류
-    if len(school_name) == 0:
-        return alert(msg="한국어로만 검색할 수 있습니다")
-
-    # 금지된 검색어들
-    if school_name in ["초등", "초등학교", "중", "중학교", "고등", "고등학교", "학교"]:
+    # 검색어가 필터링된 경우
+    if not status:
         return alert(msg="해당 검색어는 사용이 불가능 합니다")
 
-    try:
-        # 검색어로 학교 찾기
-        result = search_school_by_name(
-            school_name=school_name
-        )
-    except HTTPError:
+    # 학교 검색 결과 불러오기
+    result = get_school_data_by_query(query=school_name)
+
+    if result is None:
+        # API 서버에서 받은 정보가 없으면
+        return alert(msg="검색 결과가 없습니다")
+    elif result is False:
         # 교육청 점검 or 타임아웃
         return alert(msg="학교 목록을 불러오는 데 실패했습니다")
 
-    try:
-        # 학교 목록
-        school_list = [
-            {
-                "name": f"({school['LCTN_SC_NM']}) {school['SCHUL_NM']}",
-                "url": url_for("meal.show", edu_code=school['ATPT_OFCDC_SC_CODE'], school_code=school['SD_SCHUL_CODE'])
-            } for school in result['schoolInfo'][1]['row']
-        ]
-
-        # 검색 결과가 있으면 학교 선택
-        return render_template(
-            "school/select.html",
-            title="학교 선택",
-            result=school_list
-        )
-    except (KeyError, Exception):
-        # API 서버에서 받은 정보에 학교 정보가 없으면
-        return alert(msg="검색 결과가 없습니다")
+    # 검색 결과가 있으면 학교 선택
+    return render_template(
+        "school/select.html",
+        title="학교 선택",
+        result=result
+    )

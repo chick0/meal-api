@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from re import findall
 from json import dumps
 from datetime import datetime
 from urllib.error import HTTPError
@@ -10,7 +9,9 @@ from flask import Response
 
 from app import redis
 from app.module.cache import get_cache_by_data, add_cache
-from app.module.api import search_school_by_name, search_meal_by_codes
+from app.module.api import search_meal_by_codes
+from app.module.search import query_filter
+from app.module.search import get_school_data_by_query
 
 
 bp = Blueprint(
@@ -41,22 +42,11 @@ def read():
 
 @bp.route("/school")
 def school():
-    # 요청에서 학교 이름 가져오기
-    school_name = request.args.get("name", "")
-    school_name = "".join(findall("[가-힣]", school_name))
+    # 학교 이름 가져오고 검색어 필터링
+    status, school_name = query_filter(school_name=request.args.get("school_name", ""))
 
-    # 검색어가 없는 경우
-    if school_name is None or len(school_name) == 0:
-        return Response(
-            status=400,
-            mimetype="application/json",
-            response=dump_to_return(dict(
-                message="검색어를 입력해주세요"
-            ))
-        )
-
-    # 금지된 검색어들
-    if school_name in ["초등", "초등학교", "중", "중학교", "고등", "고등학교", "학교"]:
+    # 검색어가 필터링된 경우
+    if not status:
         return Response(
             status=400,
             mimetype="application/json",
@@ -65,12 +55,19 @@ def school():
             ))
         )
 
-    try:
-        # 검색어로 학교 찾기
-        result = search_school_by_name(
-            school_name=school_name
+    # 학교 검색 결과 불러오기
+    result = get_school_data_by_query(query=school_name)
+
+    if result is None:
+        # API 서버에서 받은 정보가 없으면
+        return Response(
+            status=404,
+            mimetype="application/json",
+            response=dump_to_return(dict(
+                message="검색 결과가 없습니다"
+            ))
         )
-    except HTTPError:
+    elif result is False:
         # 교육청 점검 or 타임아웃
         return Response(
             status=400,
@@ -80,31 +77,12 @@ def school():
             ))
         )
 
-    try:
-        # 학교 목록
-        school_list = [
-            {
-                "name": f"({school_['LCTN_SC_NM']}) {school_['SCHUL_NM']}",
-                "edu": school_['ATPT_OFCDC_SC_CODE'],
-                "school": school_['SD_SCHUL_CODE']
-            } for school_ in result['schoolInfo'][1]['row']
-        ]
-
-        # 검색 결과가 있으면 학교 목록 리턴
-        return Response(
-            status=200,
-            mimetype="application/json",
-            response=dump_to_return(school_list)
-        )
-    except (KeyError, Exception):
-        # API 서버에서 받은 정보에 학교 정보가 없으면
-        return Response(
-            status=404,
-            mimetype="application/json",
-            response=dump_to_return(dict(
-                message="검색 결과가 없습니다"
-            ))
-        )
+    # 검색 결과가 있으면 학교 목록 리턴
+    return Response(
+        status=200,
+        mimetype="application/json",
+        response=dump_to_return(json=result)
+    )
 
 
 @bp.route("/meal")
