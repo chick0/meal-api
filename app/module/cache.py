@@ -70,7 +70,8 @@ def add_cache(edu: str, school: str, date: str, json: list):
     try:
         redis.set(
             name=f"{edu}#{school}#{date}",
-            value=dumps(json, ensure_ascii=False)
+            value=dumps(json, ensure_ascii=False),
+            ex=604800
         )
     except ConnectionError:
         pass
