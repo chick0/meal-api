@@ -34,10 +34,6 @@ def select():
     if school_name == "chick_0" or school_name == "ch1ck_0":
         session['alert'] = "(~˘▾˘)~♫•*¨*•.¸¸♪"
         return redirect(url_for("index.index"))
-
-    if school_name == "캐시관리자":
-        session['alert'] = "캐시관리자를 즐겨찾기에 추가했습니다"
-        return redirect(url_for("app.admin"))
     # ----------------------------------------------------------- #
 
     # 필터링
