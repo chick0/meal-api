@@ -19,14 +19,6 @@ def no_network():
     ), 200
 
 
-@bp.route("/tool")
-def tool():
-    return render_template(
-        "app/tool.html",
-        title="🌟 즐겨찾기 관리자"
-    )
-
-
 @bp.route("")
 def start_page():
     return render_template(
