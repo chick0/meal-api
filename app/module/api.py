@@ -20,13 +20,7 @@ def get_json(url: str, payload: dict):
 
     # 요청 전송하기
     resp = urlopen(req)
-
-    # 응답 상태가 200이면 json 디코딩 해서 리턴
-    if resp.status == 200:
-        return loads(resp.read())
-
-    # 응답 상태가 200이 아니면 None 리턴
-    return None
+    return loads(resp.read())
 
 
 def search_school_by_name(school_name: str):
