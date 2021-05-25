@@ -42,40 +42,31 @@ def read():
 
 @bp.route("/school")
 def school():
+    def error(msg: str):
+        return Response(
+            status=400,
+            mimetype="application/json",
+            response=dump_to_return(dict(
+                message=msg
+            ))
+        )
+
     # 학교 이름 가져오고 검색어 필터링
     status, school_name = query_filter(school_name=request.args.get("school_name", ""))
 
     # 검색어가 필터링된 경우
     if not status:
-        return Response(
-            status=400,
-            mimetype="application/json",
-            response=dump_to_return(dict(
-                message="해당 검색어는 사용이 불가능 합니다"
-            ))
-        )
+        return error(msg="해당 검색어는 사용이 불가능 합니다")
 
     # 학교 검색 결과 불러오기
     result = get_school_data_by_query(query=school_name)
 
     if result is None:
         # API 서버에서 받은 정보가 없으면
-        return Response(
-            status=404,
-            mimetype="application/json",
-            response=dump_to_return(dict(
-                message="검색 결과가 없습니다"
-            ))
-        )
+        return error(msg="검색 결과가 없습니다")
     elif result is False:
         # 교육청 점검 or 타임아웃
-        return Response(
-            status=400,
-            mimetype="application/json",
-            response=dump_to_return(dict(
-                message="학교 목록을 불러오는 데 실패했습니다"
-            ))
-        )
+        return error(msg="학교 목록을 불러오는 데 실패했습니다")
 
     # 검색 결과가 있으면 학교 목록 리턴
     return Response(
