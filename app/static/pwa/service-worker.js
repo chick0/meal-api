@@ -4,7 +4,6 @@
 const CACHE_VER = "6fbd65c2388038420129b77ee38da183416f5c51";
 const FILES_TO_CACHE = [
     "/app",
-    "/app/tool",
     "/app/no-network",
     "/static/css/main.css",
     "/static/css/modal.css",
