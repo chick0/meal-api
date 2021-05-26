@@ -5,11 +5,11 @@
         </section>
 
         <section class="message-box l">
-            <form onsubmit="return search()">
+            <form method="post" onsubmit="return search()" action="{{ url_for('school.select') }}">
                 <p>
                     <label for="school_name">학교 찾기</label>
                 </p>
-                <input type="text" id="school_name" placeholder="{{ placeholder }}" size="15" maxlength="10">
+                <input type="text" id="school_name" name="school_name" placeholder="{{ placeholder }}" size="15" maxlength="10">
             </form>
         </section>
 
@@ -45,13 +45,15 @@
                     }
                     document.getElementById("school_name").blur();
                     document.getElementById("result_display").setAttribute("style", "margin-bottom:100%;");
-                    window.scrollTo({top: window.pageYOffset + document.getElementById("result_display").getBoundingClientRect().top, behavior: 'smooth'});
+                    window.scrollTo({top: window.pageYOffset + document.getElementById("result_display").getBoundingClientRect().top - 20, behavior: 'smooth'});
                 }).catch(function(err){
                     window.alert(err.response.data.message);
                     document.getElementById("school_name").value = "";
                     document.getElementById("school_name").focus();
-                    document.getElementById("result_display").setAttribute("style", "");
                 }); return false;
             }
+        {% if alert is not none %}
+            window.alert("{{ alert }}");
+        {% endif %}
         </script>
 {% endblock %}

@@ -5,22 +5,12 @@
             <div style="margin-top:-24px;margin-bottom:0;">
                 <a class="l" href="{{ url_for('index.index') }}">돌아가기</a>
             </div>
-            <ol class="list" id="display"></ol>
+            <ol class="list" id="display">
+            {% for sc in result %}
+                <li>
+                    <a class="btn" href="{{ sc['url'] }}">{{ sc['name'] }}</a>
+                </li>
+            {% endfor %}
+            </ol>
         </section>
 {% endblock %}
-{% block script %}
-        <script>
-            const list = {{ result|safe }};
-            for(key in list){
-                var li = document.createElement("li");
-                var a = document.createElement("a");
-
-                a.setAttribute("class", "btn");
-                a.setAttribute("href", list[key]['url']);
-                a.appendChild(document.createTextNode(list[key]['name']));
-
-                li.appendChild(a);
-                document.getElementById("display").appendChild(li);
-            }
-        </script>
-{% endblock%}
