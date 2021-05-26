@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from urllib.error import HTTPError
 from datetime import datetime, timedelta
 
 from flask import Blueprint
@@ -8,8 +7,7 @@ from flask import abort
 from flask import render_template
 from flask import redirect, url_for
 
-from app.module.api import search_meal_by_codes
-from app.module.cache import add_cache, get_cache_by_data
+from app.module.meal import get_meal_data_by_codes
 
 
 bp = Blueprint(
@@ -48,50 +46,14 @@ def show(edu_code: str, school_code: str, date: str = "today"):
     # 어제 이동 버튼을 위한 값
     yesterday = (day - timedelta(days=1)).strftime("%Y%m%d")
 
-    # Redis 에 저장된 캐시 검색
-    result = get_cache_by_data(
+    result = get_meal_data_by_codes(
         edu=edu_code,
         school=school_code,
         date=date
     )
 
-    # 발견된 캐시 없음
-    if result is None:
-        try:
-            # 교육청 서버에서 가져오기
-            result = search_meal_by_codes(
-                edu_code=edu_code,
-                school_code=school_code,
-                date=date
-            )
-
-            # 데이터 분해하기
-            result = result['mealServiceDietInfo']
-
-            # `row` 찾기
-            for i in result:
-                for j in i.keys():
-                    if j == "row":
-                        result = i[j]
-                        break
-        except KeyError:
-            # 급식 없는 날 / 주말 또는 휴교일
-            result = []
-        except HTTPError:
-            # 교육청 점검 or 타임아웃
-            session['alert'] = "급식 정보를 불러오는 데 실패했습니다"
-            return redirect(url_for("index.index"))
-
-        # Redis 에 급식 정보 캐싱
-        result = add_cache(
-            edu=edu_code,
-            school=school_code,
-            date=date,
-            json=result
-        )
-
-    # 급식 없는 날 / 주말 또는 휴교일
-    if len(result) == 0:
+    if result is None or result == []:
+        # API 서버에서 받은 정보가 없으면 ( 급식 없는 날 / 주말 / 휴교일 )
         return render_template(
             "meal/not_found.html",
             title="정보 없음",
@@ -106,6 +68,10 @@ def show(edu_code: str, school_code: str, date: str = "today"):
 
             today=today               # 오늘 메뉴인지 검사용
         )
+    elif result is False:
+        # 교육청 점검 or 타임아웃
+        session['alert'] = "급식 정보를 불러오는 데 실패했습니다"
+        return redirect(url_for("index.index"))
 
     # 급식 출력하기
     return render_template(
