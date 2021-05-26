@@ -13,7 +13,7 @@
             </form>
         </section>
 
-        <section class="lf message-box" id="result_display">
+        <section class="lf" id="result_display">
             <ol class="list" id="display" style="list-style:none;"></ol>
         </section>
 
@@ -24,12 +24,7 @@
 {% block script %}
         <script src="{{ url_for('static', filename='js/axios.min.js') }}"></script>
         <script type="text/javascript">
-        {% if alert is not none %}
-            window.alert("{{ alert }}");
-        {% endif %}
-
             function search(){
-                document.getElementById("display").innerHTML = "";
                 axios({
                     method: "GET",
                     url: "{{ url_for('api.school') }}",
