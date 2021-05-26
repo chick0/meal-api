@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 {% block content %}
-        <section class="lf">
-            <h2>'{{ title }}'의 급식 정보</h2>
+        <section class="lf" style="margin-bottom:100%">
+            <h2>{{ title }}의 급식 정보</h2>
             <div class="no-script">
                 <button class="btn" id="share">카카오톡 공유</button>
                 <button class="btn" id="star" style="display:none;">즐겨찾기</button>
@@ -44,10 +44,6 @@
                 </tr>
             </table>
         {% endfor %}
-        </section>
-
-        <section style="padding-top:100px;padding-bottom:160px;">
-            <span id="read" style="font-size:16px;">—</span>
         </section>
 
         <section class="menu">
@@ -108,21 +104,16 @@
 {% block script %}
         <script src="{{ url_for('static', filename='js/star.js') }}"></script>
         <script src="{{ url_for('static', filename='js/star-btn.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/axios.min.js') }}"></script>
         <script src="{{ url_for('static', filename='js/kakao.min.js') }}"></script>
         <script src="{{ url_for('static', filename='js/clipboard.min.js') }}"></script>
         <script>
             new ClipboardJS(".copy").on("success",function(){window.alert("복사되었습니다!"),window.getSelection().removeAllRanges();});
-            star_btn("{{ title }}", "{{ url_for('meal.show', edu_code=edu_code, school_code=school_code) }}");
+            star_btn("{{ title }}","{{ url_for('meal.show', edu_code=edu_code, school_code=school_code) }}");
             render_btn("{{ title }}"),document.getElementById("star").style.display="inline-block";
-            window.addEventListener("keydown", function(key){if(Number(key.key)>0){try{window.scrollTo({top: window.pageYOffset+document.getElementById("meal_"+key.key).getBoundingClientRect().top, behavior:'smooth'});}catch{}}});
+            window.addEventListener("keydown",function(key){if(Number(key.key)>0){try{window.scrollTo({top: window.pageYOffset+document.getElementById("meal_"+key.key).getBoundingClientRect().top, behavior:'smooth'});}catch{}}});
             document.getElementById("share").addEventListener("click",function(){
                 if(!Kakao.isInitialized()){Kakao.init("{{ g.k }}");}
                 Kakao.Link.sendCustom({templateId:{{ g.tid }}, templateArgs:{name:"{{ title }}", path:"{{ edu_code }}/{{ school_code }}"}});
-            });
-            axios.get("{{ url_for('api.read') }}").then(function(resp){
-                document.getElementById("read").innerText=resp.data.a;
-                document.getElementById("read").addEventListener("click",function(){this.innerHTML+='<br>= '+resp.data.b;});
             });
         </script>
     {% if request.user_agent.browser != "msie" %}

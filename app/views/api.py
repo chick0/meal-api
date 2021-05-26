@@ -7,7 +7,6 @@ from flask import Blueprint
 from flask import request
 from flask import Response
 
-from app import redis
 from app.module.cache import get_cache_by_data, add_cache
 from app.module.api import search_meal_by_codes
 from app.module.search import query_filter
@@ -25,19 +24,6 @@ def dump_to_return(json: dict or list):
     return dumps(
         json, ensure_ascii=False
     )
-
-
-@bp.route("/read")
-def read():
-    a, b = redis.srandmember("api:read", 1)[0].decode().split("::")
-    return Response(
-        status=200,
-        mimetype="application/json",
-        response=dump_to_return({"a": a, "b": b})
-    )
-
-
-# # # # # # # # # # # # # # # # # # # #
 
 
 @bp.route("/school")

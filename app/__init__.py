@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-from os import path
 from io import BytesIO
-from json import load
 
 from flask import Flask
 from flask import request, g
@@ -99,9 +97,5 @@ def create_app():
     app.register_error_handler(405, error.method_not_allowed)
 
     app.register_error_handler(500, error.internal_server_error)
-
-    redis.delete("api:read")
-    for ctx in load(open(path.join("conf", "read.json"), mode="r", encoding="utf-8")):
-        redis.sadd("api:read", f"{ctx['a']}::{ctx['b']}")
 
     return app
