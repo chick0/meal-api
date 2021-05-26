@@ -27,18 +27,6 @@ def query_filter(school_name: str):
     return status, school_name
 
 
-# 캐시 저장하는 함수
-def add_cache(query: str, json: list):
-    try:
-        redis.set(
-            name=f"search:{sha1(query.encode()).hexdigest()}",
-            value=dumps(json, ensure_ascii=False),
-            ex=86400
-        )
-    except ConnectionError:
-        pass
-
-
 # 검색 기록 불러오기
 def get_school_data_by_query(query: str) -> list:
     def fetch_from_redis() -> list or None:
@@ -50,6 +38,17 @@ def get_school_data_by_query(query: str) -> list:
             )
         except (ConnectionError, TypeError, JSONDecodeError):
             return None
+
+    # 캐시 저장하는 함수
+    def add_cache(json: list):
+        try:
+            redis.set(
+                name=f"search:{sha1(query.encode()).hexdigest()}",
+                value=dumps(json, ensure_ascii=False),
+                ex=86400
+            )
+        except ConnectionError:
+            pass
 
     result = fetch_from_redis()
 
@@ -76,7 +75,7 @@ def get_school_data_by_query(query: str) -> list:
                     } for school in result['schoolInfo'][1]['row']
                 ]
 
-                add_cache(query, result)
+                add_cache(json=result)
             except (KeyError, Exception):
                 result = None
 
