@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 from io import BytesIO
 
-from flask import Flask
-from flask import request, g
+from flask import Flask, g
 from flask import send_file
 from flask_redis import FlaskRedis
 
@@ -52,10 +51,19 @@ def create_app():
             mimetype="text/plain"
         )
 
-    @app.before_request
-    def for_uptime_bot():
-        if "Uptime" in request.user_agent.string:
-            return "", 200
+    @app.route("/manifest.json")
+    def manifest():
+        return send_file(
+            "static/pwa/manifest.json",
+            mimetype="application/json"
+        )
+
+    @app.route("/service-worker.js")
+    def service_worker():
+        return send_file(
+            "static/pwa/service-worker.js",
+            mimetype="application/javascript"
+        )
 
     @app.before_request
     def set_global():
