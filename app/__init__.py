@@ -6,7 +6,7 @@ from flask import send_file
 from flask_redis import FlaskRedis
 
 from app.module import error
-from conf import conf
+from config import config
 
 
 redis = FlaskRedis()
@@ -16,7 +16,7 @@ def create_app():
     app = Flask(__name__)
 
     # Redis 데이터베이스
-    app.config['REDIS_URL'] = conf['redis']['url']
+    app.config['REDIS_URL'] = config['redis']['url']
     redis.init_app(app)
 
     # 세션 용 시크릿 키
@@ -68,7 +68,7 @@ def create_app():
     @app.before_request
     def set_global():
         # 웹사이트 도메인
-        g.host = conf['app']['host']
+        g.host = config['app']['host']
 
     @app.after_request
     def set_header(response):

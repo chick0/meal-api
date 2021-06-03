@@ -3,7 +3,7 @@ from json import loads
 from urllib import parse
 from urllib.request import Request, urlopen
 
-from conf import conf
+from config import config
 
 
 def get_json(url: str, payload: dict):
@@ -14,7 +14,7 @@ def get_json(url: str, payload: dict):
         url=f"{url}?{payload}",
         method="GET",
         headers={
-            "User-Agent": f"MealWeb (https://github.com/chick0/meal; {conf['app']['host']})"
+            "User-Agent": f"MealWeb (https://github.com/chick0/meal; {config['app']['host']})"
         }
     )
 
@@ -28,7 +28,7 @@ def search_school_by_name(school_name: str):
 
     payload = dict()
 
-    payload['key'] = conf['api']['n']
+    payload['key'] = config['api']['n']
     payload['type'] = "json"
     payload['pIndex'] = 1
     payload['pSize'] = 30
@@ -46,7 +46,7 @@ def search_meal_by_codes(edu_code: str, school_code: str, date: str):
 
     payload = dict()
 
-    payload['key'] = conf['api']['n']
+    payload['key'] = config['api']['n']
     payload['type'] = "json"
     payload['pIndex'] = 1
 
