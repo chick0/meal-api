@@ -12,7 +12,6 @@ const FILES_TO_CACHE = [
     "/favicon.ico",
     "/static/img/icon192.png", "/static/img/icon512.png",
     "/static/js/clipboard.min.js",
-    "/static/js/kakao.min.js",
     "/static/js/micromodal.min.js",
     "/static/js/star.js",
     "/static/js/star-btn.js",

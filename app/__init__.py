@@ -70,11 +70,6 @@ def create_app():
         # 웹사이트 도메인
         g.host = conf['app']['host']
 
-        # 카카오톡 자바스크립트 API 키
-        g.k = conf['api']['k']
-        # 카카오톡 공유하기 템플릿 ID
-        g.tid = conf['api']['tid']
-
     @app.after_request
     def set_header(response):
         response.headers['X-Frame-Options'] = "deny"  # Clickjacking
