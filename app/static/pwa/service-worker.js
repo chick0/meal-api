@@ -1,7 +1,7 @@
 "use strict";
 
-// 2021-05-25
-const CACHE_VER = "6fbd65c2388038420129b77ee38da183416f5c51";
+// 2021-06-03
+const CACHE_VER = "b68615c2e9d0a0465a394cedbbfa81ede9234cb6";
 const FILES_TO_CACHE = [
     "/app",
     "/app/no-network",
