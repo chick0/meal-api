@@ -48,7 +48,7 @@ self.addEventListener("fetch", function(e) {
                 return response;
             });
         }).catch(function() {
-            return caches.match("/app/no-network.page");
+            return caches.match("/app/no-network");
         })
     );
 });
