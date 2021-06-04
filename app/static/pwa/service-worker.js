@@ -1,7 +1,7 @@
 "use strict";
 
-// 2021-05-25
-const CACHE_VER = "6fbd65c2388038420129b77ee38da183416f5c51";
+// 2021-06-03
+const CACHE_VER = "b68615c2e9d0a0465a394cedbbfa81ede9234cb6";
 const FILES_TO_CACHE = [
     "/app",
     "/app/no-network",
@@ -12,7 +12,6 @@ const FILES_TO_CACHE = [
     "/favicon.ico",
     "/static/img/icon192.png", "/static/img/icon512.png",
     "/static/js/clipboard.min.js",
-    "/static/js/kakao.min.js",
     "/static/js/micromodal.min.js",
     "/static/js/star.js",
     "/static/js/star-btn.js",
@@ -48,7 +47,7 @@ self.addEventListener("fetch", function(e) {
                 return response;
             });
         }).catch(function() {
-            return caches.match("/app/no-network.page");
+            return caches.match("/app/no-network");
         })
     );
 });

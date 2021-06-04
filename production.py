@@ -7,7 +7,7 @@ from waitress import serve
 from paste.translogger import TransLogger
 
 from app import create_app
-from conf import conf
+from config import config
 
 
 if __name__ == "__main__":
@@ -20,5 +20,5 @@ if __name__ == "__main__":
         app=TransLogger(
             application=create_app()
         ),
-        port=conf['server']['port'],
+        port=config['app']['port'],
     )
