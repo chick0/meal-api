@@ -44,8 +44,7 @@ def get_school_data_by_query(query: str) -> list:
         try:
             redis.set(
                 name=f"search:{sha1(query.encode()).hexdigest()}",
-                value=dumps(json, ensure_ascii=False),
-                ex=86400
+                value=dumps(json), ex=86400
             )
         except ConnectionError:
             pass

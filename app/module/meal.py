@@ -67,8 +67,7 @@ def get_meal_data_by_codes(edu: str, school: str, date: str):
         try:
             redis.set(
                 name=f"{edu}#{school}#{date}",
-                value=dumps(json, ensure_ascii=False),
-                ex=604800
+                value=dumps(json), ex=604800
             )
         except ConnectionError:
             pass
