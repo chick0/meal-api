@@ -25,41 +25,10 @@
 {% block script %}
         <script src="{{ url_for('static', filename='js/axios.min.js') }}"></script>
         <script type="text/javascript">
-            function search(){
-                let start=new Date();
-                document.getElementById("school_name").blur();
-                document.getElementById("result_display").setAttribute("style", "margin-bottom:100%;");
-                document.getElementById("status").innerText="검색결과를 불러오는 중...";
-                axios({
-                    method: "GET",
-                    url: "{{ url_for('api.school') }}",
-                    params: {
-                        school_name: document.getElementById("school_name").value
-                    }
-                }).then(function(resp){
-                    document.getElementById("display").innerHTML="";
-                    for(key in resp.data){
-                        var li = document.createElement("li");
-                        var a = document.createElement("a");
-
-                        a.setAttribute("class", "btn");
-                        a.setAttribute("href", resp.data[key]['url']);
-                        a.appendChild(document.createTextNode(resp.data[key]['name']));
-
-                        li.appendChild(a);
-                        document.getElementById("display").appendChild(li);
-                    }
-                    let end=new Date();document.getElementById("status").innerText="검색결과를 불러옴 ("+((end-start)/1000)+"초)";
-                    window.scrollTo({top: window.pageYOffset + document.getElementById("result_display").getBoundingClientRect().top - 15, behavior: 'smooth'});
-                }).catch(function(err){
-                    let end=new Date();document.getElementById("status").innerText="검색결과를 불러옴 ("+((end-start)/1000)+"초)";
-                    window.alert(err.response.data.message);
-                    document.getElementById("school_name").value="";
-                    document.getElementById("school_name").focus();
-                }); return false;
-            }
+            const url = "{{ url_for('api.school') }}";
+            function search(){let e=new Date;return document.getElementById("school_name").blur(),document.getElementById("result_display").setAttribute("style","margin-bottom:100%;"),document.getElementById("status").innerText="검색결과를 불러오는 중...",axios({method:"GET",url:url,params:{school_name:document.getElementById("school_name").value}}).then(function(t){for(key in document.getElementById("display").innerHTML="",t.data){var n=document.createElement("li"),o=document.createElement("a");o.setAttribute("class","btn"),o.setAttribute("href",t.data[key].url),o.appendChild(document.createTextNode(t.data[key].name)),n.appendChild(o),document.getElementById("display").appendChild(n)}let a=new Date;document.getElementById("status").innerText="검색결과를 불러옴 ("+(a-e)/1e3+"초)",window.scrollTo({top:window.pageYOffset+document.getElementById("result_display").getBoundingClientRect().top-15,behavior:"smooth"})}).catch(function(t){let n=new Date;document.getElementById("status").innerText="검색결과를 불러옴 ("+(n-e)/1e3+"초)",window.alert(t.response.data.message),document.getElementById("school_name").value="",document.getElementById("school_name").focus()}),!1}
         {% if alert is not none %}
             window.alert("{{ alert }}");
         {% endif %}
         </script>
-{% endblock %}
+{% endblock %} {# https://gist.github.com/chick0/d20ee8b67c9ef59d8181e1079e693505 #}
