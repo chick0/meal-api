@@ -88,4 +88,10 @@ def show(edu_code: str, school_code: str, date: str = "today"):
         tomorrow=tomorrow,            # 내일
 
         today=today,                  # 오늘 메뉴인지 검사용
+
+        this_url=url_for(             # 링크 복사용
+            ".show",
+            edu_code=edu_code,
+            school_code=school_code
+        )
     )

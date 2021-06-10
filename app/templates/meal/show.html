@@ -2,6 +2,7 @@
 {% block content %}
         <section class="lf" style="margin-bottom:100%">
             <h2 style="margin-bottom:0">{{ title }}의 급식 정보</h2>
+            <button class="btn no-script copy" data-clipboard-text="{{ g.host }}{{ this_url }}">링크 복사하기</button>
             <button class="btn no-script" id="star" style="display:none;">즐겨찾기</button>
         {% for meal in result: %}
             <hr style="margin-top:10px;margin-bottom:-1px">
