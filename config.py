@@ -24,7 +24,7 @@ if __name__ == "__main__":
         config.set("app", "host", "http://localhost:1365")
         config.set("app", "port", "1365")
         config.add_section("redis")
-        config.set("redis", "url", "redis://127.0.0.1:6379/0")
+        config.set("redis", "url", "redis://127.0.0.1:6379/0\n; use '#' to disable redis cache")
         config.add_section("api")
         config.set("api", "n", "#")
 

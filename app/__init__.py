@@ -9,6 +9,7 @@ from app.module import error
 from config import config
 
 
+no_redis = False
 redis = FlaskRedis()
 
 
@@ -16,8 +17,12 @@ def create_app():
     app = Flask(__name__)
 
     # Redis 데이터베이스
-    app.config['REDIS_URL'] = config['redis']['url']
-    redis.init_app(app)
+    if config['redis']['url'] == "#":
+        global no_redis
+        no_redis = True
+    else:
+        app.config['REDIS_URL'] = config['redis']['url']
+        redis.init_app(app)
 
     # 세션 용 시크릿 키
     try:

@@ -5,7 +5,7 @@ from urllib.error import HTTPError
 
 from redis.exceptions import ConnectionError
 
-from app import redis
+from app import redis, no_redis
 from app.module.api import search_meal_by_codes
 
 
@@ -54,6 +54,9 @@ def reformat(json: list):
 
 def get_meal_data_by_codes(edu: str, school: str, date: str):
     def fetch_from_redis() -> list or None:
+        if no_redis:
+            return None
+
         try:
             return loads(
                 redis.get(
@@ -95,6 +98,7 @@ def get_meal_data_by_codes(edu: str, school: str, date: str):
             if result:
                 result = reformat(json=result)
 
-            add_cache(json=result)
+            if not no_redis:
+                add_cache(json=result)
 
     return result
