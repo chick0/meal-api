@@ -1,14 +1,9 @@
 # -*- coding: utf-8 -*-
 from re import findall
-from json import loads, dumps
-from json import JSONDecodeError
-from hashlib import sha1
 from urllib.error import HTTPError
 
 from flask import url_for
-from redis.exceptions import ConnectionError
 
-from app import redis
 from app.module.api import search_school_by_name
 
 
@@ -29,53 +24,30 @@ def query_filter(school_name: str):
 
 # 검색 기록 불러오기
 def get_school_data_by_query(query: str) -> list:
-    def fetch_from_redis() -> list or None:
+    def fetch_from_api() -> dict or list or bool or None:
         try:
-            return loads(
-                redis.get(
-                    name=f"search:{sha1(query.encode()).hexdigest()}"
-                )
+            return search_school_by_name(
+                school_name=query
             )
-        except (ConnectionError, TypeError, JSONDecodeError):
-            return None
+        except (HTTPError, Exception):
+            return False
 
-    # 캐시 저장하는 함수
-    def add_cache(json: list):
+    result = fetch_from_api()
+
+    if isinstance(result, dict):
         try:
-            redis.set(
-                name=f"search:{sha1(query.encode()).hexdigest()}",
-                value=dumps(json), ex=86400
-            )
-        except ConnectionError:
-            pass
+            result = [
+                {
+                    "name": f"({school['LCTN_SC_NM']}) {school['SCHUL_NM']}",
+                    "url": url_for(
+                        "meal.show",
+                        edu_code=school['ATPT_OFCDC_SC_CODE'],
+                        school_code=school['SD_SCHUL_CODE']
+                    )
+                } for school in result['schoolInfo'][1]['row']
+            ]
 
-    result = fetch_from_redis()
-
-    if result is None:
-        def fetch_from_api() -> dict or list or bool or None:
-            try:
-                return search_school_by_name(
-                    school_name=query
-                )
-            except (HTTPError, Exception):
-                return False
-
-        result = fetch_from_api()
-        if isinstance(result, dict):
-            try:
-                result = [
-                    {
-                        "name": f"({school['LCTN_SC_NM']}) {school['SCHUL_NM']}",
-                        "url": url_for(
-                            "meal.show",
-                            edu_code=school['ATPT_OFCDC_SC_CODE'],
-                            school_code=school['SD_SCHUL_CODE']
-                        )
-                    } for school in result['schoolInfo'][1]['row']
-                ]
-
-                add_cache(json=result)
-            except (KeyError, Exception):
-                result = None
+        except (KeyError, Exception):
+            result = None
 
     return result
