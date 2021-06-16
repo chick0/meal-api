@@ -33,10 +33,16 @@ def reformat(json: list):
             for cd in code:
                 menu = menu.replace(str(cd), "")
 
-            menu_list.append({
-                "name": menu.replace(".", ""),
-                "allergy": [table[key] for key in sorted(code)]
-            })
+            try:
+                menu_list.append({
+                    "name": menu.replace(".", ""),
+                    "allergy": [table[key] for key in sorted(code)]
+                })
+            except KeyError:
+                menu_list.append({
+                    "name": menu,
+                    "allergy": []
+                })
 
         new_json.append({
             "school": item['SCHUL_NM'],
