@@ -16,13 +16,13 @@ function del_star(school){
 function render_star(){
     const star = get_star();
     const keys = Object.keys(star);
-    var render_target = document.getElementById("render_target");render_target.innerHTML = "";
-    for(var key in keys){
-        var li = document.createElement("li");var a = document.createElement("a");
-        if(star[keys[key]].startsWith("/")){
-            a.setAttribute("class", "high l");a.setAttribute("href", star[keys[key]]);
-            a.appendChild(document.createTextNode(keys[key]));li.appendChild(a);render_target.appendChild(li);
-            console.log(`목록에 추가함 : ${keys[key]}`);
+    let render_target = document.getElementById("render_target");render_target.innerHTML="";
+    keys.forEach(function(key){
+        let li=document.createElement("li");let a=document.createElement("a");
+        if(star[key].startsWith("/")){
+            a.setAttribute("class","high l");a.setAttribute("href",star[key]);
+            a.appendChild(document.createTextNode(key));li.appendChild(a);render_target.appendChild(li);
+            console.log(`목록에 추가함 : ${key}`);
         }
-    }
+    });
 }
