@@ -6,15 +6,15 @@ from flask import Blueprint
 from flask import request
 from flask import Response
 
-from app.module.search import query_filter
-from app.module.search import get_school_data_by_query
-from app.module.meal import get_meal_data_by_codes
+from app.search import query_filter
+from app.search import get_school_data_by_query
+from app.meal import get_meal_data_by_codes
 
 
 bp = Blueprint(
-    name=__name__.split(".")[-1],
-    import_name=__name__,
-    url_prefix=f"/{__name__.split('.')[-1]}"
+    name="api",
+    import_name="api",
+    url_prefix="/api"
 )
 
 

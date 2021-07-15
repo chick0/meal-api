@@ -4,7 +4,7 @@ from urllib.error import HTTPError
 
 from flask import url_for
 
-from app.module.api import search_school_by_name
+from .api import search_school_by_name
 
 
 # 검색어 필터링

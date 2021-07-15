@@ -1,19 +1,21 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime, timedelta
+from datetime import datetime
+from datetime import timedelta
 
 from flask import Blueprint
 from flask import session
 from flask import abort
+from flask import redirect
+from flask import url_for
 from flask import render_template
-from flask import redirect, url_for
 
-from app.module.meal import get_meal_data_by_codes
+from app.meal import get_meal_data_by_codes
 
 
 bp = Blueprint(
-    name=__name__.split(".")[-1],
-    import_name=__name__,
-    url_prefix=f"/{__name__.split('.')[-1]}"
+    name="meal",
+    import_name="meal",
+    url_prefix="/meal"
 )
 
 

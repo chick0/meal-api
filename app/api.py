@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from json import loads
 from urllib import parse
-from urllib.request import Request, urlopen
+from urllib.request import Request
+from urllib.request import urlopen
 
 from config import config
 

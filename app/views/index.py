@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 from random import choice
 
-from flask import Blueprint, session
+from flask import Blueprint
+from flask import session
 from flask import render_template
 
 
 bp = Blueprint(
-    name=__name__.split(".")[-1],
-    import_name=__name__,
+    name="index",
+    import_name="index",
     url_prefix="/"
 )
 

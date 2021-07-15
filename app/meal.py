@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 from re import findall
-from json import dumps, loads
+from json import dumps
+from json import loads
 from urllib.error import HTTPError
 
 from redis.exceptions import ConnectionError
 
-from app import redis, no_redis
-from app.module.api import search_meal_by_codes
+from app import redis
+from app import no_redis
+from .api import search_meal_by_codes
 
 
 def reformat(json: list):

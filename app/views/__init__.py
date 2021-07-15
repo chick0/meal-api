@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
-from os import path, listdir
+from os import path
+from os import listdir
 
-__all__ = [file_name[:-3] for file_name in listdir(path.dirname(__file__))
-           if file_name.endswith(".py") and not file_name.startswith("_")]
+__all__ = [
+    view_name[:-3]
+    for view_name in listdir(path.dirname(__file__)) if not view_name.startswith("__")
+]
+
 
 from app.views import *
-del path, listdir

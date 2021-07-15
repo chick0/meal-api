@@ -5,7 +5,7 @@ from flask import Flask, g
 from flask import send_file
 from flask_redis import FlaskRedis
 
-from app.module import error
+from app import error
 from config import config
 
 

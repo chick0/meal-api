@@ -1,17 +1,20 @@
 # -*- coding: utf-8 -*-
 
-from flask import Blueprint, request, session
+from flask import Blueprint
+from flask import request
+from flask import session
+from flask import redirect
+from flask import url_for
 from flask import render_template
-from flask import redirect, url_for
 
-from app.module.search import query_filter
-from app.module.search import get_school_data_by_query
+from app.search import query_filter
+from app.search import get_school_data_by_query
 
 
 bp = Blueprint(
-    name=__name__.split(".")[-1],
-    import_name=__name__,
-    url_prefix=f"/{__name__.split('.')[-1]}"
+    name="school",
+    import_name="school",
+    url_prefix="/school"
 )
 
 
