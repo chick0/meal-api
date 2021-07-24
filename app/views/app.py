@@ -11,7 +11,7 @@ bp = Blueprint(
 )
 
 
-@bp.route("/no-network")  # 오프라인 화면
+@bp.get("/no-network")  # 오프라인 화면
 def no_network():
     return render_template(
         "app/no_network.html",
@@ -19,7 +19,7 @@ def no_network():
     ), 200
 
 
-@bp.route("")
+@bp.get("")
 def start_page():
     return render_template(
         "app/start_page.html",

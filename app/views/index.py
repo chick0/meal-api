@@ -13,7 +13,7 @@ bp = Blueprint(
 )
 
 
-@bp.route("/")
+@bp.get("/")
 def index():
     try:
         alert = session['alert']

@@ -34,7 +34,7 @@ def error(msg: str):
     )
 
 
-@bp.route("/school")
+@bp.get("/school")
 def school():
     # 학교 이름 가져오고 검색어 필터링
     status, school_name = query_filter(school_name=request.args.get("school_name", ""))
@@ -61,7 +61,7 @@ def school():
     )
 
 
-@bp.route("/meal")
+@bp.get("/meal")
 def meal():
     edu_code = request.args.get("edu", None)
     school_code = request.args.get("school", None)

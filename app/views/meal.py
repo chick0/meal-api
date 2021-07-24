@@ -19,8 +19,8 @@ bp = Blueprint(
 )
 
 
-@bp.route("/<string:edu_code>/<string:school_code>/")
-@bp.route("/<string:edu_code>/<string:school_code>/<string:date>")
+@bp.get("/<string:edu_code>/<string:school_code>/")
+@bp.get("/<string:edu_code>/<string:school_code>/<string:date>")
 def show(edu_code: str, school_code: str, date: str = "today"):
     today = False
 

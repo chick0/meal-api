@@ -23,7 +23,7 @@ def alert(msg: str):
     return redirect(url_for("index.index"))
 
 
-@bp.route("", methods=['POST'])
+@bp.post("")
 def select():
     # 학교 이름 가져오고 검색어 필터링
     status, school_name = query_filter(school_name=request.form.get("school_name", ""))
