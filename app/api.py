@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
 from json import loads
 from urllib import parse
 from urllib.request import Request
 from urllib.request import urlopen
 
-from config import config
+from flask import request
+from flask import current_app
 
 
 def get_json(url: str, payload: dict):
@@ -15,7 +15,7 @@ def get_json(url: str, payload: dict):
         url=f"{url}?{payload}",
         method="GET",
         headers={
-            "User-Agent": f"MealWeb (https://github.com/chick0/meal; {config['app']['host']})"
+            "User-Agent": f"SchoolMeal (https://github.com/chick0/meal; {request.host})"
         }
     )
 
@@ -25,38 +25,29 @@ def get_json(url: str, payload: dict):
 
 
 def search_school_by_name(school_name: str):
-    target_url = "https://open.neis.go.kr/hub/schoolInfo"
-
-    payload = dict()
-
-    payload['key'] = config['api']['n']
-    payload['type'] = "json"
-    payload['pIndex'] = 1
-    payload['pSize'] = 30
-
-    payload['SCHUL_NM'] = school_name
-
     return get_json(
-        url=target_url,
-        payload=payload
+        url="https://open.neis.go.kr/hub/schoolInfo",
+        payload={
+            "key": current_app.config['API_KEY'],
+            "type": "json",
+            "pIndex": 1,
+            "pSize": 30,
+
+            "SCHUL_NM": school_name
+        }
     )
 
 
 def search_meal_by_codes(edu_code: str, school_code: str, date: str):
-    target_url = "https://open.neis.go.kr/hub/mealServiceDietInfo"
-
-    payload = dict()
-
-    payload['key'] = config['api']['n']
-    payload['type'] = "json"
-    payload['pIndex'] = 1
-
-    payload['ATPT_OFCDC_SC_CODE'] = edu_code
-    payload['SD_SCHUL_CODE'] = school_code
-
-    payload['MLSV_YMD'] = date
-
     return get_json(
-        url=target_url,
-        payload=payload
+        url="https://open.neis.go.kr/hub/mealServiceDietInfo",
+        payload={
+            "key": current_app.config['API_KEY'],
+            "type": "json",
+            "pIndex": 1,
+
+            "ATPT_OFCDC_SC_CODE": edu_code,
+            "SD_SCHUL_CODE": school_code,
+            "MLSV_YMD": date
+        }
     )

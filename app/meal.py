@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from re import findall
 from json import dumps
 from json import loads

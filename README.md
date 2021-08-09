@@ -1,9 +1,28 @@
-# Meal!
-쉽게 우리학교의 급식을 확인하세요!
+# Meal
 
-# 사용방법
-1. 웹사이트에 접속한다
-2. 학교를 검색한다
-3. 학교를 선택한다
-4. 급식을 확인한다
-    - 즐겨찾기에 추가하면 내일 확인할 때가 편해짐
+학교 검색 & 급식 조회 웹 사이트
+
+## 실행 방법
+
+1. 의존성 설치하기
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. 환경변수 설치하기
+
+   ```bash
+   export redis_url='redis://:<password>@<host>:<port>/<id>'
+   export api_key='#'
+   ```
+
+   - redis 서버가 없다면 접속 URL 대신 # 을 넣으면 됩니다. 
+
+   - API 키는 [https://open.neis.go.kr](https://open.neis.go.kr)에서 API 키 발급받아야 합니다.
+
+3. 서버 실행하기
+
+   ```bash
+   gunicorn -w 2 -b 127.0.0.1:1365 "app:create_app()"
+   ```

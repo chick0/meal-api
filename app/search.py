@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from re import findall
 from urllib.error import HTTPError
 

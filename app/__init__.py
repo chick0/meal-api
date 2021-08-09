@@ -1,12 +1,9 @@
-# -*- coding: utf-8 -*-
-from io import BytesIO
 
-from flask import Flask, g
-from flask import send_file
+from flask import Flask
 from flask_redis import FlaskRedis
 
-from app import error
-from config import config
+from . import error
+from . import config
 
 
 no_redis = False
@@ -15,69 +12,18 @@ redis = FlaskRedis()
 
 def create_app():
     app = Flask(__name__)
+    app.config.from_object(config)
 
-    # Redis 데이터베이스
-    if config['redis']['url'] == "#":
+    # Redis 캐시 서버
+    if app.config['REDIS_URL'] == "#":
         global no_redis
         no_redis = True
     else:
-        app.config['REDIS_URL'] = config['redis']['url']
         redis.init_app(app)
-
-    # 세션 용 시크릿 키
-    try:
-        app.config['SECRET_KEY'] = open(".SECRET_KEY", mode="rb").read()
-    except FileNotFoundError:
-        from secrets import token_bytes
-        app.config['SECRET_KEY'] = token_bytes(32)
-        open(".SECRET_KEY", mode="wb").write(app.config['SECRET_KEY'])
-
-    # 세션 쿠키 설정
-    app.config['SESSION_COOKIE_NAME'] = "s"
-    app.config['SESSION_COOKIE_HTTPONLY'] = True
-    app.config['SESSION_COOKIE_SAMESITE'] = "Strict"
-
-    @app.route("/favicon.ico")
-    def favicon():
-        return send_file(
-            "static/img/favicon.ico",
-            mimetype="image/x-icon"
-        )
-
-    @app.route("/robots.txt")
-    def robots():
-        return send_file(
-            BytesIO(b"\n".join([
-                b"User-agent: *",
-                b"Allow: /$",       # 메인 페이지
-                b"Allow: /static",  # js, css, img 같은 정적 파일들
-                b"Disallow: /",     # 위를 제외한 나머지 다
-            ])),
-            mimetype="text/plain"
-        )
-
-    @app.route("/manifest.json")
-    def manifest():
-        return send_file(
-            "static/pwa/manifest.json",
-            mimetype="application/json"
-        )
-
-    @app.route("/service-worker.js")
-    def service_worker():
-        return send_file(
-            "static/pwa/service-worker.js",
-            mimetype="application/javascript"
-        )
-
-    @app.before_request
-    def set_global():
-        # 웹사이트 도메인
-        g.host = config['app']['host']
 
     @app.after_request
     def set_header(response):
-        response.headers['X-Frame-Options'] = "deny"  # Clickjacking
+        response.headers['X-Frame-Options'] = "deny"
         response.headers['X-Powered-By'] = "chick_0"
         return response
 
@@ -92,11 +38,9 @@ def create_app():
         name="origin"
     )
 
-    from app import views
-    for view_point in views.__all__:
-        app.register_blueprint(
-            blueprint=getattr(getattr(views, view_point), "bp")
-        )
+    from . import views
+    for view in views.__all__:
+        app.register_blueprint(getattr(getattr(getattr(__import__(f"app.views.{view}"), "views"), view), "bp"))
 
     # 오류 핸들러
     app.register_error_handler(400, error.bad_request)

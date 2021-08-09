@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 from flask import Blueprint
 from flask import render_template
@@ -11,7 +10,7 @@ bp = Blueprint(
 )
 
 
-@bp.get("/no-network")  # 오프라인 화면
+@bp.get("/no-network")
 def no_network():
     return render_template(
         "app/no_network.html",

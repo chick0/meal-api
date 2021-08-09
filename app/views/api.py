@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
-from json import dumps
 from datetime import datetime
 
 from flask import Blueprint
 from flask import request
-from flask import Response
+from flask import jsonify
 
 from app.search import query_filter
 from app.search import get_school_data_by_query
@@ -18,20 +16,10 @@ bp = Blueprint(
 )
 
 
-def dump_to_return(json: dict or list):
-    return dumps(
-        json, ensure_ascii=False
-    )
-
-
 def error(msg: str):
-    return Response(
-        status=400,
-        mimetype="application/json",
-        response=dump_to_return(dict(
-            message=msg
-        ))
-    )
+    return jsonify({
+        "message": msg
+    }), 400
 
 
 @bp.get("/school")
@@ -54,11 +42,7 @@ def school():
         return error(msg="학교 목록을 불러오는 데 실패했습니다")
 
     # 검색 결과가 있으면 학교 목록 리턴
-    return Response(
-        status=200,
-        mimetype="application/json",
-        response=dump_to_return(json=result)
-    )
+    return jsonify(result)
 
 
 @bp.get("/meal")
@@ -84,8 +68,4 @@ def meal():
         return error(msg="급식 정보를 불러오는 데 실패했습니다")
 
     # 급식 출력하기
-    return Response(
-        status=200,
-        mimetype="application/json",
-        response=dump_to_return(result)
-    )
+    return jsonify(result)
