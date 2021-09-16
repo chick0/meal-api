@@ -42,7 +42,11 @@ def get_school_data_by_query(query: str) -> list:
                         "meal.show",
                         edu_code=school['ATPT_OFCDC_SC_CODE'],
                         school_code=school['SD_SCHUL_CODE']
-                    )
+                    ),
+                    "code": {
+                        "edu": school['ATPT_OFCDC_SC_CODE'],
+                        "school": school['SD_SCHUL_CODE']
+                    }
                 } for school in result['schoolInfo'][1]['row']
             ]
 
