@@ -39,20 +39,23 @@ def reformat(json: list):
         menu_list = []
         for menu in item['DDISH_NM'].split("<br/>"):
             code = [int(code) for code in "".join(findall(r"[0-9.]", menu)).split(".") if len(code) != 0]
-            code = sorted(code, reverse=True)
 
-            for cd in code:
+            for cd in sorted(code, reverse=True):
                 menu = menu.replace(str(cd), "")
+
+            code = sorted(code)
 
             try:
                 menu_list.append({
                     "name": menu.replace(".", ""),
-                    "allergy": [table[key] for key in sorted(code)]
+                    "allergy": [table[key] for key in code],
+                    "allergy_code": code
                 })
             except KeyError:
                 menu_list.append({
                     "name": menu,
-                    "allergy": []
+                    "allergy": [],
+                    "allergy_code": code
                 })
 
         new_json.append({
