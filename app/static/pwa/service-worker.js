@@ -1,18 +1,17 @@
 "use strict";
 
-// const CACHE_VER = md5("2021-06-16");
-const CACHE_VER = "99038770e4457d8a8867c424f3aa0a43";
+const CACHE_VER = "v9_2021-12-22";
 const FILES_TO_CACHE = [
     "/app",
     "/app/no-network",
     "/static/css/main.css",
-    "/static/css/modal.css",
+    "/static/css/detail.css",
     "/static/fonts/noto-sans-kr-v12-latin_korean-regular.woff",
     "/static/fonts/noto-sans-kr-v12-latin_korean-regular.woff2",
     "/favicon.ico",
-    "/static/img/icon192.png", "/static/img/icon512.png",
+    "/static/img/icon192.png",
+    "/static/img/icon512.png",
     "/static/js/clipboard.min.js",
-    "/static/js/micromodal.min.js",
     "/static/js/star.js",
     "/static/js/star-btn.js",
 ];

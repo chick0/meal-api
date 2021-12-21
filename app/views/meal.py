@@ -58,7 +58,6 @@ def show(edu_code: str, school_code: str, date: str = "today"):
         return render_template(
             "meal/not_found.html",
             title="정보 없음",
-            use_modal=True,
 
             day=day.strftime('%Y년 %m월 %d일'),
 
@@ -78,7 +77,6 @@ def show(edu_code: str, school_code: str, date: str = "today"):
     return render_template(
         "meal/show.html",
         title=result[0]['school'],  # 학교 이름
-        use_modal=True,
 
         day=day.strftime('%Y년 %m월 %d일'),
         result=result,                # 급식 조회 결과

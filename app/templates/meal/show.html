@@ -33,11 +33,30 @@
                         </ul>
                     </td>
                 </tr>
-                <tr class="no-script ie">
+                <tr class="ie">
                     <th width="75px">추가정보</th>
                     <td>
-                        <button class="btn" data-micromodal-trigger="nutrients_{{ meal['code'][0] }}">영양정보</button>
-                        <button class="btn" data-micromodal-trigger="origin_{{ meal['code'][0] }}">원산지</button>
+                        <details style="margin-bottom:10px;">
+                            <summary>영양정보</summary>
+                            <ul>
+                            {% for info in meal['nutrient'] %}
+                                <li>{{ info }}</li>
+                            {% endfor %}
+                            </ul>
+                        </details>
+
+                        <details>
+                            <summary>원산지</summary>
+                            <ul>
+                        {% for from in meal['origin'] %}
+                            {% if not from|origin %}
+                                <li><span class="high">{{ from }}</span></li>
+                            {% else %}
+                                <li>{{ from }}</li>
+                            {% endif %}
+                        {% endfor %}
+                            </ul>
+                        </details>
                     </td>
                 </tr>
             </table>
@@ -60,45 +79,6 @@
             <a class="btn" href="{{ url_for('index.index') }}">학교 검색하러 가기</a>
         </section>
 {% endblock %}
-{% block modal %}
-    {% for meal in result: %}
-        <section class="modal" id="nutrients_{{ meal['code'][0] }}">
-            <div class="overlay" tabindex="-1" data-micromodal-close>
-                <div class="display" style="width:300px;">
-                    <h2>영양정보 ({{ meal['code'][1] }})</h2>
-                    <hr style="margin-bottom:0">
-                    <ul style="max-height:220px;height:220px;margin:0;overflow-y:scroll;">
-                    {% for info in meal['nutrient'] %}
-                        <li>{{ info }}</li>
-                    {% endfor %}
-                    </ul>
-                    <hr style="margin-top:0">
-                    <button class="btn" style="width:100%" data-micromodal-close>화면 닫기</button>
-                </div>
-            </div>
-        </section>
-
-        <section class="modal" id="origin_{{ meal['code'][0] }}">
-            <div class="overlay" tabindex="-1" data-micromodal-close>
-                <div class="display" style="width:300px;">
-                    <h2 style="margin:0">원산지 정보 ({{ meal['code'][1] }})</h2>
-                    <hr style="margin-bottom:0">
-                    <ul style="max-height:220px;height:220px;margin:0;overflow-y:scroll;">
-                {% for from in meal['origin'] %}
-                    {% if not from|origin %}
-                        <li><span class="high">{{ from }}</span></li>
-                    {% else %}
-                        <li>{{ from }}</li>
-                    {% endif %}
-                {% endfor %}
-                    </ul>
-                    <hr style="margin-top:0">
-                    <button class="btn" style="width:100%" data-micromodal-close>화면 닫기</button>
-                </div>
-            </div>
-        </section>
-    {% endfor %}
-{% endblock %}
 {% block script %}
         <script src="{{ url_for('static', filename='js/star.js') }}"></script>
         <script src="{{ url_for('static', filename='js/star-btn.js') }}"></script>
@@ -109,8 +89,4 @@
             render_btn("{{ title }}"),document.getElementById("star").style.display="inline-block";
             window.addEventListener("keydown",function(key){if(Number(key.key)>0){try{window.scrollTo({top: window.pageYOffset+document.getElementById("meal_"+key.key).getBoundingClientRect().top, behavior:'smooth'});}catch{}}});
         </script>
-    {% if request.user_agent.browser != "msie" %}
-        <script src="{{ url_for('static', filename='js/micromodal.min.js') }}"></script>
-        <script>MicroModal.init({ disableFocus:true });</script>
-    {% endif %}
 {% endblock %}

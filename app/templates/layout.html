@@ -17,8 +17,8 @@
         <meta property="og:image" content="{{ url_for('static', filename='img/icon192.png') }}">
 
         <link rel="canonical" href="{{ request.url_root }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">{% if use_modal == True %}
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">{% endif %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/detail.css') }}">
 
         <meta name="theme-color" content="#DBDBDB">
         <link rel="shortcut icon" href="/favicon.ico">
@@ -51,7 +51,6 @@
     </head>
     <body>
         {% block content %}{% endblock %}
-        {% block modal %}{% endblock %}
 
         <script>
             if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("/sw.js");});}
