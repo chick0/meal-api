@@ -65,14 +65,11 @@
 
         <section class="menu">
         {% if today is false %}
-            <div>
-                <a class="btn" href="{{ url_for('meal.show', edu_code=edu_code, school_code=school_code) }}">
-                    <b>오늘 메뉴</b> 보러가기
-                </a>
-            </div>
-        {% endif %}
+            <a class="btn" href="{{ url_for('meal.show', edu_code=edu_code, school_code=school_code) }}"><b>오늘 메뉴</b> 보러가기</a>
+        {% else %}
             <a class="btn" href="{{ url_for('meal.show', edu_code=edu_code, school_code=school_code, date=yesterday) }}">← 어제 급식</a>
             <a class="btn" href="{{ url_for('meal.show', edu_code=edu_code, school_code=school_code, date=tomorrow) }}">내일 급식 →</a>
+        {% endif %}
         </section>
 
         <section class="nav-right-bottom">
