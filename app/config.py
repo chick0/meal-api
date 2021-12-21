@@ -1,5 +1,9 @@
 from os import environ
 from secrets import token_bytes
+from dotenv import load_dotenv
+
+# Load .env!
+load_dotenv()
 
 # Redis
 REDIS_URL = environ.get("redis_url", default="redis://127.0.0.1:6379/0")

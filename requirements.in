@@ -1,4 +1,6 @@
 Flask
 flask-redis
 
+python-dotenv
+
 gunicorn
