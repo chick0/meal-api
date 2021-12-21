@@ -12,6 +12,10 @@ flask==2.0.1
     #   flask-redis
 flask-redis==0.4.0
     # via -r requirements.in
+gevent==21.12.0
+    # via -r requirements.in
+greenlet==1.1.2
+    # via gevent
 gunicorn==20.1.0
     # via -r requirements.in
 itsdangerous==2.0.1
@@ -26,6 +30,10 @@ redis==3.5.3
     # via flask-redis
 werkzeug==2.0.1
     # via flask
+zope.event==4.5.0
+    # via gevent
+zope.interface==5.4.0
+    # via gevent
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools

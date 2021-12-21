@@ -4,3 +4,4 @@ flask-redis
 python-dotenv
 
 gunicorn
+gevent
