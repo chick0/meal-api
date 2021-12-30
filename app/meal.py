@@ -38,7 +38,8 @@ def reformat(json: list):
     for item in json:
         menu_list = []
         for menu in item['DDISH_NM'].split("<br/>"):
-            code = [int(code) for code in "".join(findall(r"[0-9.]", menu)).split(".") if len(code) != 0]
+            code = [int(code) for code in "".join(findall(r"[0-9.]", menu)).split(".")
+                    if len(code) != 0 and code in menu]
 
             for cd in sorted(code, reverse=True):
                 menu = menu.replace(str(cd), "")
