@@ -12,7 +12,6 @@ from flask import render_template
 
 from app.meal import get_meal_data_by_codes
 
-
 bp = Blueprint(
     name="meal",
     import_name="meal",

@@ -8,7 +8,6 @@ from flask import render_template
 from app.search import query_filter
 from app.search import get_school_data_by_query
 
-
 bp = Blueprint(
     name="school",
     import_name="school",
