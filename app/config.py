@@ -8,6 +8,11 @@ load_dotenv()
 # Redis
 REDIS_URL = environ.get("redis_url", default="redis://127.0.0.1:6379/0")
 
+if REDIS_URL == "#":
+    NO_REDIS = True
+else:
+    NO_REDIS = False
+
 
 # 나이스 API Key
 API_KEY = environ.get("api_key", default="#")

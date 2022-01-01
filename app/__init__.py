@@ -5,8 +5,6 @@ from flask_redis import FlaskRedis
 from . import error
 from . import config
 
-
-no_redis = False
 redis = FlaskRedis()
 
 
@@ -15,10 +13,7 @@ def create_app():
     app.config.from_object(config)
 
     # Redis 캐시 서버
-    if app.config['REDIS_URL'] == "#":
-        global no_redis
-        no_redis = True
-    else:
+    if not app.config.get("NO_REDIS"):
         redis.init_app(app)
 
     @app.after_request
