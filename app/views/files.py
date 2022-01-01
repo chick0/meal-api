@@ -15,6 +15,7 @@ def robots():
         "\n".join([
             "User-agent: *",
             "Allow: /$",
+            "Allow: /static",
             "Disallow: /",
         ]),
         mimetype="text/plain"
