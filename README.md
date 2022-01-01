@@ -24,5 +24,5 @@
 3. 서버 실행하기
 
    ```bash
-   gunicorn -w 2 -b 127.0.0.1:1365 "app:create_app()"
+   gunicorn -c gunicorn.py
    ```
