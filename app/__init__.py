@@ -1,3 +1,4 @@
+from json import load
 
 from flask import Flask
 from flask_redis import FlaskRedis
@@ -11,6 +12,11 @@ redis = FlaskRedis()
 def create_app():
     app = Flask(__name__)
     app.config.from_object(config)
+
+    # 시 불러오기
+    app.config.update({
+        "poems": load(open("poems.json", mode="r", encoding="utf-8"))
+    })
 
     # Redis 캐시 서버
     if not app.config.get("NO_REDIS"):

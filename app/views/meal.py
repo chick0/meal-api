@@ -1,7 +1,9 @@
+from random import choice
 from datetime import datetime
 from datetime import timedelta
 
 from flask import Blueprint
+from flask import current_app
 from flask import session
 from flask import abort
 from flask import redirect
@@ -73,6 +75,13 @@ def show(edu_code: str, school_code: str, date: str = "today"):
         session['alert'] = "급식 정보를 불러오는 데 실패했습니다"
         return redirect(url_for("index.index"))
 
+    # 시 불러오기
+    poems = current_app.config.get("poems")
+    poem_id = choice(list(poems.keys()))
+
+    poem = poems.get(poem_id, {})
+    p_text = choice([x.replace("&nbsp;", "") for x in poem.get("content", "") if len(x.strip()) != 0])
+
     # 급식 출력하기
     return render_template(
         "meal/show.html",
@@ -85,6 +94,11 @@ def show(edu_code: str, school_code: str, date: str = "today"):
         school_code=school_code,      # 학교 코드
         yesterday=yesterday,          # 어제
         tomorrow=tomorrow,            # 내일
+
+        poem_id=poem_id,              # 시 고유 코드
+        p_text=p_text,                # 시 [한줄만]
+        p_title=poem.get("title"),    # 제목
+        p_author=poem.get("author"),  # 작가
 
         today=today,                  # 오늘 메뉴인지 검사용
     )
