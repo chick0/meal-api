@@ -6,3 +6,5 @@ __all__ = [
     "meal",
     "school",
 ]
+
+from . import *

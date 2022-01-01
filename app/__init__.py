@@ -40,7 +40,7 @@ def create_app():
 
     from . import views
     for view in views.__all__:
-        app.register_blueprint(getattr(getattr(getattr(__import__(f"app.views.{view}"), "views"), view), "bp"))
+        app.register_blueprint(getattr(getattr(views, view), "bp"))
 
     # 오류 핸들러
     app.register_error_handler(400, error.bad_request)
