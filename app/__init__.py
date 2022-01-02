@@ -5,6 +5,7 @@ from flask_redis import FlaskRedis
 
 from . import error
 from . import config
+from . import template_filter
 
 redis = FlaskRedis()
 
@@ -28,16 +29,12 @@ def create_app():
         response.headers['X-Powered-By'] = "chick_0"
         return response
 
-    # 국내산 확인용 필터
-    # 1) 텍스트에서 ':'을 기준으로 식재료와 원산지 정보로 분리
-    # 2) 원산지 정보에서 '국내산' 제거
-    # 3) 제거된 원산진 정보에서 '산' 이 있는지 확인
-    # 4-1) 있다면, 수입산이 포함된 식재료
-    # 4-2) 없다면, 국내산만 포함된 식재료
-    app.add_template_filter(
-        lambda s: s.split(":")[-1].replace("국내산", "").find("산") == -1,
-        name="origin"
-    )
+    for name in [x for x in dir(template_filter) if not x.startswith("__")]:
+        func = getattr(template_filter, name)
+        if func.__class__.__name__ == "function":
+            app.add_template_filter(
+                f=func, name=name
+            )
 
     from . import views
     for view in views.__all__:
