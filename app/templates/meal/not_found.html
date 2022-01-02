@@ -1,5 +1,9 @@
 {% extends 'layout.html' %}
 {% block content %}
+    <section class="lf">
+        <a href="{{ url_for('index.index') }}">← 학교 검색하러 가기</a>
+    </section>
+
     <section class="message-box l">
         <span class="s" style="padding-bottom:3px;border-bottom: 0.7px solid #BCBCBC;">{{ day.strftime('%Y년 %m월 %d일') }}</span>
         <p><span class="high">급식</span> 정보가 없습니다</p><br>
@@ -13,10 +17,6 @@
             [{{ date_str[::-1][:2][::-1] }}]
         </a>
     {% endfor %}
-    </section>
-
-    <section class="nav-right-bottom">
-        <a class="btn" href="{{ url_for('index.index') }}">학교 검색하러 가기</a>
     </section>
 {% endblock %}
 {% block script %}

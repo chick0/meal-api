@@ -1,7 +1,8 @@
 {% extends 'layout.html' %}
 {% block content %}
     <section class="lf" style="margin-bottom:220px">
-        <h2 style="margin-bottom:0">{{ title }}의 급식 정보</h2>
+        <a href="{{ url_for('index.index') }}">← 학교 검색하러 가기</a>
+        <h2 style="margin:0">{{ title }}의 급식 정보</h2>
         <button class="btn no-script copy" data-clipboard-text="{{ request.base_url }}">링크 복사하기</button>
         <button class="btn no-script" id="star" style="display:none;">즐겨찾기</button>
     {% for meal in result: %}
@@ -78,10 +79,6 @@
             [{{ date_str[::-1][:2][::-1] }}]
         </a>
     {% endfor %}
-    </section>
-
-    <section class="nav-right-bottom">
-        <a class="btn" href="{{ url_for('index.index') }}">학교 검색하러 가기</a>
     </section>
 {% endblock %}
 {% block script %}
