@@ -7,3 +7,24 @@ def origin(s: str) -> bool:
     #     3-2) 없다면, 국내산만 포함된 식재료*
 
     return s.split(":")[-1].replace("국내산", "").find("산") == -1
+
+
+def is_weekend(code: int) -> bool:
+    # 주말인지 체크하는 필터
+    return {
+        6: True,  # 일요일
+        5: True,  # 토요일
+    }.get(code, False)
+
+
+def get_day_name(code: int) -> str:
+    # 요일 이름 불러오는 필터
+    return {
+        6: "일",  # 주말
+        0: "월",
+        1: "화",
+        2: "수",
+        3: "목",
+        4: "금",
+        5: "토",  # 주말
+    }.get(code)

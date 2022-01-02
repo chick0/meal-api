@@ -1,6 +1,5 @@
 from random import choice
 from datetime import datetime
-from datetime import timedelta
 
 from flask import Blueprint
 from flask import current_app
@@ -11,6 +10,7 @@ from flask import url_for
 from flask import render_template
 
 from app.meal import get_meal_data_by_codes
+from app.weeks import get_weeks
 
 bp = Blueprint(
     name="meal",
@@ -22,17 +22,12 @@ bp = Blueprint(
 @bp.get("/<string:edu_code>/<string:school_code>/")
 @bp.get("/<string:edu_code>/<string:school_code>/<string:date>")
 def show(edu_code: str, school_code: str, date: str = "today"):
-    today = False
-
     if date == "today":
-        # 오늘 날짜 불러오기
+        # 급식 조회할 날짜를 오늘 날짜로 설정하기
         day = datetime.today()
-        date = day.strftime("%Y%m%d")
-
-        today = True
     else:
         try:
-            # 날짜 불러오기
+            # URL에서 급식 조회할 날짜 불러오기
             day = datetime.strptime(date, "%Y%m%d")
 
             # 오늘 날짜면 today 링크로 리다이렉트
@@ -42,16 +37,14 @@ def show(edu_code: str, school_code: str, date: str = "today"):
             # 전달받은 날짜로 날짜를 불러오지 못함
             return abort(400)
 
-    # 내일 이동 버튼을 위한 값
-    tomorrow = (day + timedelta(days=1)).strftime("%Y%m%d")
+    # 이번주 이동 버튼
+    weeks = get_weeks(day=day)
 
-    # 어제 이동 버튼을 위한 값
-    yesterday = (day - timedelta(days=1)).strftime("%Y%m%d")
-
+    # 교육청 코드와 학교 코드와 날짜로 급식 불러오기
     result = get_meal_data_by_codes(
         edu=edu_code,
         school=school_code,
-        date=date
+        date=day.strftime("%Y%m%d")
     )
 
     if result is None or result == []:
@@ -60,14 +53,12 @@ def show(edu_code: str, school_code: str, date: str = "today"):
             "meal/not_found.html",
             title="정보 없음",
 
-            day=day.strftime('%Y년 %m월 %d일'),
+            day=day,
 
             edu_code=edu_code,        # 교육청 코드
             school_code=school_code,  # 학교 코드
-            yesterday=yesterday,      # 어제
-            tomorrow=tomorrow,        # 내일
 
-            today=today               # 오늘 메뉴인지 검사용
+            weeks=weeks,              # 이번주 급식 메뉴 이동 버튼용
         )
     elif result is False:
         # 교육청 점검 or 타임아웃
@@ -86,18 +77,16 @@ def show(edu_code: str, school_code: str, date: str = "today"):
         "meal/show.html",
         title=result[0]['school'],  # 학교 이름
 
-        day=day.strftime('%Y년 %m월 %d일'),
-        result=result,                # 급식 조회 결과
+        day=day,
 
+        result=result,                # 급식 조회 결과
         edu_code=edu_code,            # 교육청 코드
         school_code=school_code,      # 학교 코드
-        yesterday=yesterday,          # 어제
-        tomorrow=tomorrow,            # 내일
 
         poem_id=poem_id,              # 시 고유 코드
         p_text=p_text,                # 시 [한줄만]
         p_title=poem.get("title"),    # 제목
         p_author=poem.get("author"),  # 작가
 
-        today=today,                  # 오늘 메뉴인지 검사용
+        weeks=weeks,                  # 이번주 급식 메뉴 이동 버튼용
     )
