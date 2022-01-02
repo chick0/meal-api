@@ -1,26 +1,26 @@
 {% extends 'layout.html' %}
 {% block content %}
-        <section class="message-box l">
-            <span class="s" style="padding-bottom:3px;border-bottom: 0.7px solid #BCBCBC;">{{ day.strftime('%Y년 %m월 %d일') }}</span>
-            <p><span class="high">급식</span> 정보가 없습니다</p><br>
-        </section>
+    <section class="message-box l">
+        <span class="s" style="padding-bottom:3px;border-bottom: 0.7px solid #BCBCBC;">{{ day.strftime('%Y년 %m월 %d일') }}</span>
+        <p><span class="high">급식</span> 정보가 없습니다</p><br>
+    </section>
 
-        <section class="menu">
-        {% for code, date in weeks.items(): %}
-            {% set date_str = date.strftime("%Y%m%d") %}
-            <a id="date-{{ date_str }}" class="btn" href="{{ url_for('meal.show', edu_code=edu_code, school_code=school_code, date=date_str) }}">
-                {{ code|get_day_name }}<br>
-                [{{ date_str[::-1][:2][::-1] }}]
-            </a>
-        {% endfor %}
-        </section>
+    <section class="menu">
+    {% for code, date in weeks.items(): %}
+        {% set date_str = date.strftime("%Y%m%d") %}
+        <a id="date-{{ date_str }}" class="btn" href="{{ url_for('meal.show', edu_code=edu_code, school_code=school_code, date=date_str) }}">
+            {{ code|get_day_name }}<br>
+            [{{ date_str[::-1][:2][::-1] }}]
+        </a>
+    {% endfor %}
+    </section>
 
-        <section class="nav-right-bottom">
-            <a class="btn" href="{{ url_for('index.index') }}">학교 검색하러 가기</a>
-        </section>
+    <section class="nav-right-bottom">
+        <a class="btn" href="{{ url_for('index.index') }}">학교 검색하러 가기</a>
+    </section>
 {% endblock %}
 {% block script %}
-        <script>
-            document.getElementById("date-{{ day.strftime('%Y%m%d') }}").style = "background-color:#5a5a5a;color:#DBDBDB";
-        </script>
+    <script>
+        document.getElementById("date-{{ day.strftime('%Y%m%d') }}").style = "background-color:#5a5a5a;color:#DBDBDB";
+    </script>
 {% endblock %}

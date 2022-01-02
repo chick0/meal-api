@@ -1,11 +1,11 @@
 {% extends 'layout.html' %}
 {% block content %}
-        <section class="message-box l">
-            <p>인터넷에 연결되지 않았습니다</p>
-        </section>
+    <section class="message-box l">
+        <p>인터넷에 연결되지 않았습니다</p>
+    </section>
 
-        <section class="menu">
-            <a class="btn" href="{{ url_for('index.index') }}">학교 검색하러 가기</a>
-            <a class="btn" href="{{ url_for('app.start_page') }}">즐겨찾기 확인하기</a>
-        </section>
+    <section class="menu">
+        <a class="btn" href="{{ url_for('index.index') }}">학교 검색하러 가기</a>
+        <a class="btn" href="{{ url_for('app.start_page') }}">즐겨찾기 확인하기</a>
+    </section>
 {% endblock %}

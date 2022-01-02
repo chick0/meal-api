@@ -1,99 +1,99 @@
 {% extends 'layout.html' %}
 {% block content %}
-        <section class="lf" style="margin-bottom:220px">
-            <h2 style="margin-bottom:0">{{ title }}의 급식 정보</h2>
-            <button class="btn no-script copy" data-clipboard-text="{{ request.base_url }}">링크 복사하기</button>
-            <button class="btn no-script" id="star" style="display:none;">즐겨찾기</button>
-        {% for meal in result: %}
-            <hr style="margin-top:10px;margin-bottom:-1px">
-            <table id="meal_{{ meal['code'][0] }}">
-                <tr>
-                    <th width="75px">정보</th>
-                    <td>{{ day.strftime('%Y년 %m월 %d일') }} / {{ meal['code'][1] }}</td>
-                </tr>
-                <tr>
-                    <th width="75px">칼로리</th>
-                    <td><span class="high">{{ meal['calorie'] }}</span></td>
-                </tr>
-                <tr>
-                    <th width="75px" class="copy" data-clipboard-target="#menu_{{ meal['code'][0] }}">
-                        메뉴<br class="no-script">
-                        <span class="s high no-script">복사하기</span>
-                    </th>
-                    <td>
-                        <ul id="menu_{{ meal['code'][0] }}">
-                        {% for menu in meal['menu'] %}
-                            <li>
-                                {{ menu['name'] }}
-                            {% if menu['allergy']|length != 0 %}
-                                <span class="allergy high">[{{ ",".join(menu['allergy']) }}]</span>
-                            {% endif %}
-                            </li>
+    <section class="lf" style="margin-bottom:220px">
+        <h2 style="margin-bottom:0">{{ title }}의 급식 정보</h2>
+        <button class="btn no-script copy" data-clipboard-text="{{ request.base_url }}">링크 복사하기</button>
+        <button class="btn no-script" id="star" style="display:none;">즐겨찾기</button>
+    {% for meal in result: %}
+        <hr style="margin-top:10px;margin-bottom:-1px">
+        <table id="meal_{{ meal['code'][0] }}">
+            <tr>
+                <th width="75px">정보</th>
+                <td>{{ day.strftime('%Y년 %m월 %d일') }} / {{ meal['code'][1] }}</td>
+            </tr>
+            <tr>
+                <th width="75px">칼로리</th>
+                <td><span class="high">{{ meal['calorie'] }}</span></td>
+            </tr>
+            <tr>
+                <th width="75px" class="copy" data-clipboard-target="#menu_{{ meal['code'][0] }}">
+                    메뉴<br class="no-script">
+                    <span class="s high no-script">복사하기</span>
+                </th>
+                <td>
+                    <ul id="menu_{{ meal['code'][0] }}">
+                    {% for menu in meal['menu'] %}
+                        <li>
+                            {{ menu['name'] }}
+                        {% if menu['allergy']|length != 0 %}
+                            <span class="allergy high">[{{ ",".join(menu['allergy']) }}]</span>
+                        {% endif %}
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            <tr class="ie">
+                <th width="75px">추가정보</th>
+                <td>
+                    <details style="margin-bottom:10px;">
+                        <summary>영양정보</summary>
+                        <ul>
+                        {% for info in meal['nutrient'] %}
+                            <li>{{ info }}</li>
                         {% endfor %}
                         </ul>
-                    </td>
-                </tr>
-                <tr class="ie">
-                    <th width="75px">추가정보</th>
-                    <td>
-                        <details style="margin-bottom:10px;">
-                            <summary>영양정보</summary>
-                            <ul>
-                            {% for info in meal['nutrient'] %}
-                                <li>{{ info }}</li>
-                            {% endfor %}
-                            </ul>
-                        </details>
+                    </details>
 
-                        <details>
-                            <summary>원산지</summary>
-                            <ul>
-                        {% for from in meal['origin'] %}
-                            {% if not from|origin %}
-                                <li><span class="high">{{ from }}</span></li>
-                            {% else %}
-                                <li>{{ from }}</li>
-                            {% endif %}
-                        {% endfor %}
-                            </ul>
-                        </details>
-                    </td>
-                </tr>
-            </table>
-        {% endfor %}
+                    <details>
+                        <summary>원산지</summary>
+                        <ul>
+                    {% for from in meal['origin'] %}
+                        {% if not from|origin %}
+                            <li><span class="high">{{ from }}</span></li>
+                        {% else %}
+                            <li>{{ from }}</li>
+                        {% endif %}
+                    {% endfor %}
+                        </ul>
+                    </details>
+                </td>
+            </tr>
+        </table>
+    {% endfor %}
 
-            <div class="poem">
-                <a href="{{ url_for('poem.view', poem_id=poem_id, e=edu_code, s=school_code) }}">
-                    {{ p_text }}<br>
-                    <sub>{{ p_author }} - {{ p_title }}</sub>
-                </a>
-            </div>
-        </section>
-
-        <section class="menu">
-        {% for code, date in weeks.items(): %}
-            {% set date_str = date.strftime("%Y%m%d") %}
-            <a id="date-{{ date_str }}" class="btn" href="{{ url_for('meal.show', edu_code=edu_code, school_code=school_code, date=date_str) }}">
-                {{ code|get_day_name }}<br>
-                [{{ date_str[::-1][:2][::-1] }}]
+        <div class="poem">
+            <a href="{{ url_for('poem.view', poem_id=poem_id, e=edu_code, s=school_code) }}">
+                {{ p_text }}<br>
+                <sub>{{ p_author }} - {{ p_title }}</sub>
             </a>
-        {% endfor %}
-        </section>
+        </div>
+    </section>
 
-        <section class="nav-right-bottom">
-            <a class="btn" href="{{ url_for('index.index') }}">학교 검색하러 가기</a>
-        </section>
+    <section class="menu">
+    {% for code, date in weeks.items(): %}
+        {% set date_str = date.strftime("%Y%m%d") %}
+        <a id="date-{{ date_str }}" class="btn" href="{{ url_for('meal.show', edu_code=edu_code, school_code=school_code, date=date_str) }}">
+            {{ code|get_day_name }}<br>
+            [{{ date_str[::-1][:2][::-1] }}]
+        </a>
+    {% endfor %}
+    </section>
+
+    <section class="nav-right-bottom">
+        <a class="btn" href="{{ url_for('index.index') }}">학교 검색하러 가기</a>
+    </section>
 {% endblock %}
 {% block script %}
-        <script src="{{ url_for('static', filename='js/star.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/star-btn.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/clipboard.min.js') }}"></script>
-        <script>
-            new ClipboardJS(".copy").on("success",function(){window.alert("복사되었습니다!"),window.getSelection().removeAllRanges();});
-            star_btn("{{ title }}","{{ url_for('meal.show', edu_code=edu_code, school_code=school_code) }}");
-            render_btn("{{ title }}"),document.getElementById("star").style.display="inline-block";
-            window.addEventListener("keydown",function(key){if(Number(key.key)>0){try{window.scrollTo({top: window.pageYOffset+document.getElementById("meal_"+key.key).getBoundingClientRect().top, behavior:'smooth'});}catch{}}});
+    <script src="{{ url_for('static', filename='js/star.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/star-btn.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/clipboard.min.js') }}"></script>
+    <script>
+        new ClipboardJS(".copy").on("success",function(){window.alert("복사되었습니다!"),window.getSelection().removeAllRanges();});
+        star_btn("{{ title }}","{{ url_for('meal.show', edu_code=edu_code, school_code=school_code) }}");
+        render_btn("{{ title }}"),document.getElementById("star").style.display="inline-block";
+        window.addEventListener("keydown",function(key){if(Number(key.key)>0){try{window.scrollTo({top: window.pageYOffset+document.getElementById("meal_"+key.key).getBoundingClientRect().top, behavior:'smooth'});}catch{}}});
 
-            document.getElementById("date-{{ day.strftime('%Y%m%d') }}").style = "background-color:#5a5a5a;color:#DBDBDB";
-        </script>
+        document.getElementById("date-{{ day.strftime('%Y%m%d') }}").style = "background-color:#5a5a5a;color:#DBDBDB";
+    </script>
 {% endblock %}

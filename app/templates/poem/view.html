@@ -1,12 +1,12 @@
 {% extends 'layout.html' %}
 {% block content %}
-        <section class="lf">
-            <a href="{{ back }}">← 뒤로 돌아가기</a>
-            <h1 style="margin:0">{{ poem.title }}</h1>
-            <h3 style="margin-top:0">{{ poem.author }}</h3>
+    <section class="lf">
+        <a href="{{ back }}">← 뒤로 돌아가기</a>
+        <h1 style="margin:0">{{ poem.title }}</h1>
+        <h3 style="margin-top:0">{{ poem.author }}</h3>
 
-        {% for line in poem.content %}
-            <span>{{ line|safe }}</span><br>
-        {% endfor %}
-        </section>
+    {% for line in poem.content %}
+        <span>{{ line|safe }}</span><br>
+    {% endfor %}
+    </section>
 {% endblock %}
