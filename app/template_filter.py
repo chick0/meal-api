@@ -15,16 +15,3 @@ def is_weekend(code: int) -> bool:
         6: True,  # 일요일
         5: True,  # 토요일
     }.get(code, False)
-
-
-def get_day_name(code: int) -> str:
-    # 요일 이름 불러오는 필터
-    return {
-        6: "일",  # 주말
-        0: "월",
-        1: "화",
-        2: "수",
-        3: "목",
-        4: "금",
-        5: "토",  # 주말
-    }.get(code)

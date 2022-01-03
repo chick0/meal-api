@@ -72,11 +72,10 @@
     </section>
 
     <section class="menu">
-    {% for code, date in weeks.items(): %}
-        {% set date_str = date.strftime("%Y%m%d") %}
-        <a id="date-{{ date_str }}" class="btn" href="{{ url_for('meal.show', edu_code=edu_code, school_code=school_code, date=date_str) }}">
-            {{ code|get_day_name }}<br>
-            [{{ date_str[::-1][:2][::-1] }}]
+    {% for week in weeks: %}
+        <a id="dt-{{ week.ymd }}" class="btn" href="{{ url_for('meal.show', edu_code=edu_code, school_code=school_code, date=week.ymd) }}">
+            {{ week.day_str }}<br>
+            [{{ week.dd }}]
         </a>
     {% endfor %}
     </section>
@@ -91,6 +90,6 @@
         render_btn("{{ title }}"),document.getElementById("star").style.display="inline-block";
         window.addEventListener("keydown",function(key){if(Number(key.key)>0){try{window.scrollTo({top: window.pageYOffset+document.getElementById("meal_"+key.key).getBoundingClientRect().top, behavior:'smooth'});}catch{}}});
 
-        document.getElementById("date-{{ day.strftime('%Y%m%d') }}").style = "background-color:#5a5a5a;color:#DBDBDB";
+        document.getElementById("dt-{{ day.strftime('%Y%m%d') }}").style = "background-color:#5a5a5a;color:#DBDBDB";
     </script>
 {% endblock %}

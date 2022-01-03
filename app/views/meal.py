@@ -10,7 +10,7 @@ from flask import url_for
 from flask import render_template
 
 from app.meal import get_meal_data_by_codes
-from app.weeks import get_weeks
+from app.weeks import Day
 
 bp = Blueprint(
     name="meal",
@@ -38,7 +38,7 @@ def show(edu_code: str, school_code: str, date: str = "today"):
             return abort(400)
 
     # 이번주 이동 버튼
-    weeks = get_weeks(day=day)
+    weeks = Day(dt=day).get_center(length=5)
 
     # 교육청 코드와 학교 코드와 날짜로 급식 불러오기
     result = get_meal_data_by_codes(
