@@ -7,6 +7,7 @@ from flask import jsonify
 from app.search import query_filter
 from app.search import get_school_data_by_query
 from app.meal import get_meal_data_by_codes
+from app.const import ERRORS
 
 bp = Blueprint(
     name="api",
@@ -16,26 +17,18 @@ bp = Blueprint(
 
 
 def error(code: str):
-    errors = {
-        "school": {
-            "query_filtered": "해당 검색어는 사용이 불가능 합니다",
-            "result_none": "검색 결과가 없습니다",
-            "api_timeout_or_dead": "학교 목록을 불러오는 데 실패했습니다",
-        },
-        "meal": {
-            "query_none": "교육청 코드와 학교 코드를 전달받지 못했습니다",
-            "result_none": "급식 정보가 없습니다",
-            "api_timeout_or_dead": "급식 정보를 불러오는 데 실패했습니다",
-        },
-    }
-
     tp, cd = code.split(".")
-    message = errors.get(tp, {}).get(cd, "등록되지 않은 오류입니다. 개발자한테 신고해주세요.")
+    message = ERRORS.get(tp, {}).get(cd, "등록되지 않은 오류입니다. 개발자한테 신고해주세요.")
 
     return jsonify({
         "code": code,
         "message": message
     }), 400
+
+
+@bp.get("/errors")
+def errors():
+    return jsonify(ERRORS)
 
 
 @bp.get("/school")
