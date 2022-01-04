@@ -81,7 +81,7 @@ def meal():
         return error(code="meal.result_none")
     elif result is False:
         # 교육청 점검 or 타임아웃
-        return error(code="meal.timeout_or_dead")
+        return error(code="meal.api_timeout_or_dead")
 
     # 급식 출력하기
     return jsonify(result)
