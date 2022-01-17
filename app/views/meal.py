@@ -64,8 +64,6 @@ def show(edu_code: str, school_code: str, date: str = "today"):
             p_text=p_text,                # 시 [한줄만]
             p_title=poem.get("title"),    # 제목
             p_author=poem.get("author"),  # 작가
-
-            today=today.strftime(date_format),  # 오늘 급식 메뉴 이동 버튼용
         )
 
     # 이번주 이동 버튼
@@ -86,7 +84,6 @@ def show(edu_code: str, school_code: str, date: str = "today"):
 
             day=day,
             today=today,
-            today_str=today.strftime(date_format),
 
             edu_code=edu_code,        # 교육청 코드
             school_code=school_code,  # 학교 코드
@@ -110,7 +107,6 @@ def show(edu_code: str, school_code: str, date: str = "today"):
 
         day=day,
         today=today,
-        today_str=today.strftime(date_format),
 
         result=result,                # 급식 조회 결과
         edu_code=edu_code,            # 교육청 코드
