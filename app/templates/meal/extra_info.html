@@ -1,0 +1,50 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <section class="lf" style="margin-bottom:220px">
+        <a href="{{ back }}">← 급식 메뉴로 이동하기</a>
+        <h2 style="margin:0">{{ title }}의 급식의 추가 정보</h2>
+    {% for meal in result: %}
+        <hr style="margin-top:10px;margin-bottom:-1px">
+        <table id="info_{{ meal['code'][0] }}">
+            <tr>
+                <th width="75px">정보</th>
+                <td>{{ day.strftime('%Y년 %m월 %d일') }} / {{ meal['code'][1] }}</td>
+            </tr>
+            <tr>
+                <th width="75px">메뉴</th>
+                <td>
+                    <a class="btn" href="{{ back }}#menu_{{ meal['code'][0] }}"><b>클릭</b>해서 이동</a>
+                </td>
+            </tr>
+            <tr>
+                <th width="75px">칼로리</th>
+                <td><span class="high">{{ meal['calorie'] }}</span></td>
+            </tr>
+            <tr class="ie">
+                <th width="75px">영양정보</th>
+                <td>
+                    <ul>
+                    {% for info in meal['nutrient'] %}
+                        <li>{{ info }}</li>
+                    {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            <tr class="ie">
+                <th width="75px">원산지</th>
+                <td>
+                    <ul>
+                {% for from in meal['origin'] %}
+                    {% if not from|origin %}
+                        <li><span class="high">{{ from }}</span></li>
+                    {% else %}
+                        <li>{{ from }}</li>
+                    {% endif %}
+                {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    {% endfor %}
+    </section>
+{% endblock %}

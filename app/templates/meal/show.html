@@ -37,27 +37,7 @@
             <tr class="ie">
                 <th width="75px">추가정보</th>
                 <td>
-                    <details style="margin-bottom:10px;">
-                        <summary>영양정보</summary>
-                        <ul>
-                        {% for info in meal['nutrient'] %}
-                            <li>{{ info }}</li>
-                        {% endfor %}
-                        </ul>
-                    </details>
-
-                    <details>
-                        <summary>원산지</summary>
-                        <ul>
-                    {% for from in meal['origin'] %}
-                        {% if not from|origin %}
-                            <li><span class="high">{{ from }}</span></li>
-                        {% else %}
-                            <li>{{ from }}</li>
-                        {% endif %}
-                    {% endfor %}
-                        </ul>
-                    </details>
+                    <a class="btn" href="{{ extra_info }}#info_{{ meal['code'][0] }}"><b>클릭</b>해서 이동</a>
                 </td>
             </tr>
         </table>

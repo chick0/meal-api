@@ -83,6 +83,14 @@ def show(edu_code: str, school_code: str, date: str = "today"):
         session['alert'] = "급식 정보를 불러오는 데 실패했습니다"
         return redirect(url_for("index.index"))
 
+    # 추가 정보 조회 링크 생성하기
+    extra_info_url = url_for(
+        "meal.extra_info",
+        edu_code=edu_code,
+        school_code=school_code,
+        date=date if date != "today" else day.strftime(date_format)
+    )
+
     # 급식 출력하기
     return render_template(
         "meal/show.html",
@@ -95,10 +103,60 @@ def show(edu_code: str, school_code: str, date: str = "today"):
         edu_code=edu_code,            # 교육청 코드
         school_code=school_code,      # 학교 코드
 
+        extra_info=extra_info_url,    # 추가 정보 조회 링크
+
         poem_id=poem_id,              # 시 고유 코드
         p_text=p_text,                # 시 [한줄만]
         p_title=poem.get("title"),    # 제목
         p_author=poem.get("author"),  # 작가
 
         weeks=weeks,                  # 이번주 급식 메뉴 이동 버튼용
+    )
+
+
+@bp.get("/<string:edu_code>/<string:school_code>/<string:date>/extra_info")
+def extra_info(edu_code: str, school_code: str, date: str):
+    # 오늘 날짜 불러오기
+    #  -> 시간은 버리기
+    date_format = "%Y" + "%m" + "%d"
+
+    try:
+        # URL에서 급식 조회할 날짜 불러오기
+        day = datetime.strptime(date, date_format)
+    except ValueError:
+        # 전달받은 날짜로 날짜를 불러오지 못함
+        return abort(400)
+
+    # 교육청 코드와 학교 코드와 날짜로 급식 불러오기
+    result = get_meal_data_by_codes(
+        edu=edu_code,
+        school=school_code,
+        date=day.strftime(date_format)
+    )
+
+    # 급식 조회 메뉴 링크
+    back = url_for("meal.show",
+                   edu_code=edu_code,
+                   school_code=school_code,
+                   date=date)
+
+    if result is None or result == []:
+        # API 서버에서 받은 정보가 없으면 ( 급식 없는 날 / 주말 / 휴교일 )
+        return redirect(back)
+    elif result is False:
+        # 교육청 점검 or 타임아웃
+        session['alert'] = "급식 정보를 불러오는 데 실패했습니다"
+        return redirect(url_for("index.index"))
+
+    # 급식 출력하기
+    return render_template(
+        "meal/extra_info.html",
+        title=result[0]['school'],  # 학교 이름
+
+        day=day,
+        back=back,  # 급식 조회 메뉴 링크
+
+        result=result,                # 급식 조회 결과
+        edu_code=edu_code,            # 교육청 코드
+        school_code=school_code,      # 학교 코드
     )
