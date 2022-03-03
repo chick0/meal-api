@@ -1,11 +1,10 @@
 "use strict";
 
-const CACHE_VER = "v13_2022-01-03";
+const CACHE_VER = "v14_2022-03-03";
 const FILES_TO_CACHE = [
     "/app",
     "/app/no-network",
     "/static/css/main.css",
-    "/static/css/detail.css",
     "/static/fonts/noto-sans-kr-v12-latin_korean-regular.woff",
     "/static/fonts/noto-sans-kr-v12-latin_korean-regular.woff2",
     "/favicon.ico",
