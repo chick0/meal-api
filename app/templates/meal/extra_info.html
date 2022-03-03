@@ -1,8 +1,7 @@
 {% extends 'layout.html' %}
 {% block content %}
     <section class="lf" style="margin-bottom:220px">
-        <a href="{{ back }}">← 급식 메뉴로 이동하기</a>
-        <h2 style="margin:0">{{ title }}의 급식의 추가 정보</h2>
+        <h2 style="margin:0">{{ title }}의 급식 정보</h2>
         <p style="margin:0">{{ day.strftime('%Y년 %m월 %d일') }}</p>
     {% for meal in result: %}
         <hr style="margin-top:10px;margin-bottom:-1px">
@@ -53,6 +52,10 @@
             </tr>
         </table>
     {% endfor %}
+    </section>
+
+    <section class="menu">
+        <a class="btn" href="{{ back }}">급식 메뉴로 이동</a>
     </section>
 {% endblock %}
 {% block script %}
