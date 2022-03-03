@@ -1,8 +1,12 @@
 {% extends 'layout.html' %}
 {% block content %}
     <section class="lf" style="margin-bottom:220px">
+        <a href="{{ url_for('index.index') }}">← 학교 검색하러 가기</a>
         <h2 style="margin:0">{{ title }}의 급식 정보</h2>
-        <p style="margin:0">{{ day.strftime('%Y년 %m월 %d일') }}</p>
+        <p style="margin-top:0">
+            <a href="{{ back }}">요약 정보 조회하기</a>
+        </p>
+
     {% for meal in result: %}
         <hr style="margin-top:10px;margin-bottom:-1px">
         <table id="info_{{ meal['code'][0] }}">
@@ -21,6 +25,9 @@
                     {% for menu in meal['menu'] %}
                         <li>
                             {{ menu['name'] }}
+                        {% if menu['allergy']|length != 0 %}
+                            <span class="allergy high">[{{ ",".join(menu['allergy']) }}]</span>
+                        {% endif %}
                         </li>
                     {% endfor %}
                     </ul>
@@ -55,7 +62,7 @@
     </section>
 
     <section class="menu">
-        <a class="btn" href="{{ back }}">급식 메뉴로 이동</a>
+        <a class="btn" href="{{ back }}">요약 정보 조회하기</a>
     </section>
 {% endblock %}
 {% block script %}

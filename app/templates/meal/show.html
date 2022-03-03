@@ -3,6 +3,10 @@
     <section class="lf" style="margin-bottom:220px">
         <a href="{{ url_for('index.index') }}">← 학교 검색하러 가기</a>
         <h2 style="margin:0">{{ title }}의 급식 정보</h2>
+        <p style="margin-top:0">
+            <a href="{{ extra_info }}">생략된 정보 조회하기</a>
+        </p>
+
         <button class="btn no-script ie copy" data-clipboard-text="{{ request.base_url }}">링크 복사하기</button>
         <button class="btn no-script ie" id="star" style="display:none;">즐겨찾기</button>
     {% for meal in result: %}
@@ -26,9 +30,6 @@
                     {% for menu in meal['menu'] %}
                         <li>
                             {{ menu['name'] }}
-                        {% if menu['allergy']|length != 0 %}
-                            <span class="allergy high">[{{ ",".join(menu['allergy']) }}]</span>
-                        {% endif %}
                         </li>
                     {% endfor %}
                     </ul>
@@ -39,18 +40,10 @@
                 <td>
                 {% set _imported = meal['origin']|imported_counter %}
                 {% if _imported != 0 %}
-                    <b>{{ _imported }}</b>개의 식재료가 국내산이 아닙니다.
+                    <b>{{ _imported }}</b>개의 식자재가 국내산이 아닙니다.
                 {% else %}
-                    모든 식재료가 국내산입니다.
+                    모든 식자재가 국내산입니다.
                 {% endif %}
-                </td>
-            </tr>
-            <tr>
-                <th width="75px">영양정보</th>
-                <td>
-                    <a class="btn" href="{{ extra_info }}#info_{{ meal['code'][0] }}">
-                        <b>클릭</b>해서 이동
-                    </a>
                 </td>
             </tr>
         </table>
