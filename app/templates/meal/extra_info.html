@@ -18,7 +18,13 @@
             <tr>
                 <th width="75px">메뉴</th>
                 <td>
-                    <a class="btn" href="{{ back }}#menu_{{ meal['code'][0] }}"><b>클릭</b>해서 이동</a>
+                    <ul>
+                    {% for menu in meal['menu'] %}
+                        <li>
+                            {{ menu['name'] }}
+                        </li>
+                    {% endfor %}
+                    </ul>
                 </td>
             </tr>
             <tr>
