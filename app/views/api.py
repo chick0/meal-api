@@ -80,14 +80,6 @@ def meal():
     if len(date) != 8:
         return error(code="meal.not_yyyymmdd")
 
-    # 30일보다 먼 미래라면
-    try:
-        if (datetime.strptime(date, date_format) - today).days >= 30:
-            return error(code="meal.30")
-    except ValueError:
-        # 날짜 형식이 올바르지 않아서 파싱에 실패한 상황
-        return error(code="meal.not_yyyymmdd")
-
     # 데이터 불러오기
     result = get_meal_data_by_codes(
         edu=edu_code,
