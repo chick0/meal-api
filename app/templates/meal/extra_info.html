@@ -12,16 +12,16 @@
                 <td>{{ day.strftime('%Y년 %m월 %d일') }} / {{ meal['code'][1] }}</td>
             </tr>
             <tr>
+                <th width="75px">칼로리</th>
+                <td><span class="high">{{ meal['calorie'] }}</span></td>
+            </tr>
+            <tr>
                 <th width="75px">메뉴</th>
                 <td>
                     <a class="btn" href="{{ back }}#menu_{{ meal['code'][0] }}"><b>클릭</b>해서 이동</a>
                 </td>
             </tr>
             <tr>
-                <th width="75px">칼로리</th>
-                <td><span class="high">{{ meal['calorie'] }}</span></td>
-            </tr>
-            <tr class="ie">
                 <th width="75px">영양정보</th>
                 <td>
                     <ul>
@@ -31,7 +31,7 @@
                     </ul>
                 </td>
             </tr>
-            <tr class="ie">
+            <tr>
                 <th width="75px">원산지</th>
                 <td>
                     <ul>

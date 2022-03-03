@@ -3,8 +3,8 @@
     <section class="lf" style="margin-bottom:220px">
         <a href="{{ url_for('index.index') }}">← 학교 검색하러 가기</a>
         <h2 style="margin:0">{{ title }}의 급식 정보</h2>
-        <button class="btn no-script copy" data-clipboard-text="{{ request.base_url }}">링크 복사하기</button>
-        <button class="btn no-script" id="star" style="display:none;">즐겨찾기</button>
+        <button class="btn no-script ie copy" data-clipboard-text="{{ request.base_url }}">링크 복사하기</button>
+        <button class="btn no-script ie" id="star" style="display:none;">즐겨찾기</button>
     {% for meal in result: %}
         <hr style="margin-top:10px;margin-bottom:-1px">
         <table id="meal_{{ meal['code'][0] }}">
@@ -18,8 +18,8 @@
             </tr>
             <tr>
                 <th width="75px" class="copy" data-clipboard-target="#menu_{{ meal['code'][0] }}">
-                    메뉴<br class="no-script">
-                    <span class="s high no-script">복사하기</span>
+                    메뉴<br class="no-script ie">
+                    <span class="s high no-script ie">복사하기</span>
                 </th>
                 <td>
                     <ul id="menu_{{ meal['code'][0] }}">
