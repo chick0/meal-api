@@ -9,6 +9,11 @@ def origin(s: str) -> bool:
     return s.split(":")[-1].replace("국내산", "").find("산") == -1
 
 
+def imported_counter(origin_list: list) -> int:
+    _imported = [x for x in origin_list if not origin(x)].__len__()
+    return _imported
+
+
 def is_weekend(code: int) -> bool:
     # 주말인지 체크하는 필터
     return {

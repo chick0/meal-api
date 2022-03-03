@@ -34,10 +34,23 @@
                     </ul>
                 </td>
             </tr>
-            <tr class="ie">
-                <th width="75px">추가정보</th>
+            <tr>
+                <th width="75px">원산지</th>
                 <td>
-                    <a class="btn" href="{{ extra_info }}#info_{{ meal['code'][0] }}"><b>클릭</b>해서 이동</a>
+                {% set _imported = meal['origin']|imported_counter %}
+                {% if _imported != 0 %}
+                    <b>{{ _imported }}</b>개의 식재료가 국내산이 아닙니다.
+                {% else %}
+                    모든 식재료가 국내산입니다.
+                {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th width="75px">영양정보</th>
+                <td>
+                    <a class="btn" href="{{ extra_info }}#info_{{ meal['code'][0] }}">
+                        <b>클릭</b>해서 이동
+                    </a>
                 </td>
             </tr>
         </table>
