@@ -8,13 +8,6 @@
         <span class="s" style="padding-bottom:3px;border-bottom: 0.7px solid #BCBCBC;">{{ day.strftime('%Y년 %m월 %d일') }}</span>
         <p><span class="high">급식</span> 정보가 없습니다</p><br>
 
-        <div class="poem">
-            <a href="{{ url_for('poem.view', poem_id=poem_id, e=edu_code, s=school_code) }}">
-                {{ p_text }}<br>
-                <sub>{{ p_author }} - {{ p_title }}</sub>
-            </a>
-        </div>
-
     {% if day != today %}
         <div class="poem fake-poem">
             <a href="{{ url_for('meal.show', edu_code=edu_code, school_code=school_code, date='today') }}">

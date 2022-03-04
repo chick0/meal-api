@@ -42,13 +42,6 @@ def show(edu_code: str, school_code: str, date: str = "today"):
             # 전달받은 날짜로 날짜를 불러오지 못함
             return abort(400)
 
-    # 시 불러오기
-    poems = current_app.config.get("poems")
-    poem_id = choice(list(poems.keys()))
-
-    poem = poems.get(poem_id, {})
-    p_text = choice([x.replace("&nbsp;", "") for x in poem.get("content", "") if len(x.strip()) != 0])
-
     # 이번주 이동 버튼
     weeks = Day(dt=day).get_center(length=7)
 
@@ -71,11 +64,6 @@ def show(edu_code: str, school_code: str, date: str = "today"):
             edu_code=edu_code,        # 교육청 코드
             school_code=school_code,  # 학교 코드
 
-            poem_id=poem_id,              # 시 고유 코드
-            p_text=p_text,                # 시 [한줄만]
-            p_title=poem.get("title"),    # 제목
-            p_author=poem.get("author"),  # 작가
-
             weeks=weeks,              # 이번주 급식 메뉴 이동 버튼용
         )
     elif result is False:
@@ -90,6 +78,13 @@ def show(edu_code: str, school_code: str, date: str = "today"):
         school_code=school_code,
         date=date if date != "today" else day.strftime(date_format)
     )
+
+    # 시 불러오기
+    poems = current_app.config.get("poems")
+    poem_id = choice(list(poems.keys()))
+
+    poem = poems.get(poem_id, {})
+    p_text = choice([x.replace("&nbsp;", "") for x in poem.get("content", "") if len(x.strip()) != 0])
 
     # 급식 출력하기
     return render_template(
