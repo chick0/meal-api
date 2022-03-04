@@ -64,7 +64,14 @@
         </a> <br style="margin-bottom:15px">
     {% endif %}
     {% for week in weeks: %}
-        <a id="dt-{{ week.ymd }}" class="btn" href="{{ url_for('meal.show', edu_code=edu_code, school_code=school_code, date=week.ymd) }}">
+    {% if week.datetime == today %}
+        {% set href = url_for('meal.show', edu_code=edu_code, school_code=school_code, date='today') %}
+        {% set style = "background-color:#5a5a5a;color:#DBDBDB" %}
+    {% else %}
+        {% set href = url_for('meal.show', edu_code=edu_code, school_code=school_code, date=week.ymd) %}
+        {% set style = "" %}
+    {% endif %}
+        <a class="btn" href="{{ href }}" style="{{ style }}">
             {{ week.day_str }}<br>
             <sub>{{ week.dd }}일</sub>
         </a>
@@ -80,10 +87,5 @@
         star_btn("{{ title }}","{{ url_for('meal.show', edu_code=edu_code, school_code=school_code) }}");
         render_btn("{{ title }}"),document.getElementById("star").style.display="inline-block";
         window.addEventListener("keydown",function(key){if(Number(key.key)>0){try{window.scrollTo({top: window.pageYOffset+document.getElementById("meal_"+key.key).getBoundingClientRect().top, behavior:'smooth'});}catch{}}});
-    </script>
-    <script>
-        const todayButton = document.getElementById("dt-{{ today.strftime('%Y%m%d') }}");
-        todayButton.style = "background-color:#5a5a5a;color:#DBDBDB";
-        todayButton.href = "{{ url_for('meal.show', edu_code=edu_code, school_code=school_code, date='today') }}";
     </script>
 {% endblock %}
