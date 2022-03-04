@@ -50,7 +50,7 @@
     {% endfor %}
 
         <div class="poem">
-            <a href="{{ url_for('poem.view', poem_id=poem_id, e=edu_code, s=school_code) }}">
+            <a href="{{ p_url }}">
                 {{ p_text }}<br>
                 <sub>{{ p_author }} - {{ p_title }}</sub>
             </a>

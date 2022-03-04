@@ -104,6 +104,11 @@ def show(edu_code: str, school_code: str, date: str = "today"):
         p_text=p_text,                # 시 [한줄만]
         p_title=poem.get("title"),    # 제목
         p_author=poem.get("author"),  # 작가
+        p_url=url_for("poem.view",
+                      poem_id=poem_id,
+                      edu=edu_code,
+                      school=school_code,
+                      date=day.strftime(date_format)),
 
         weeks=weeks,                  # 이번주 급식 메뉴 이동 버튼용
     )

@@ -15,13 +15,14 @@ bp = Blueprint(
 
 @bp.get("/<string:poem_id>")
 def view(poem_id: str):
-    edu = request.args.get("e", "")
-    school = request.args.get("s", "")
+    edu = request.args.get("edu", "")
+    school = request.args.get("school", "")
+    date = request.args.get("date", "today")
 
     if len(edu) == 0 or len(school) == 0:
         back = url_for("index.index")
     else:
-        back = url_for("meal.show", edu_code=edu, school_code=school)
+        back = url_for("meal.show", edu_code=edu, school_code=school, date=date)
 
     try:
         poem = current_app.config.get("poems", {})[poem_id]
