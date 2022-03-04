@@ -50,7 +50,7 @@ def show(edu_code: str, school_code: str, date: str = "today"):
     p_text = choice([x.replace("&nbsp;", "") for x in poem.get("content", "") if len(x.strip()) != 0])
 
     # 이번주 이동 버튼
-    weeks = Day(dt=day).get_center(length=5)
+    weeks = Day(dt=day).get_center(length=7)
 
     # 교육청 코드와 학교 코드와 날짜로 급식 불러오기
     result = get_meal_data_by_codes(
