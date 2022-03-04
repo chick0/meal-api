@@ -9,11 +9,9 @@
         <p><span class="high">급식</span> 정보가 없습니다</p><br>
 
     {% if day != today %}
-        <div class="poem fake-poem">
-            <a href="{{ url_for('meal.show', edu_code=edu_code, school_code=school_code, date='today') }}">
-                <b>오늘 메뉴</b> 확인하기
-            </a>
-        </div>
+        <a class="btn" href="{{ url_for('meal.show', edu_code=edu_code, school_code=school_code, date='today') }}">
+            오늘 메뉴 확인하기
+        </a>
     {% endif %}
     </section>
 
