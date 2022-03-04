@@ -83,7 +83,10 @@
         star_btn("{{ title }}","{{ url_for('meal.show', edu_code=edu_code, school_code=school_code) }}");
         render_btn("{{ title }}"),document.getElementById("star").style.display="inline-block";
         window.addEventListener("keydown",function(key){if(Number(key.key)>0){try{window.scrollTo({top: window.pageYOffset+document.getElementById("meal_"+key.key).getBoundingClientRect().top, behavior:'smooth'});}catch{}}});
-
-        document.getElementById("dt-{{ day.strftime('%Y%m%d') }}").style = "background-color:#5a5a5a;color:#DBDBDB";
+    </script>
+    <script>
+        const todayButton = document.getElementById("dt-{{ today.strftime('%Y%m%d') }}");
+        todayButton.style = "background-color:#5a5a5a;color:#DBDBDB";
+        todayButton.href = "{{ url_for('meal.show', edu_code=edu_code, school_code=school_code, date='today') }}";
     </script>
 {% endblock %}

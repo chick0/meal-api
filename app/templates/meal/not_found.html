@@ -26,6 +26,8 @@
 {% endblock %}
 {% block script %}
     <script>
-        document.getElementById("dt-{{ day.strftime('%Y%m%d') }}").style = "background-color:#5a5a5a;color:#DBDBDB";
+        const todayButton = document.getElementById("dt-{{ today.strftime('%Y%m%d') }}");
+        todayButton.style = "background-color:#5a5a5a;color:#DBDBDB";
+        todayButton.href = "{{ url_for('meal.show', edu_code=edu_code, school_code=school_code, date='today') }}";
     </script>
 {% endblock %}
