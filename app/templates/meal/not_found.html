@@ -21,7 +21,7 @@
     {% for week in weeks: %}
         <a id="dt-{{ week.ymd }}" class="btn" href="{{ url_for('meal.show', edu_code=edu_code, school_code=school_code, date=week.ymd) }}">
             {{ week.day_str }}<br>
-            [{{ week.dd }}]
+            <sub>{{ week.dd }}일</sub>
         </a>
     {% endfor %}
     </section>
