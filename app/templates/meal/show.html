@@ -55,17 +55,14 @@
                 <sub>{{ p_author }} - {{ p_title }}</sub>
             </a>
         </div>
-
-    {% if day != today %}
-        <div class="poem fake-poem">
-            <a href="{{ url_for('meal.show', edu_code=edu_code, school_code=school_code, date='today') }}">
-                <b>오늘 메뉴</b> 확인하기
-            </a>
-        </div>
-    {% endif %}
     </section>
 
     <section class="menu weeks-btn">
+    {% if day != today %}
+        <a class="btn" href="{{ url_for('meal.show', edu_code=edu_code, school_code=school_code, date='today') }}">
+            오늘 메뉴로 이동하기
+        </a> <br style="margin-bottom:15px">
+    {% endif %}
     {% for week in weeks: %}
         <a id="dt-{{ week.ymd }}" class="btn" href="{{ url_for('meal.show', edu_code=edu_code, school_code=school_code, date=week.ymd) }}">
             {{ week.day_str }}<br>
