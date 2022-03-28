@@ -1,6 +1,7 @@
 from json import load
 
 from flask import Flask
+from flask import request
 from flask_redis import FlaskRedis
 
 from . import error
@@ -27,6 +28,11 @@ def create_app():
     def set_header(response):
         response.headers['X-Frame-Options'] = "deny"
         response.headers['X-Powered-By'] = "chick_0"
+
+        if request.path.startswith("/api/"):
+            response.headers['Access-Control-Allow-Origin'] = "*"
+            response.headers['Access-Control-Allow-Methods'] = "GET"
+
         return response
 
     for name in [x for x in dir(template_filter) if not x.startswith("__")]:
