@@ -9,45 +9,47 @@
 
         <button class="btn no-script ie copy" data-clipboard-text="{{ request.base_url }}">링크 복사하기</button>
         <button class="btn no-script ie" id="star" style="display:none;">즐겨찾기</button>
-    {% for meal in result: %}
-        <hr style="margin-top:10px;margin-bottom:-1px">
-        <table id="meal_{{ meal['code'][0] }}">
-            <tr>
-                <th width="75px">정보</th>
-                <td>{{ day.strftime('%Y년 %m월 %d일') }} / {{ meal['code'][1] }}</td>
-            </tr>
-            <tr>
-                <th width="75px">칼로리</th>
-                <td><span class="high">{{ meal['calorie'] }}</span></td>
-            </tr>
-            <tr>
-                <th width="75px" class="copy" data-clipboard-target="#menu_{{ meal['code'][0] }}">
-                    메뉴<br class="no-script ie">
-                    <span class="s high no-script ie">복사하기</span>
-                </th>
-                <td>
-                    <ul id="menu_{{ meal['code'][0] }}">
-                    {% for menu in meal['menu'] %}
-                        <li>
-                            {{ menu['name'] }}
-                        </li>
-                    {% endfor %}
-                    </ul>
-                </td>
-            </tr>
-            <tr>
-                <th width="75px">원산지</th>
-                <td>
-                {% set _imported = meal['origin']|imported_counter %}
-                {% if _imported != 0 %}
-                    <b>{{ _imported }}</b>개의 식자재가 국내산이 아닙니다.
-                {% else %}
-                    모든 식자재가 국내산입니다.
-                {% endif %}
-                </td>
-            </tr>
-        </table>
-    {% endfor %}
+
+        <div style="margin-top:30px;margin-bottom:10px">
+        {% for meal in result: %}
+            <table id="meal_{{ meal['code'][0] }}" style="margin-bottom:30px;">
+                <tr>
+                    <th width="75px">정보</th>
+                    <td>{{ day.strftime('%Y년 %m월 %d일') }} / {{ meal['code'][1] }}</td>
+                </tr>
+                <tr>
+                    <th width="75px">칼로리</th>
+                    <td><span class="high">{{ meal['calorie'] }}</span></td>
+                </tr>
+                <tr>
+                    <th width="75px" class="copy" data-clipboard-target="#menu_{{ meal['code'][0] }}">
+                        메뉴<br class="no-script ie">
+                        <span class="s high no-script ie">복사하기</span>
+                    </th>
+                    <td>
+                        <ul id="menu_{{ meal['code'][0] }}">
+                        {% for menu in meal['menu'] %}
+                            <li>
+                                {{ menu['name'] }}
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="75px">원산지</th>
+                    <td>
+                    {% set _imported = meal['origin']|imported_counter %}
+                    {% if _imported != 0 %}
+                        <b>{{ _imported }}</b>개의 식자재가 국내산이 아닙니다.
+                    {% else %}
+                        모든 식자재가 국내산입니다.
+                    {% endif %}
+                    </td>
+                </tr>
+            </table>
+        {% endfor %}
+        </div>
 
         <div class="poem">
             <a href="{{ p_url }}">
