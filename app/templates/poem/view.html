@@ -6,7 +6,7 @@
         <h3 style="margin-top:0"><a href="{{ url_for('poem.author', name=poem.author) }}">{{ poem.author }}</a></h3>
 
     {% for line in poem.content %}
-        <span style="font-size:20px;">{{ line|safe }}</span><br>
+        <span>{{ line|safe }}</span><br>
     {% endfor %}
     </section>
 {% endblock %}
