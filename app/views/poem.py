@@ -13,6 +13,26 @@ bp = Blueprint(
 )
 
 
+@bp.get("/author/<string:name>")
+def author(name: str):
+    poems = [
+        {
+            "url": url_for("poem.view", poem_id=x['id']),
+            "title": x['title']
+        }
+        for x in current_app.config.get("authors", {}).get(name, [])
+    ]
+
+    if len(poems) == 0:
+        session['alert'] = "등록된 작품이 없습니다."
+        return redirect(url_for("index.index"))
+
+    return render_template(
+        "poem/author.html",
+        poems=poems,
+    )
+
+
 @bp.get("/<string:poem_id>")
 def view(poem_id: str):
     edu = request.args.get("edu", "")

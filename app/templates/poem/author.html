@@ -1,0 +1,13 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <section class="lf">
+        <a href="{{ url_for('index.index') }}">← 뒤로 돌아가기</a>
+        <h1 style="margin:0">작품 선택</h1>
+
+        <ol>
+        {% for poem in poems %}
+            <li style="font-size:22px;margin-bottom:15px;"><a href="{{ poem.url }}">{{ poem.title }}</a></li>
+        {% endfor %}
+        </ol>
+    </section>
+{% endblock %}

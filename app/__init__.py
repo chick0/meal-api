@@ -7,6 +7,7 @@ from flask_redis import FlaskRedis
 from . import error
 from . import config
 from . import template_filter
+from . import parse
 
 redis = FlaskRedis()
 
@@ -16,8 +17,10 @@ def create_app():
     app.config.from_object(config)
 
     # 시 불러오기
+    poems = load(open("poems.json", mode="r", encoding="utf-8"))
     app.config.update({
-        "poems": load(open("poems.json", mode="r", encoding="utf-8"))
+        "poems": poems,
+        "authors": parse.authors(poems=poems)
     })
 
     # Redis 캐시 서버
