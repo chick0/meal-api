@@ -6,12 +6,8 @@
 #
 async-timeout==4.0.2
     # via redis
-cffi==1.15.0
-    # via gevent
 click==8.1.2
     # via flask
-colorama==0.4.4
-    # via click
 deprecated==1.2.13
     # via redis
 flask==2.1.1
@@ -34,8 +30,6 @@ markupsafe==2.1.1
     # via jinja2
 packaging==21.3
     # via redis
-pycparser==2.21
-    # via cffi
 pyparsing==3.0.8
     # via packaging
 python-dotenv==0.20.0
@@ -46,9 +40,9 @@ werkzeug==2.1.1
     # via flask
 wrapt==1.14.0
     # via deprecated
-zope-event==4.5.0
+zope.event==4.5.0
     # via gevent
-zope-interface==5.4.0
+zope.interface==5.4.0
     # via gevent
 
 # The following packages are considered to be unsafe in a requirements file:
