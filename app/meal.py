@@ -1,4 +1,3 @@
-from re import findall
 from json import dumps
 from json import loads
 from urllib.error import HTTPError
@@ -38,26 +37,23 @@ def reformat(json: list):
     for item in json:
         menu_list = []
         for menu in item['DDISH_NM'].split("<br/>"):
-            code = [int(code) for code in "".join(findall(r"[0-9.]", menu)).split(".")
-                    if len(code) != 0 and code in menu]
+            display, codes = menu.split("  ")
 
-            for cd in sorted(code, reverse=True):
-                menu = menu.replace(str(cd), "")
+            codes = [int(x)
+                     # 괄호 제거 & . 을 기준으로 자르기
+                     for x in codes.replace("(", "").replace(")", "").split(".") if len(x) != 0]
 
-            code = sorted(code)
+            allergy = []
+            for code in codes:
+                # 알러지 식품명 표에서 가져오기
+                # 표에 등록된 식품이 아니라면 그냥 숫자 코드 등록하기
+                allergy.append(table.get(code, str(code)))
 
-            try:
-                menu_list.append({
-                    "name": menu.replace(".", ""),
-                    "allergy": [table[key] for key in code],
-                    "allergy_code": code
-                })
-            except KeyError:
-                menu_list.append({
-                    "name": menu,
-                    "allergy": [],
-                    "allergy_code": code
-                })
+            menu_list.append({
+                "name": display,
+                "allergy": allergy,
+                "allergy_code": codes
+            })
 
         new_json.append({
             "school": item['SCHUL_NM'],
