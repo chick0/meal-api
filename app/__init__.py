@@ -1,60 +1,59 @@
-from json import load
+from os import environ
+from os.path import join
+from os.path import abspath
+from os.path import dirname
 
 from flask import Flask
-from flask import request
-from flask_redis import FlaskRedis
-
-from . import error
-from . import config
-from . import template_filter
-from . import parse
-
-redis = FlaskRedis()
+from flask import Response
+from flask import send_from_directory
+from werkzeug.exceptions import NotFound
+from redis import Redis
+from dotenv import load_dotenv
 
 
 def create_app():
-    app = Flask(__name__)
-    app.config.from_object(config)
+    load_dotenv()
+    app = Flask(__name__, static_folder=None)
 
-    # 시 불러오기
-    poems = load(open("poems.json", mode="r", encoding="utf-8"))
-    app.config.update({
-        "poems": poems,
-        "authors": parse.authors(poems=poems)
-    })
+    REDIS_URL = environ.get("REDIS_URL", default=None)
 
-    # Redis 캐시 서버
-    if not app.config.get("NO_REDIS"):
-        redis.init_app(app)
+    if REDIS_URL is None:
+        app.redis = None
+    else:
+        app.redis = Redis.from_url(
+            url=REDIS_URL
+        )
 
-    @app.after_request
-    def set_header(response):
-        response.headers['X-Frame-Options'] = "deny"
-        response.headers['X-Powered-By'] = "chick_0"
+    API_KEY = environ.get("API_KEY", default="#")
 
-        if request.path.startswith("/api/"):
-            response.headers['Access-Control-Allow-Origin'] = "*"
-            response.headers['Access-Control-Allow-Methods'] = "GET"
+    if API_KEY == "#":
+        raise Exception("시작할 수 없습니다. '나이스 교육정보 개방 포털'의 API 키가 필요합니다.")
+
+    app.API_KEY = API_KEY
+
+    from app.routes import api
+    app.register_blueprint(api.bp)
+
+    BASE_DIR = dirname(dirname(abspath(__file__)))
+    DIST_DIR = join(BASE_DIR, "dist")
+
+    @app.get("/")
+    @app.get("/<path:path>")
+    def frontend(path = None):  # noqa: E251
+        if path is None:
+            path = "index.html"
+
+        try:
+            response: Response = send_from_directory(
+                directory=DIST_DIR,
+                path=path
+            )
+        except NotFound:
+            return "파일을 찾을 수 없습니다.", 404
+
+        if path.endswith(".js"):
+            response.content_type = "text/javascript; charset=utf-8"
 
         return response
-
-    for name in [x for x in dir(template_filter) if not x.startswith("__")]:
-        func = getattr(template_filter, name)
-        if func.__class__.__name__ == "function":
-            app.add_template_filter(
-                f=func, name=name
-            )
-
-    from . import views
-    for view in views.__all__:
-        app.register_blueprint(getattr(getattr(views, view), "bp"))
-
-    # 오류 핸들러
-    app.register_error_handler(400, error.bad_request)
-    app.register_error_handler(403, error.forbidden)
-    app.register_error_handler(404, error.page_not_found)
-    app.register_error_handler(405, error.method_not_allowed)
-
-    app.register_error_handler(500, error.internal_server_error)
 
     return app

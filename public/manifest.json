@@ -1,0 +1,33 @@
+{
+    "name": "급식",
+    "short_name": "급식",
+    "description": "초중고 급식 조회",
+    "icons": [
+        {
+            "src": "/static/img/icon192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/static/img/icon256.png",
+            "sizes": "256x256",
+            "type": "image/png"
+        },
+        {
+            "src": "/static/img/icon512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "/static/img/maskable_icon.png",
+            "sizes": "752x752",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ],
+    "id": "/#/star",
+    "start_url": "/#/star",
+    "display": "standalone",
+    "background_color": "#DBDBDB",
+    "theme_color": "#DBDBDB"
+}

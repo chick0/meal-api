@@ -3,8 +3,7 @@ from urllib import parse
 from urllib.request import Request
 from urllib.request import urlopen
 
-from flask import request
-from flask import current_app
+from flask import current_app as app
 
 
 def get_json(url: str, payload: dict):
@@ -15,7 +14,7 @@ def get_json(url: str, payload: dict):
         url=f"{url}?{payload}",
         method="GET",
         headers={
-            "User-Agent": f"SchoolMeal (https://github.com/chick0/meal; {request.host})"
+            "User-Agent": "meal (https://github.com/chick0/meal)"
         }
     )
 
@@ -28,7 +27,7 @@ def search_school_by_name(school_name: str):
     return get_json(
         url="https://open.neis.go.kr/hub/schoolInfo",
         payload={
-            "key": current_app.config['API_KEY'],
+            "key": app.API_KEY,
             "type": "json",
             "pIndex": 1,
             "pSize": 30,
@@ -42,7 +41,7 @@ def search_meal_by_codes(edu_code: str, school_code: str, date: str):
     return get_json(
         url="https://open.neis.go.kr/hub/mealServiceDietInfo",
         payload={
-            "key": current_app.config['API_KEY'],
+            "key": app.API_KEY,
             "type": "json",
             "pIndex": 1,
 

@@ -2,11 +2,10 @@ from json import dumps
 from json import loads
 from urllib.error import HTTPError
 
-from flask import current_app
+from flask import current_app as app
 from redis.exceptions import ConnectionError
 
-from app import redis
-from .api import search_meal_by_codes
+from app.api import search_meal_by_codes
 
 
 def reformat(json: list):
@@ -71,12 +70,12 @@ def reformat(json: list):
 
 def get_meal_data_by_codes(edu: str, school: str, date: str):
     def fetch_from_redis() -> list or None:
-        if current_app.config.get("NO_REDIS"):
+        if app.redis is None:
             return None
 
         try:
             return loads(
-                redis.get(
+                app.redis.get(
                     name=f"{edu}#{school}#{date}"
                 )
             )
@@ -85,7 +84,7 @@ def get_meal_data_by_codes(edu: str, school: str, date: str):
 
     def add_cache(json: list):
         try:
-            redis.set(
+            app.redis.set(
                 name=f"{edu}#{school}#{date}",
                 value=dumps(json), ex=604800
             )
@@ -115,7 +114,7 @@ def get_meal_data_by_codes(edu: str, school: str, date: str):
             if result:
                 result = reformat(json=result)
 
-            if not current_app.config.get("NO_REDIS"):
+            if app.redis is not None:
                 add_cache(json=result)
 
     return result

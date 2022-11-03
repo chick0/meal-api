@@ -1,9 +1,7 @@
 from re import findall
 from urllib.error import HTTPError
 
-from flask import url_for
-
-from .api import search_school_by_name
+from app.api import search_school_by_name
 
 
 # 검색어 필터링
@@ -38,19 +36,14 @@ def get_school_data_by_query(query: str) -> list:
             result = [
                 {
                     "name": f"({school['LCTN_SC_NM']}) {school['SCHUL_NM']}",
-                    "url": url_for(
-                        "meal.show",
-                        edu_code=school['ATPT_OFCDC_SC_CODE'],
-                        school_code=school['SD_SCHUL_CODE']
-                    ),
+                    "url": f"/meal/{school['ATPT_OFCDC_SC_CODE']}/{school['SD_SCHUL_CODE']}",
                     "code": {
                         "edu": school['ATPT_OFCDC_SC_CODE'],
                         "school": school['SD_SCHUL_CODE']
                     }
                 } for school in result['schoolInfo'][1]['row']
             ]
-
-        except (KeyError, Exception):
+        except KeyError:
             result = None
 
     return result

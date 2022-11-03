@@ -1,7 +1,6 @@
 Flask
-flask-redis
-
+redis
 python-dotenv
-
 gunicorn
 gevent
+flake8

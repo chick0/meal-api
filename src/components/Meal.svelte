@@ -1,0 +1,202 @@
+<script>
+    import { onMount } from "svelte";
+    import poems from "src/poems";
+    import { add_star, del_star, get_star } from "src/star";
+    export let params = {};
+
+    /**
+     * @typedef Menu
+     * @property {string[]} allergy
+     * @property {number[]} allergy_code
+     * @property {string} name
+     */
+
+    /**
+     * @typedef Meal
+     * @property {string} calorie
+     * @property {string[]} code
+     * @property {Menu[]} menu
+     * @property {string[]} nutrient
+     * @property {string[]} origin
+     * @property {string} school
+     *
+     * @property {number} import_origin_count
+     */
+
+    /** @type {Meal[]} */
+    let json = [];
+
+    let show_full_poem = false;
+    let poem = poems[Math.floor(Math.random() * poems.length)];
+
+    let safe_content = poem.content.filter((content) => content.length > 0);
+    let poem_one_verse = safe_content[Math.floor(Math.random() * safe_content.length)].replace("&nbsp", "");
+
+    let show_allergy = false;
+
+    let school_name = "";
+
+    let is_star_added = false;
+
+    function is_local(origin) {
+        let ori = origin.replace("국내산", "");
+        return ori.split("").filter((x) => x == "산").length == 0;
+    }
+
+    onMount(() => {
+        params.json.forEach((meal) => {
+            let count = 0;
+
+            meal.origin.forEach((origin) => {
+                if (is_local(origin) == false) {
+                    count += 1;
+                }
+            });
+
+            meal.import_origin_count = count;
+        });
+
+        school_name = params.json[0].school;
+        document.title = `${school_name}의 급식 정보`;
+
+        is_star_added = get_star().filter((x) => x.name == school_name).length == 1;
+
+        json = params.json;
+    });
+</script>
+
+<div class="lf" style="margin-bottom:220px">
+    <a href="#/">← 학교 검색하러 가기</a>
+    <h2 style="margin:0">{school_name}의 급식 정보</h2>
+    <p style="margin-top:0">
+        {#if show_allergy}
+            <a
+                href="/hide-allergy-info"
+                on:click="{(event) => {
+                    event.preventDefault();
+                    show_allergy = false;
+                }}">알러지 정보 닫기</a>
+        {:else}
+            <a
+                href="/show-allergy-info"
+                on:click="{(event) => {
+                    event.preventDefault();
+                    show_allergy = true;
+                }}">알러지 정보 확인하기</a>
+        {/if}
+    </p>
+
+    <button
+        class="btn"
+        on:click="{() => {
+            window.navigator.clipboard
+                .writeText(location.href)
+                .then(() => {
+                    alert('링크가 복사되었습니다.');
+                })
+                .catch(() => {
+                    prompt('아래의 텍스트를 복사해주세요.', location.href);
+                });
+        }}">링크 복사하기</button>
+
+    {#if is_star_added}
+        <button
+            class="btn"
+            on:click="{() => {
+                del_star(school_name);
+                alert('삭제되었습니다.');
+                is_star_added = false;
+            }}">즐겨찾기에서 삭제하기</button>
+    {:else}
+        <button
+            class="btn"
+            on:click="{() => {
+                add_star(school_name, `/meal/${params.edu}/${params.school}`);
+                alert('추가되었습니다.');
+                is_star_added = true;
+            }}">즐겨찾기에 추가하기</button>
+    {/if}
+
+    <div style="margin-top:30px;margin-bottom:10px">
+        {#each json as meal}
+            <table style="margin-bottom:30px;">
+                <tr>
+                    <th width="75px">정보</th>
+                    <td>{params.date.toLocaleDateString()} / {meal.code[1]}</td>
+                </tr>
+                <tr>
+                    <th width="75px">칼로리</th>
+                    <td><span class="high">{meal.calorie}</span></td>
+                </tr>
+                <tr>
+                    <th width="75px">
+                        메뉴<br />
+                        <span class="s high">복사하기</span>
+                    </th>
+                    <td>
+                        <ul>
+                            {#each meal.menu as menu}
+                                <li>
+                                    {menu.name}
+                                    {#if show_allergy && menu.allergy.length > 0}
+                                        <span class="allergy high">[{menu.allergy.join(",")}]</span>
+                                    {/if}
+                                </li>
+                            {/each}
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="75px">원산지</th>
+                    <td>
+                        {#if meal.import_origin_count == 0}
+                            모든 식자재가 국내산입니다.
+                        {:else}
+                            <b>{meal.import_origin_count}</b>개의 식자재가 국내산이 아닙니다.
+                            <hr />
+                            <ol>
+                                {#each meal.origin as origin}
+                                    {#if is_local(origin) == false}
+                                        <li>{origin}</li>
+                                    {/if}
+                                {/each}
+                            </ol>
+                        {/if}
+                    </td>
+                </tr>
+            </table>
+        {/each}
+    </div>
+
+    <div class="poem">
+        {#if show_full_poem == false}
+            <a
+                href="/show-full"
+                on:click="{(event) => {
+                    event.preventDefault();
+                    show_full_poem = true;
+                }}">
+                {poem_one_verse}<br />
+                <sub>{poem.author} - {poem.title}</sub>
+            </a>
+        {:else}
+            <div class="lf poem-content">
+                <h2>{poem.title}</h2>
+                <h3>{poem.author}</h3>
+                {#each poem.content as content}
+                    <span>{content}</span><br />
+                {/each}
+            </div>
+
+            <style>
+                .poem-content > h2 {
+                    margin: 0;
+                }
+
+                .poem-content > h3 {
+                    margin-top: 0;
+                }
+            </style>
+        {/if}
+    </div>
+</div>
