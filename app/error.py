@@ -11,3 +11,13 @@ ERRORS = {
         "not_yyyymmdd": "요청한 날짜가 올바르지 않습니다. YYYYMMDD 형식을 지켜주세요."
     },
 }
+
+
+def error(code: str):
+    tp, cd = code.split(".")
+    message = ERRORS.get(tp, {}).get(cd, "등록되지 않은 오류입니다.")
+
+    return {
+        "code": code,
+        "message": message
+    }, 400

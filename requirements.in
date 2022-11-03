@@ -1,6 +1,5 @@
 Flask
 redis
 python-dotenv
-gunicorn
-gevent
+waitress
 flake8

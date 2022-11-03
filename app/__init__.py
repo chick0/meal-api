@@ -10,9 +10,11 @@ from werkzeug.exceptions import NotFound
 from redis import Redis
 from dotenv import load_dotenv
 
+if "REDIS_URL" not in environ:
+    load_dotenv()
+
 
 def create_app():
-    load_dotenv()
     app = Flask(__name__, static_folder=None)
 
     REDIS_URL = environ.get("REDIS_URL", default=None)
