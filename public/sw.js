@@ -1,5 +1,5 @@
 const PRECACHE = "precache-v1";
-const PRECACHE_URLS = ["/icons/192.png"];
+const PRECACHE_URLS = ["/icon/192.png", "/icon/256.png", "/icon/512.png", "/icon/maskable.png"];
 
 const RUNTIME = "runtime-{tag}";
 
