@@ -14,6 +14,12 @@
     });
 </script>
 
+{#if is_component_loading}
+    <div class="message-box">
+        <p>페이지를 불러오고 있습니다...</p>
+    </div>
+{/if}
+
 <Router
     routes="{routes}"
     on:routeLoading="{() => {
