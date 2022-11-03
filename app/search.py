@@ -1,7 +1,10 @@
 from re import findall
 from urllib.error import HTTPError
+from logging import getLogger
 
 from app.api import search_school_by_name
+
+logger = getLogger()
 
 
 # 검색어 필터링
@@ -27,6 +30,7 @@ def get_school_data_by_query(query: str) -> list:
                 school_name=query
             )
         except (HTTPError, Exception):
+            logger.exception("Exception in school search api request")
             return False
 
     result = fetch_from_api()
@@ -44,6 +48,7 @@ def get_school_data_by_query(query: str) -> list:
                 } for school in result['schoolInfo'][1]['row']
             ]
         except KeyError:
+            logger.exception("Exception in school search response parsing")
             result = None
 
     return result

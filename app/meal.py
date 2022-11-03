@@ -1,11 +1,14 @@
 from json import dumps
 from json import loads
 from urllib.error import HTTPError
+from logging import getLogger
 
 from flask import current_app as app
 from redis.exceptions import ConnectionError
 
 from app.api import search_meal_by_codes
+
+logger = getLogger()
 
 
 def reformat(json: list):
@@ -80,13 +83,15 @@ def get_meal_data_by_codes(edu: str, school: str, date: str):
                 )
             )
         except (ConnectionError, TypeError, Exception):
+            logger.exception("Exception in getting data from redis")
             return None
 
     def add_cache(json: list):
         try:
             app.redis.set(
                 name=f"{edu}#{school}#{date}",
-                value=dumps(json), ex=604800
+                value=dumps(json),
+                ex=604800
             )
         except ConnectionError:
             pass
@@ -102,6 +107,7 @@ def get_meal_data_by_codes(edu: str, school: str, date: str):
                     date=date
                 )
             except (HTTPError, Exception):
+                logger.exception("Exception in meal data api request")
                 return False
 
         result = fetch_from_api()
