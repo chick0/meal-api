@@ -1,7 +1,7 @@
 <script>
     import { onMount } from "svelte";
     import Router from "svelte-spa-router";
-    import { routes } from "src/router.js";
+    import { routes } from "src/router";
 
     /** @type {boolean} */
     let is_component_loading = false;

@@ -1,7 +1,7 @@
 <script>
     import { onMount } from "svelte";
     import { push } from "svelte-spa-router";
-    import { from_ymd, is_today, to_ymd } from "src/date.js";
+    import { from_ymd, is_today, to_ymd } from "src/date";
     import Meal from "comp/Meal.svelte";
     import NoMeal from "comp/NoMeal.svelte";
     import Week from "comp/Week.svelte";

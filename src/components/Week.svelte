@@ -1,5 +1,5 @@
 <script>
-    import { get_day, get_date, to_ymd, is_today } from "src/date.js";
+    import { get_day, get_date, to_ymd, is_today } from "src/date";
     export let params = {};
 
     let path = `/move/${params.edu}/${params.school}`;

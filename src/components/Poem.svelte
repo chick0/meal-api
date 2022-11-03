@@ -1,5 +1,5 @@
 <script>
-    import poems from "src/poems.js";
+    import poems from "src/poems";
 
     let show_full_poem = false;
     let selected_poem = poems[Math.floor(Math.random() * poems.length)];
