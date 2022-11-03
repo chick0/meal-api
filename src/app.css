@@ -109,7 +109,11 @@ hr {
     list-style: none;
 }
 
-@media (min-width: 700px) {
+@media (min-width: 768px) {
+    html {
+        font-size: 20px;
+    }
+
     .lf {
         margin-left: 20%;
         margin-right: 20%;
