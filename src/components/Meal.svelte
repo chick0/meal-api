@@ -1,9 +1,18 @@
 <script>
     import { onMount } from "svelte";
     import { push } from "svelte-spa-router";
-    import poems from "src/poems";
+    import Poem from "comp/Poem.svelte";
     import { add_star, del_star, get_star } from "src/star";
     export let params = {};
+
+    /**
+     * @param {string} origin
+     * @returns {boolean}
+     */
+    function is_local(origin) {
+        let ori = origin.replace("국내산", "");
+        return ori.split("").filter((x) => x == "산").length == 0;
+    }
 
     /**
      * @typedef Menu
@@ -27,22 +36,11 @@
     /** @type {Meal[]} */
     let json = [];
 
-    let show_full_poem = false;
-    let poem = poems[Math.floor(Math.random() * poems.length)];
-
-    let safe_content = poem.content.filter((content) => content.length > 0);
-    let poem_one_verse = safe_content[Math.floor(Math.random() * safe_content.length)].replace("&nbsp", "");
-
     let show_allergy = false;
 
     let school_name = "";
 
     let is_star_added = false;
-
-    function is_local(origin) {
-        let ori = origin.replace("국내산", "");
-        return ori.split("").filter((x) => x == "산").length == 0;
-    }
 
     onMount(() => {
         params.json.forEach((meal) => {
@@ -200,42 +198,5 @@
         {/each}
     </div>
 
-    <div class="poem">
-        {#if show_full_poem == false}
-            <a
-                href="/show-full"
-                on:click="{(event) => {
-                    event.preventDefault();
-                    show_full_poem = true;
-                }}">
-                {poem_one_verse}<br />
-                <sub>{poem.author} - {poem.title}</sub>
-            </a>
-        {:else}
-            <div class="lf poem-content">
-                <h2>{poem.title}</h2>
-                <h3>{poem.author}</h3>
-                {#each poem.content as content}
-                    <span>{content}</span><br />
-                {/each}
-            </div>
-
-            <style>
-                .poem-content > h2 {
-                    margin: 0;
-                }
-
-                .poem-content > h3 {
-                    margin-top: 0;
-                }
-            </style>
-        {/if}
-    </div>
+    <Poem />
 </div>
-
-<style>
-    .poem {
-        text-align: center;
-        margin-top: 60px;
-    }
-</style>
