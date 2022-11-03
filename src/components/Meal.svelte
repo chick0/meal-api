@@ -139,7 +139,31 @@
                 <tr>
                     <th width="75px">
                         메뉴<br />
-                        <span class="s high">복사하기</span>
+                        <a
+                            class="high s"
+                            href="/copy"
+                            on:click="{(event) => {
+                                event.preventDefault();
+
+                                const menu = meal.menu
+                                    .map((x) => {
+                                        if (show_allergy && x.allergy.length > 0) {
+                                            return x.name + ' [' + x.allergy.join(',') + ']';
+                                        } else {
+                                            return x.name;
+                                        }
+                                    })
+                                    .join('\n');
+
+                                window.navigator.clipboard
+                                    .writeText(menu)
+                                    .then(() => {
+                                        alert('메뉴가 복사되었습니다.');
+                                    })
+                                    .catch(() => {
+                                        prompt('아래의 텍스트를 복사해주세요.', menu);
+                                    });
+                            }}">복사하기</a>
                     </th>
                     <td>
                         <ul>
