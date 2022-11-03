@@ -17,6 +17,7 @@ input {
     background-color: var(--background-color);
     color: var(--color);
     padding: 10px;
+    font: inherit;
 }
 
 a {
