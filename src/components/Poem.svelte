@@ -51,7 +51,7 @@
                     }}">{selected_poem.author}</a>
             </h3>
             {#each selected_poem.content as content}
-                <span>{content}</span><br />
+                <span>{@html content}</span><br />
             {/each}
         </div>
     {/if}
