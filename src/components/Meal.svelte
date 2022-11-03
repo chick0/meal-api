@@ -1,5 +1,6 @@
 <script>
     import { onMount } from "svelte";
+    import { push } from "svelte-spa-router";
     import poems from "src/poems";
     import { add_star, del_star, get_star } from "src/star";
     export let params = {};
@@ -66,8 +67,15 @@
 </script>
 
 <div class="lf" style="margin-bottom:220px">
-    <a href="#/">← 학교 검색하러 가기</a>
-    <h2 style="margin:0">{school_name}의 급식 정보</h2>
+    <h2 style="margin-bottom:0">
+        <a
+            href="/"
+            style="color: #000"
+            on:click="{(event) => {
+                event.preventDefault();
+                push('/');
+            }}">{school_name}의 급식 정보</a>
+    </h2>
     <p style="margin-top:0">
         {#if show_allergy}
             <a
@@ -87,7 +95,7 @@
     </p>
 
     <button
-        class="btn"
+        class="button"
         on:click="{() => {
             window.navigator.clipboard
                 .writeText(location.href)
@@ -101,7 +109,7 @@
 
     {#if is_star_added}
         <button
-            class="btn"
+            class="button"
             on:click="{() => {
                 del_star(school_name);
                 alert('삭제되었습니다.');
@@ -109,7 +117,7 @@
             }}">즐겨찾기에서 삭제하기</button>
     {:else}
         <button
-            class="btn"
+            class="button"
             on:click="{() => {
                 add_star(school_name, `/meal/${params.edu}/${params.school}`);
                 alert('추가되었습니다.');
@@ -200,3 +208,10 @@
         {/if}
     </div>
 </div>
+
+<style>
+    .poem {
+        text-align: center;
+        margin-top: 60px;
+    }
+</style>

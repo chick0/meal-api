@@ -1,5 +1,5 @@
 const PRECACHE = "precache-v1";
-const PRECACHE_URLS = ["/icons/192.png", "/fonts/noto-sans-kr-v12.woff2"];
+const PRECACHE_URLS = ["/icons/192.png"];
 
 const RUNTIME = "runtime-{tag}";
 

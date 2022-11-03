@@ -29,5 +29,5 @@
 </div>
 
 <div class="menu">
-    <a class="btn" href="/#">학교 검색하러 가기</a>
+    <a class="button" href="/#">학교 검색하러 가기</a>
 </div>

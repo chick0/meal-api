@@ -59,19 +59,15 @@
 {:else if is_fail}
     <div class="message-box l">
         <p>{fail_message}</p>
-        <a class="btn" href="#/">학교 검색하기</a>
-        <button
-            class="btn"
-            on:click="{() => {
-                location.reload();
-            }}">페이지 새로고침</button>
+        <div class="buttons">
+            <a class="button" href="#/">학교 검색하기</a>
+            <button
+                class="button"
+                on:click="{() => {
+                    location.reload();
+                }}">페이지 새로고침</button>
+        </div>
     </div>
-
-    <style>
-        .btn:not(:last-child) {
-            margin-right: 3px;
-        }
-    </style>
 {:else if is_none}
     <NoMeal params="{params}" />
 {:else}

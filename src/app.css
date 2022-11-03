@@ -1,44 +1,38 @@
-@font-face {
-    font-family: "Noto Sans KR";
-    font-style: normal;
-    font-weight: 400;
-    font-display: swap;
-    src: local("Noto Sans KR Regular"), local("NotoSansKR-Regular"), url("/fonts/noto-sans-kr-v12.woff2") format("woff2");
-}
-
-::selection {
-    background-color: #f3969a;
+:root {
+    --color: #5a5a5a;
+    --background-color: #dbdbdb;
 }
 
 html {
-    color: #5a5a5a;
-    background-color: #dbdbdb;
+    color: var(--color);
+    background-color: var(--background-color);
     text-align: center;
-}
-* {
-    font-family: "Noto Sans KR", sans-serif;
+    font-family: "Nanum Gothic", Pretendard, -apple-system, system-ui, Roboto, sans-serif;
+    font-size: 16px;
 }
 
-input,
-textarea {
-    border: 1px solid #5a5a5a;
+input {
+    border: 1px solid var(--color);
     border-radius: 0.4rem;
-    background-color: #dbdbdb;
-    color: #5a5a5a;
+    background-color: var(--background-color);
+    color: var(--color);
     padding: 10px;
 }
 
-a,
-button {
+a {
+    color: var(--color);
     text-decoration: none;
     border: none;
-    padding: 0;
-    background-color: #dbdbdb;
-    color: #5a5a5a;
+}
+
+button {
+    font: inherit;
 }
 
 h1,
-h2 {
+h2,
+h3 {
+    font-weight: 800;
     color: #000;
 }
 
@@ -54,45 +48,22 @@ h2 {
     font-size: larger;
 }
 
-.btn {
+.button {
     display: inline-block;
-    border: #5a5a5a 1px solid;
+    border: var(--color) 1px solid;
     border-radius: 0.3rem;
     padding: 10px;
-    font-size: 13px;
-    background-color: #dbdbdb;
-    color: #5a5a5a;
+    background-color: var(--background-color);
+    color: var(--color);
 }
 
-.btn:hover {
-    background-color: #5a5a5a;
-    color: #dbdbdb;
+.button:hover {
+    background-color: var(--color);
+    color: var(--background-color);
 }
 
-.nav {
-    text-align: left;
-    padding-top: 10px;
-    padding-left: 10px;
-    position: fixed;
-    top: 0;
-    left: 0px;
-    width: 100%;
-}
-
-.nav-right-bottom {
-    text-align: right;
-    padding-bottom: 10px;
-    padding-right: 10px;
-    position: fixed;
-    bottom: 0;
-    right: 0px;
-    width: 100%;
-}
-
-.title {
-    padding-top: 60px;
-    padding-bottom: 30px;
-    font-size: 90px;
+.buttons > .button:not(:last-child) {
+    margin-right: 3px;
 }
 
 .menu {
@@ -102,15 +73,6 @@ h2 {
     right: 0;
     position: fixed;
     bottom: 80px;
-}
-
-.n-menu {
-    margin-left: auto;
-    margin-right: auto;
-    left: 0;
-    right: 0;
-    margin-top: 60px;
-    margin-bottom: 130px;
 }
 
 .lf {
@@ -130,12 +92,12 @@ li {
 
 td {
     padding-left: 10px;
-    border-left: 1px solid #5a5a5a;
+    border-left: 1px solid var(--color);
 }
 
 hr {
     border: none;
-    border-bottom: 0.7px solid #5a5a5a;
+    border-bottom: 0.7px solid var(--color);
 }
 
 .message-box {
@@ -147,39 +109,10 @@ hr {
     list-style: none;
 }
 
-.poem {
-    text-align: center;
-    margin-top: 60px;
-}
-
-@media (max-width: 420px) {
-    .title {
-        font-size: 40px;
-    }
-
-    .weeks-btn {
-        bottom: 20px !important;
-    }
-}
-
-@media (max-width: 320px) {
-    .btn {
-        font-size: 11px;
-    }
-}
-
 @media (min-width: 700px) {
-    .btn {
-        font-size: 16px;
-    }
-
     .lf {
         margin-left: 20%;
         margin-right: 20%;
-    }
-
-    .nav {
-        margin-left: 20%;
     }
 
     .message-box {

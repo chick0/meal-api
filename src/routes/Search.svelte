@@ -72,7 +72,7 @@
     </div>
 
     <div class="menu">
-        <a class="btn" href="/#/star">즐겨찾기 확인하기</a>
+        <a class="button" href="/#/star">즐겨찾기 확인하기</a>
     </div>
 {:else}
     <div class="lf">
@@ -85,7 +85,7 @@
             {/each}
         </ol>
         <button
-            class="btn is-fullwidth"
+            class="button is-fullwidth"
             on:click="{() => {
                 has_result = false;
             }}">다시 검색하기</button>
