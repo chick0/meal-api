@@ -9,6 +9,9 @@
     let preview = safe_content[Math.floor(Math.random() * safe_content.length)].replace("&nbsp", "");
 
     let show_poem_list = false;
+
+    /** @type {HTMLElement} */
+    let poem_content = undefined;
 </script>
 
 <div class="poem">
@@ -18,6 +21,11 @@
             on:click="{(event) => {
                 event.preventDefault();
                 show_full_poem = true;
+                setTimeout(() => {
+                    poem_content.scrollIntoView({
+                        behavior: 'smooth',
+                    });
+                }, 100);
             }}">
             {preview}<br />
             <sub>{selected_poem.author} - {selected_poem.title}</sub>
@@ -34,13 +42,19 @@
 
                                 show_poem_list = false;
                                 selected_poem = poem;
+
+                                setTimeout(() => {
+                                    poem_content.scrollIntoView({
+                                        behavior: 'smooth',
+                                    });
+                                }, 100);
                             }}">{poem.author} - {poem.title}</a>
                     </li>
                 {/each}
             </ol>
         </div>
     {:else}
-        <div class="lf poem-content">
+        <div class="lf poem-content" bind:this="{poem_content}">
             <h2>{selected_poem.title}</h2>
             <h3>
                 <a

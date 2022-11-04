@@ -1,6 +1,5 @@
 <script>
     import { onMount } from "svelte";
-    import { push } from "svelte-spa-router";
     import Poem from "comp/Poem.svelte";
     import { add_star, del_star, get_star } from "src/star";
     export let params = {};
@@ -64,33 +63,27 @@
     });
 </script>
 
-<div class="lf" style="margin-bottom:220px">
-    <h2 style="margin-bottom:0">
-        <a
-            href="/"
-            style="color: #000"
-            on:click="{(event) => {
-                event.preventDefault();
-                push('/');
-            }}">{school_name}의 급식 정보</a>
-    </h2>
-    <p style="margin-top:0">
-        {#if show_allergy}
-            <a
-                href="/hide-allergy-info"
-                on:click="{(event) => {
-                    event.preventDefault();
-                    show_allergy = false;
-                }}">알러지 정보 닫기</a>
-        {:else}
-            <a
-                href="/show-allergy-info"
-                on:click="{(event) => {
-                    event.preventDefault();
-                    show_allergy = true;
-                }}">알러지 정보 확인하기</a>
-        {/if}
-    </p>
+<div class="lf">
+    <div class="packed">
+        <h1>{school_name}의 급식 정보</h1>
+        <p>
+            {#if show_allergy}
+                <a
+                    href="/hide-allergy-info"
+                    on:click="{(event) => {
+                        event.preventDefault();
+                        show_allergy = false;
+                    }}">알러지 정보 닫기</a>
+            {:else}
+                <a
+                    href="/show-allergy-info"
+                    on:click="{(event) => {
+                        event.preventDefault();
+                        show_allergy = true;
+                    }}">알러지 정보 확인하기</a>
+            {/if}
+        </p>
+    </div>
 
     <button
         class="button"
@@ -123,9 +116,9 @@
             }}">즐겨찾기에 추가하기</button>
     {/if}
 
-    <div style="margin-top:30px;margin-bottom:10px">
-        {#each json as meal}
-            <table style="margin-bottom:30px;">
+    {#each json as meal}
+        <div class="table-wrapper">
+            <table>
                 <tr>
                     <th width="75px">정보</th>
                     <td>{params.date.toLocaleDateString()} / {meal.code[1]}</td>
@@ -195,8 +188,30 @@
                     </td>
                 </tr>
             </table>
-        {/each}
-    </div>
+        </div>
+    {/each}
 
     <Poem />
 </div>
+
+<style>
+    .lf {
+        margin-bottom: 30vh;
+    }
+
+    .packed > :nth-child(1) {
+        margin-bottom: 0;
+        font-size: 25px;
+        color: #000;
+    }
+
+    .packed > :nth-child(2) {
+        margin-top: 0;
+        font-size: 20px;
+    }
+
+    .table-wrapper {
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+</style>

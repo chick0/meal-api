@@ -8,9 +8,15 @@
 </script>
 
 <div class="message-box l">
-    <span class="s" style="padding-bottom:3px;border-bottom: 0.7px solid #BCBCBC;">
+    <span class="date">
         {params.date.toLocaleDateString()}
     </span>
     <p><span class="high">급식</span> 정보가 없습니다.</p>
-    <p><a class="button" href="#/">학교 검색하러 가기</a></p>
 </div>
+
+<style>
+    span.date {
+        padding-bottom: 3px;
+        border-bottom: 0.7px solid #bcbcbc;
+    }
+</style>
