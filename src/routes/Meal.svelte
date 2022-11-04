@@ -8,6 +8,8 @@
 
     function fetch_meal() {
         is_loading = true;
+        is_fail = false;
+        is_none = false;
 
         fetch(`/api/meal?edu=${params.edu}&school=${params.school}&date=${to_ymd(params.date)}`)
             .then((resp) => resp.json())
@@ -36,13 +38,21 @@
     /** @type {Object} */
     export let params = {};
 
+    $: if (params.date == null) {
+        params.date = new Date();
+        fetch_meal();
+    } else if (typeof params.date == "string") {
+        params.date = from_ymd(params.date);
+        fetch_meal();
+    }
+
     if (params.date == null) {
         params.date = new Date();
     } else {
         params.date = from_ymd(params.date);
 
         if (is_today(params.date)) {
-            push(`/move/${params.edu}/${params.school}`);
+            push(`/meal/${params.edu}/${params.school}`);
         }
     }
 

@@ -5,7 +5,6 @@ export const routes = {
     "/star": wrap({ asyncComponent: () => import("routes/Star.svelte") }),
 
     "/meal/:edu/:school/:date?": wrap({ asyncComponent: () => import("routes/Meal.svelte") }),
-    "/move/:edu/:school/:date?": wrap({ asyncComponent: () => import("routes/Move.svelte") }),
 
     "*": wrap({ asyncComponent: () => import("src/NotFound.svelte") }),
 };

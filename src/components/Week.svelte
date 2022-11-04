@@ -2,7 +2,7 @@
     import { get_day, get_date, to_ymd, is_today } from "src/date";
     export let params = {};
 
-    let path = `/move/${params.edu}/${params.school}`;
+    let path = `/meal/${params.edu}/${params.school}`;
 
     /** @type {Date[]} */
     let date_list = [];
