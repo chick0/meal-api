@@ -18,8 +18,9 @@
 
 <div class="menu weeks">
     {#if is_today(params.date) == false}
-        <a class="button" href="#{path}">오늘 메뉴로 이동하기</a>
-        <br style="margin-bottom:15px" />
+        <p class="space">
+            <a class="button" href="#{path}">오늘 메뉴로 이동하기</a>
+        </p>
     {/if}
     <div class="buttons">
         {#each date_list as date}
@@ -49,9 +50,14 @@
         bottom: 20px;
     }
 
+    .weeks .space {
+        margin: 0;
+        margin-bottom: 3px;
+    }
+
     @media (max-width: 768px) {
-        .weeks .button {
-            padding: 7px;
+        .weeks .buttons > .button {
+            padding: 9px;
         }
     }
 </style>
