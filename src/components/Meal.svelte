@@ -82,39 +82,43 @@
                         show_allergy = true;
                     }}">알러지 정보 확인하기</a>
             {/if}
+            <b>·</b>
+            <a href="#/">학교 검색하기</a>
         </p>
     </div>
 
-    <button
-        class="button"
-        on:click="{() => {
-            window.navigator.clipboard
-                .writeText(location.href)
-                .then(() => {
-                    alert('링크가 복사되었습니다.');
-                })
-                .catch(() => {
-                    prompt('아래의 텍스트를 복사해주세요.', location.href);
-                });
-        }}">링크 복사하기</button>
+    <div class="buttons">
+        <button
+            class="button"
+            on:click="{() => {
+                window.navigator.clipboard
+                    .writeText(location.href)
+                    .then(() => {
+                        alert('링크가 복사되었습니다.');
+                    })
+                    .catch(() => {
+                        prompt('아래의 텍스트를 복사해주세요.', location.href);
+                    });
+            }}">링크 복사하기</button>
 
-    {#if is_star_added}
-        <button
-            class="button"
-            on:click="{() => {
-                del_star(school_name);
-                alert('삭제되었습니다.');
-                is_star_added = false;
-            }}">즐겨찾기에서 삭제하기</button>
-    {:else}
-        <button
-            class="button"
-            on:click="{() => {
-                add_star(school_name, `/meal/${params.edu}/${params.school}`);
-                alert('추가되었습니다.');
-                is_star_added = true;
-            }}">즐겨찾기에 추가하기</button>
-    {/if}
+        {#if is_star_added}
+            <button
+                class="button"
+                on:click="{() => {
+                    del_star(school_name);
+                    alert('삭제되었습니다.');
+                    is_star_added = false;
+                }}">즐겨찾기에서 삭제하기</button>
+        {:else}
+            <button
+                class="button"
+                on:click="{() => {
+                    add_star(school_name, `/meal/${params.edu}/${params.school}`);
+                    alert('추가되었습니다.');
+                    is_star_added = true;
+                }}">즐겨찾기에 추가하기</button>
+        {/if}
+    </div>
 
     {#each json as meal}
         <div class="table-wrapper">

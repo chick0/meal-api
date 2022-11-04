@@ -7,6 +7,10 @@
     });
 </script>
 
+<div class="lf">
+    <a href="#/">학교 검색하기</a>
+</div>
+
 <div class="message-box l">
     <span class="date">
         {params.date.toLocaleDateString()}

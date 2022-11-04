@@ -64,10 +64,6 @@
     let is_none = false;
 </script>
 
-<div class="lf">
-    <a href="#/">학교 검색하기</a>
-</div>
-
 {#if is_loading}
     <div class="message-box l">
         <p>급식 정보를 불러오고 있습니다...</p>
@@ -90,10 +86,3 @@
 {#if is_loading == false && is_fail == false}
     <Week params="{params}" />
 {/if}
-
-<style>
-    .lf {
-        padding-bottom: 3px;
-        border-bottom: 0.7px solid var(--color);
-    }
-</style>
