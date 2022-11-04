@@ -77,11 +77,12 @@ def get_meal_data_by_codes(edu: str, school: str, date: str):
             return None
 
         try:
-            return loads(
-                app.redis.get(
-                    name=f"{edu}#{school}#{date}"
-                )
-            )
+            from_redis = app.redis.get(name=f"{edu}#{school}#{date}")
+
+            if from_redis is None:
+                return None
+
+            return loads(from_redis)
         except (ConnectionError, TypeError, Exception):
             logger.exception("Exception in getting data from redis")
             return None
