@@ -18,10 +18,10 @@
             .then((resp) => resp.json())
             .then((json) => {
                 is_loading = false;
+                now_date = to_ymd(params.date);
 
                 if (json.code == null) {
                     params.json = json;
-                    now_date = to_ymd(params.date);
                 } else {
                     if (json.code == "meal.result_none") {
                         is_none = true;
@@ -32,10 +32,10 @@
                 }
             })
             .catch(() => {
-                alert("알 수 없는 오류가 발생했습니다.");
                 is_loading = false;
                 is_fail = true;
                 fail_message = "알 수 없는 오류가 발생했습니다.";
+                alert(fail_message);
             });
     }
 
