@@ -6,27 +6,9 @@
     import NoMeal from "comp/NoMeal.svelte";
     import Week from "comp/Week.svelte";
 
-    /** @type {Object} */
-    export let params = {};
+    function fetch_meal() {
+        is_loading = true;
 
-    if (params.date == null) {
-        params.date = new Date();
-    } else {
-        params.date = from_ymd(params.date);
-
-        if (is_today(params.date)) {
-            push(`/move/${params.edu}/${params.school}`);
-        }
-    }
-
-    let is_loading = true;
-
-    let is_fail = false;
-    let fail_message = "";
-
-    let is_none = false;
-
-    onMount(() => {
         fetch(`/api/meal?edu=${params.edu}&school=${params.school}&date=${to_ymd(params.date)}`)
             .then((resp) => resp.json())
             .then((json) => {
@@ -49,6 +31,30 @@
                 is_fail = true;
                 fail_message = "알 수 없는 오류가 발생했습니다.";
             });
+    }
+
+    /** @type {Object} */
+    export let params = {};
+
+    if (params.date == null) {
+        params.date = new Date();
+    } else {
+        params.date = from_ymd(params.date);
+
+        if (is_today(params.date)) {
+            push(`/move/${params.edu}/${params.school}`);
+        }
+    }
+
+    let is_loading = true;
+
+    let is_fail = false;
+    let fail_message = "";
+
+    let is_none = false;
+
+    onMount(() => {
+        fetch_meal();
     });
 </script>
 
@@ -63,14 +69,11 @@
 {:else if is_fail}
     <div class="message-box l">
         <p>{fail_message}</p>
-        <div class="buttons">
-            <a class="button" href="#/">학교 검색하기</a>
-            <button
-                class="button"
-                on:click="{() => {
-                    location.reload();
-                }}">페이지 새로고침</button>
-        </div>
+        <button
+            class="button"
+            on:click="{() => {
+                fetch_meal();
+            }}">다시 시도하기</button>
     </div>
 {:else if is_none}
     <NoMeal params="{params}" />
@@ -78,7 +81,9 @@
     <Meal params="{params}" />
 {/if}
 
-<Week params="{params}" />
+{#if is_loading == false && is_fail == false}
+    <Week params="{params}" />
+{/if}
 
 <style>
     .lf {
