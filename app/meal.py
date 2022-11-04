@@ -111,6 +111,7 @@ def get_meal_data_by_codes(edu: str, school: str, date: str):
                 return False
 
         result = fetch_from_api()
+
         if isinstance(result, dict):
             try:
                 result = [j['row'] for j in [i for i in result['mealServiceDietInfo']] if "row" in j][0]
