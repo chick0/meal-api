@@ -1,5 +1,4 @@
 <script>
-    import { onMount } from "svelte";
     import { push } from "svelte-spa-router";
     import { from_ymd, is_today, to_ymd } from "src/date";
     import Meal from "comp/Meal.svelte";
@@ -7,6 +6,10 @@
     import Week from "comp/Week.svelte";
 
     function fetch_meal() {
+        if (now_date == to_ymd(params.date)) {
+            return;
+        }
+
         is_loading = true;
         is_fail = false;
         is_none = false;
@@ -18,6 +21,7 @@
 
                 if (json.code == null) {
                     params.json = json;
+                    now_date = to_ymd(params.date);
                 } else {
                     if (json.code == "meal.result_none") {
                         is_none = true;
@@ -43,29 +47,21 @@
         fetch_meal();
     } else if (typeof params.date == "string") {
         params.date = from_ymd(params.date);
-        fetch_meal();
-    }
-
-    if (params.date == null) {
-        params.date = new Date();
-    } else {
-        params.date = from_ymd(params.date);
 
         if (is_today(params.date)) {
             push(`/meal/${params.edu}/${params.school}`);
+        } else {
+            fetch_meal();
         }
     }
 
     let is_loading = true;
+    let now_date = "";
 
     let is_fail = false;
     let fail_message = "";
 
     let is_none = false;
-
-    onMount(() => {
-        fetch_meal();
-    });
 </script>
 
 <div class="lf">
