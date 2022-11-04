@@ -124,15 +124,15 @@
         <div class="table-wrapper">
             <table>
                 <tr>
-                    <th width="75px">정보</th>
+                    <th>정보</th>
                     <td>{params.date.toLocaleDateString()} / {meal.code[1]}</td>
                 </tr>
                 <tr>
-                    <th width="75px">칼로리</th>
+                    <th>칼로리</th>
                     <td><span class="high">{meal.calorie}</span></td>
                 </tr>
                 <tr>
-                    <th width="75px">
+                    <th>
                         메뉴<br />
                         <a
                             class="high s"
@@ -174,13 +174,12 @@
                     </td>
                 </tr>
                 <tr>
-                    <th width="75px">원산지</th>
+                    <th>원산지</th>
                     <td>
                         {#if meal.import_origin_count == 0}
                             모든 식자재가 국내산입니다.
                         {:else}
                             <b>{meal.import_origin_count}</b>개의 식자재가 국내산이 아닙니다.
-                            <hr />
                             <ol>
                                 {#each meal.origin as origin}
                                     {#if is_local(origin) == false}
@@ -217,5 +216,10 @@
     .table-wrapper {
         margin-top: 30px;
         margin-bottom: 30px;
+        overflow-x: auto;
+    }
+
+    th {
+        width: 75px;
     }
 </style>
