@@ -30,6 +30,7 @@
      * @property {string} school
      *
      * @property {number} import_origin_count
+     * @property {boolean} show_origin
      */
 
     /** @type {Meal[]} */
@@ -52,6 +53,7 @@
             });
 
             meal.import_origin_count = count;
+            meal.show_origin = false;
         });
 
         school_name = params.json[0].school;
@@ -179,12 +181,19 @@
                         {#if meal.import_origin_count == 0}
                             모든 식자재가 국내산입니다.
                         {:else}
-                            <b>{meal.import_origin_count}</b>개의 식자재가 국내산이 아닙니다.
+                            <a
+                                href="/toggle"
+                                on:click="{(event) => {
+                                    event.preventDefault();
+                                    meal.show_origin = !meal.show_origin;
+                                }}">
+                                <b>{meal.import_origin_count}</b>개의 식자재가 국내산이 아닙니다.
+                            </a>
+                        {/if}
+                        {#if meal.show_origin}
                             <ol>
                                 {#each meal.origin as origin}
-                                    {#if is_local(origin) == false}
-                                        <li>{origin}</li>
-                                    {/if}
+                                    <li class="{is_local(origin) == false ? 'high' : ''}">{origin}</li>
                                 {/each}
                             </ol>
                         {/if}
@@ -221,5 +230,16 @@
 
     th {
         width: 75px;
+    }
+
+    ol {
+        padding-left: 0;
+        counter-reset: o;
+        list-style-type: none;
+    }
+
+    ol > li::before {
+        counter-increment: o;
+        content: counters(o, ".") ". ";
     }
 </style>
