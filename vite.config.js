@@ -12,4 +12,13 @@ export default defineConfig({
             comp: path.resolve(__dirname) + "/src/components",
         },
     },
+    server: {
+        proxy: {
+            "/api": {
+                target: "https://school.ch1ck.xyz",
+                changeOrigin: true,
+                secure: false,
+            },
+        },
+    },
 });
