@@ -96,7 +96,7 @@ def get_meal_data_by_codes(edu: str, school: str, date: str):
             if from_redis is None:
                 return None
 
-            logger.info(f"Get meal date from redis / {addr()}")
+            logger.info(f"Get meal data from redis / {addr()}")
             return loads(from_redis)
         except (ConnectionError, TypeError, Exception):
             logger.exception("Exception in getting data from redis")
@@ -128,7 +128,7 @@ def get_meal_data_by_codes(edu: str, school: str, date: str):
                 logger.exception("Exception in meal data api request")
                 return False
 
-        logger.info(f"Get meal date from api / {addr()}")
+        logger.info(f"Get meal data from api / {addr()}")
         result = fetch_from_api()
 
         if isinstance(result, dict):
