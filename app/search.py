@@ -48,7 +48,9 @@ def get_school_data_by_query(query: str) -> list:
                 } for school in result['schoolInfo'][1]['row']
             ]
         except KeyError:
-            logger.exception("Exception in school search response parsing")
+            """
+            {'RESULT': {'CODE': 'INFO-200', 'MESSAGE': '해당하는 데이터가 없습니다.'}}
+            """
             result = None
 
     return result
