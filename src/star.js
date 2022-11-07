@@ -3,9 +3,16 @@ const VERSION = "2";
 const STORAGE_KEY = `${NAMESPACE}:v${VERSION}`;
 
 export function remove_old() {
-    Object.keys(window.localStorage)
-        .filter((x) => (x.startsWith(NAMESPACE) || x == "star") && x != STORAGE_KEY)
-        .map((key) => window.localStorage.removeItem(key));
+    let keys = Object.keys(window.localStorage);
+
+    keys.forEach((key) => {
+        if (key.startsWith(NAMESPACE) || key == "star") {
+            if (key != STORAGE_KEY) {
+                console.log("Old version key detected");
+                window.localStorage.removeItem(key);
+            }
+        }
+    });
 }
 
 /**
