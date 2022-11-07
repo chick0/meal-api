@@ -8,7 +8,12 @@
     let is_star_added = get_star(params.edu, params.school) != null;
 
     if ($school_name.length == 0) {
-        school_name.set(get_cache(params.edu, params.school));
+        let name_from_cache = get_cache(params.edu, params.school);
+
+        if (name_from_cache != null) {
+            school_name.set(name_from_cache);
+            console.log("Load school name from cache : ", $school_name);
+        }
     }
 </script>
 
