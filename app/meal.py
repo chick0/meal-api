@@ -37,7 +37,7 @@ def reformat(json: list):
 
     new_json = []
 
-    re = compile(r"([0-9.]){2,}")
+    re = compile(r"([0-9]{1,}[.])")
 
     for item in json:
         menu_list = []
@@ -49,7 +49,7 @@ def reformat(json: list):
                 allergy = []
                 codes = []
             else:
-                codes = menu[search.start():search.end()]
+                codes = "".join(re.findall(menu))
                 display = menu.replace(codes, "")
 
                 codes = [int(x) for x in codes.split(".") if len(x) != 0]
