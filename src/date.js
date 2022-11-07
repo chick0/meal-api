@@ -24,7 +24,7 @@ export function get_date(dt) {
     let date = dt.getDate();
 
     if (date < 10) {
-        return `0${date}`;
+        return "0" + date.toString();
     } else {
         return date.toString();
     }
@@ -68,7 +68,7 @@ export function to_ymd(dt) {
     let month = dt.getMonth() + 1;
     let date = get_date(dt);
 
-    return `${year}${month < 10 ? `0${month}` : month}${date}`;
+    return `${year}${month < 10 ? "0" + month.toString() : month}${date}`;
 }
 
 /**
