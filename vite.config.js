@@ -15,7 +15,7 @@ export default defineConfig({
     server: {
         proxy: {
             "/api": {
-                target: "https://school.ch1ck.xyz",
+                target: "http://localhost:1365",
                 changeOrigin: true,
                 secure: false,
             },
