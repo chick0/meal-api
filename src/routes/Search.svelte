@@ -85,7 +85,7 @@
             {/each}
         </ol>
         <button
-            class="button is-fullwidth"
+            class="button is-fullwidth result-close"
             on:click="{() => {
                 has_result = false;
             }}">다시 검색하기</button>
@@ -99,5 +99,9 @@
 
     button.is-fullwidth {
         width: 100%;
+    }
+
+    button.result-close {
+        margin-bottom: 10vh;
     }
 </style>
