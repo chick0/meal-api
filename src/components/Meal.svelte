@@ -1,8 +1,10 @@
 <script>
     import { onMount } from "svelte";
+    import Star from "comp/Star.svelte";
     import Poem from "comp/Poem.svelte";
-    import { add_star, del_star, get_star } from "src/star";
-    import { show_allergy } from "src/store";
+    import { get_star } from "src/star";
+    import { show_allergy, school_name } from "src/store";
+    import { set_cache } from "src/name";
     export let params = {};
 
     /**
@@ -37,12 +39,10 @@
     /** @type {Meal[]} */
     let json = [];
 
-    let school_name = "";
-
     let is_star_added = false;
 
     onMount(() => {
-        params.json.forEach((meal) => {
+        params.json.forEach((/** @type {Meal} */ meal) => {
             let count = 0;
 
             meal.origin.forEach((origin) => {
@@ -55,10 +55,12 @@
             meal.show_origin = false;
         });
 
-        school_name = params.json[0].school;
-        document.title = `${school_name}의 급식 정보`;
+        school_name.set(params.json[0].school);
 
-        is_star_added = get_star().filter((x) => x.name == school_name).length == 1;
+        document.title = `${$school_name}의 급식 정보`;
+        set_cache(params.edu, params.school, $school_name);
+
+        is_star_added = get_star(params.edu, params.school) != null;
 
         json = params.json;
     });
@@ -66,7 +68,7 @@
 
 <div class="lf">
     <div class="packed">
-        <h1>{school_name}의 급식 정보</h1>
+        <h1>{$school_name}의 급식 정보</h1>
         <p>
             {#if $show_allergy}
                 <a
@@ -102,23 +104,7 @@
                     });
             }}">링크 복사하기</button>
 
-        {#if is_star_added}
-            <button
-                class="button"
-                on:click="{() => {
-                    del_star(school_name);
-                    alert('삭제되었습니다.');
-                    is_star_added = false;
-                }}">즐겨찾기에서 삭제하기</button>
-        {:else}
-            <button
-                class="button"
-                on:click="{() => {
-                    add_star(school_name, `/meal/${params.edu}/${params.school}`);
-                    alert('추가되었습니다.');
-                    is_star_added = true;
-                }}">즐겨찾기에 추가하기</button>
-        {/if}
+        <Star params="{params}" is_button="{true}" />
     </div>
 
     {#each json as meal}

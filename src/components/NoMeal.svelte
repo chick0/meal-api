@@ -1,5 +1,6 @@
 <script>
     import { onMount } from "svelte";
+    import Star from "comp/Star.svelte";
     export let params = {};
 
     onMount(() => {
@@ -9,6 +10,8 @@
 
 <div class="lf">
     <a href="#/">학교 검색하기</a>
+    <b>·</b>
+    <Star params="{params}" is_button="{false}" />
 </div>
 
 <div class="message-box l">
@@ -19,6 +22,10 @@
 </div>
 
 <style>
+    div.lf > b:last-child {
+        display: none;
+    }
+
     span.date {
         padding-bottom: 3px;
         border-bottom: 0.7px solid #bcbcbc;
