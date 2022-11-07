@@ -2,6 +2,7 @@
     import { onMount } from "svelte";
     import Poem from "comp/Poem.svelte";
     import { add_star, del_star, get_star } from "src/star";
+    import { show_allergy } from "src/store";
     export let params = {};
 
     /**
@@ -36,8 +37,6 @@
     /** @type {Meal[]} */
     let json = [];
 
-    let show_allergy = false;
-
     let school_name = "";
 
     let is_star_added = false;
@@ -69,19 +68,19 @@
     <div class="packed">
         <h1>{school_name}의 급식 정보</h1>
         <p>
-            {#if show_allergy}
+            {#if $show_allergy}
                 <a
                     href="/hide-allergy-info"
                     on:click="{(event) => {
                         event.preventDefault();
-                        show_allergy = false;
+                        show_allergy.set(false);
                     }}">알러지 정보 닫기</a>
             {:else}
                 <a
                     href="/show-allergy-info"
                     on:click="{(event) => {
                         event.preventDefault();
-                        show_allergy = true;
+                        show_allergy.set(true);
                     }}">알러지 정보 확인하기</a>
             {/if}
             <b>·</b>
@@ -167,7 +166,7 @@
                             {#each meal.menu as menu}
                                 <li>
                                     {menu.name}
-                                    {#if show_allergy && menu.allergy.length > 0}
+                                    {#if $show_allergy && menu.allergy.length > 0}
                                         <span class="allergy high">[{menu.allergy.join(",")}]</span>
                                     {/if}
                                 </li>
