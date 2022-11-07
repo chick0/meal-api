@@ -37,7 +37,7 @@ def search_school_by_name(school_name: str):
     )
 
 
-def search_meal_by_codes(edu_code: str, school_code: str, date: str):
+def search_meal_by_codes(edu: str, school: str, date: str):
     return get_json(
         url="https://open.neis.go.kr/hub/mealServiceDietInfo",
         payload={
@@ -45,8 +45,8 @@ def search_meal_by_codes(edu_code: str, school_code: str, date: str):
             "type": "json",
             "pIndex": 1,
 
-            "ATPT_OFCDC_SC_CODE": edu_code,
-            "SD_SCHUL_CODE": school_code,
+            "ATPT_OFCDC_SC_CODE": edu,
+            "SD_SCHUL_CODE": school,
             "MLSV_YMD": date
         }
     )

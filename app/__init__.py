@@ -2,6 +2,8 @@ from os import environ
 from os.path import join
 from os.path import abspath
 from os.path import dirname
+from sys import exit
+from sys import stderr
 
 from flask import Flask
 from flask import Response
@@ -29,7 +31,8 @@ def create_app():
     API_KEY = environ.get("API_KEY", default="#")
 
     if API_KEY == "#":
-        raise Exception("시작할 수 없습니다. '나이스 교육정보 개방 포털'의 API 키가 필요합니다.")
+        stderr.write("API 서버를 시작할 수 없습니다. '나이스 교육정보 개방 포털'의 API 키가 필요합니다.")
+        exit(-1)
 
     app.API_KEY = API_KEY
 
