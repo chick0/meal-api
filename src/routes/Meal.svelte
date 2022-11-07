@@ -74,6 +74,7 @@
         <button
             class="button"
             on:click="{() => {
+                now_date = '';
                 fetch_meal();
             }}">다시 시도하기</button>
     </div>
