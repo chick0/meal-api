@@ -1,6 +1,6 @@
 import { writable } from "svelte/store";
 
-export const show_allergy = writable(true);
+export const show_allergy = writable(false);
 
 /**
  * @typedef SchoolNameCache
