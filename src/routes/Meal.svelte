@@ -1,9 +1,9 @@
 <script>
     import { push } from "svelte-spa-router";
-    import { from_ymd, is_today, to_ymd } from "src/date";
     import Meal from "comp/Meal.svelte";
     import NoMeal from "comp/NoMeal.svelte";
     import Week from "comp/Week.svelte";
+    import { from_ymd, is_today, to_ymd } from "src/date";
 
     function fetch_meal() {
         if (now_date == to_ymd(params.date)) {
