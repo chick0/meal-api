@@ -5,6 +5,7 @@
     import { get_star } from "src/star";
     import { show_allergy, school_name } from "src/store";
     import { set_cache } from "src/name";
+    import { get_day } from "src/date";
     export let params = {};
 
     /**
@@ -112,7 +113,7 @@
             <table>
                 <tr>
                     <th>정보</th>
-                    <td>{params.date.toLocaleDateString()} / {meal.code[1]}</td>
+                    <td>{params.date.toLocaleDateString()} ({get_day(params.date)}) / {meal.code[1]}</td>
                 </tr>
                 <tr>
                     <th>칼로리</th>
