@@ -2,4 +2,3 @@ Flask
 redis
 python-dotenv
 waitress
-flake8
