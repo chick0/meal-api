@@ -44,7 +44,8 @@ def meal():
     if result == SearchMeal.EMPTY_RESULT:
         # API 서버에서 받은 정보가 없으면 ( 급식 없는 날 / 주말 / 휴교일 )
         return error(code="meal.result_none")
-    elif result == SearchMeal.API_REQUEST_FAIL:
+
+    if result == SearchMeal.API_REQUEST_FAIL:
         # 교육청 점검 or 타임아웃
         return error(code="meal.api_timeout_or_dead")
 

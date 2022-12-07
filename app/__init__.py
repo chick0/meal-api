@@ -1,14 +1,8 @@
 from os import environ
-from os.path import join
-from os.path import abspath
-from os.path import dirname
 from sys import exit
 from sys import stderr
 
 from flask import Flask
-from flask import Response
-from flask import send_from_directory
-from werkzeug.exceptions import NotFound
 from redis import Redis
 from dotenv import load_dotenv
 
@@ -22,9 +16,9 @@ def create_app():
     REDIS_URL = environ.get("REDIS_URL", default=None)
 
     if REDIS_URL is None:
-        app.redis = None
+        app.redis = None  # type: ignore
     else:
-        app.redis = Redis.from_url(
+        app.redis = Redis.from_url(  # type: ignore
             url=REDIS_URL
         )
 
@@ -34,31 +28,17 @@ def create_app():
         stderr.write("API 서버를 시작할 수 없습니다. '나이스 교육정보 개방 포털'의 API 키가 필요합니다.")
         exit(-1)
 
-    app.API_KEY = API_KEY
+    app.API_KEY = API_KEY  # type: ignore
 
     from app.routes import api
     app.register_blueprint(api.bp)
 
-    BASE_DIR = dirname(dirname(abspath(__file__)))
-    DIST_DIR = join(BASE_DIR, "dist")
-
-    @app.get("/")
-    @app.get("/<path:path>")
-    def frontend(path = None):  # noqa: E251
-        if path is None:
-            path = "index.html"
-
-        try:
-            response: Response = send_from_directory(
-                directory=DIST_DIR,
-                path=path
-            )
-        except NotFound:
-            return "파일을 찾을 수 없습니다.", 404
-
-        if path.endswith(".js"):
-            response.content_type = "text/javascript; charset=utf-8"
-
-        return response
+    app.register_error_handler(
+        404,
+        lambda error: ({
+            "code": "404",
+            "message": "올바른 경로가 아닙니다."
+        }, error.code)
+    )
 
     return app

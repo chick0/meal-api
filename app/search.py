@@ -1,5 +1,7 @@
 from re import findall
 from urllib.error import HTTPError
+from typing import Union
+from typing import Optional
 from logging import getLogger
 
 from app.api import search_school_by_name
@@ -9,7 +11,7 @@ logger = getLogger()
 
 
 # 검색어 필터링
-def query_filter(school_name: str) -> SchoolSearch or str:
+def query_filter(school_name: str) -> Union[SchoolSearch, str]:
     # 한글 완성자만 남기기
     school_name = "".join(findall("[가-힣]", school_name))
 
@@ -24,7 +26,7 @@ def query_filter(school_name: str) -> SchoolSearch or str:
     return school_name
 
 
-def fetch_from_api(query: str) -> dict or None:
+def fetch_from_api(query: str) -> Optional[dict]:
     try:
         return search_school_by_name(
             school_name=query
@@ -36,7 +38,8 @@ def fetch_from_api(query: str) -> dict or None:
 
 
 # 검색 기록 불러오기
-def get_school_data_by_query(query: str) -> SchoolSearch or list:
+def get_school_data_by_query(query: str) -> Union[SchoolSearch, list]:
+    logger.info(f"School search requested {query!r}")
     result = fetch_from_api(query)
 
     if result is None:
@@ -46,7 +49,6 @@ def get_school_data_by_query(query: str) -> SchoolSearch or list:
         result = [
             {
                 "name": f"({school['LCTN_SC_NM']}) {school['SCHUL_NM']}",
-                "url": f"/meal/{school['ATPT_OFCDC_SC_CODE']}/{school['SD_SCHUL_CODE']}",
                 "code": {
                     "edu": school['ATPT_OFCDC_SC_CODE'],
                     "school": school['SD_SCHUL_CODE']
