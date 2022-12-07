@@ -3,19 +3,8 @@
         ".git/": true,
         ".github/": true,
         ".vscode/": true,
-        ".yarn/": true,
-        "node_modules/": true,
         "venv/": true,
         "**/__pycache__/": true
-    },
-    "[javascript]": {
-        "editor.maxTokenizationLineLength": 2500,
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "editor.formatOnSave": true,
-    },
-    "[svelte]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "editor.formatOnSave": true
     },
     "python.linting.enabled": true,
     "python.linting.flake8Enabled": true,
