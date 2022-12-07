@@ -7,7 +7,7 @@ from app.search import get_school_data_by_query
 from app.status import SchoolSearch
 
 
-@bp.get("/school")
+@bp.get("/school")  # type: ignore
 def search():
     # 학교 필터링
     school_name_from_args = request.args.get("school_name", "")
@@ -27,9 +27,6 @@ def search():
     if result == SchoolSearch.API_REQUEST_FAIL:
         # 교육청 점검 or 타임아웃
         return error(code="school.api_timeout_or_dead")
-
-    # 오류는 모두 위에서 확인해주고, 타입 체크를 위한 변수 덮어쓰기
-    result: list = result
 
     # 검색 결과가 있으면 학교 목록 리턴
     return result
