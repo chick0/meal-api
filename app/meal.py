@@ -34,14 +34,14 @@ def fetch_from_redis(name: str) -> Optional[list]:
         if from_redis is None:
             return None
 
-        logger.info(f"Get meal data from Redis {format_name(name)}")
+        logger.info(f"Get meal data from redis {format_name(name)}")
         return loads(from_redis)
     except ConnectionError:
-        logger.error("Redis server connection failed")
+        logger.error("redis server connection failed")
     except TypeError:
         pass
     except Exception:
-        logger.exception("Exception in getting data from Redis")
+        logger.exception("Exception in getting data from redis")
 
 
 def add_cache(name: str, json: list):
@@ -54,7 +54,7 @@ def add_cache(name: str, json: list):
 
         logger.info(f"Add meal data to redis {format_name(name)}")
     except ConnectionError:
-        logger.error("Redis server connection failed")
+        logger.error("redis server connection failed")
 
 
 def fetch_from_api(edu: str, school: str, date: str) -> Optional[dict]:
