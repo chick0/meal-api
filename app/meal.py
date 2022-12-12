@@ -5,19 +5,14 @@ from typing import Union
 from typing import Optional
 from logging import getLogger
 
-from flask import current_app as app
-from redis import Redis
+from flask import g
 from redis.exceptions import ConnectionError
 
-from app.api import search_meal_by_codes
 from app.reformat import reformat
 from app.status import SearchMeal
+from client.utils import search_meal_by_codes
 
 logger = getLogger()
-
-
-def get_redis() -> Redis:
-    return app.redis  # type: ignore
 
 
 def format_name(name: str) -> str:
@@ -25,11 +20,11 @@ def format_name(name: str) -> str:
 
 
 def fetch_from_redis(name: str) -> Optional[list]:
-    if get_redis() is None:
+    if g.redis is None:
         return None
 
     try:
-        from_redis = get_redis().get(name)
+        from_redis = g.redis.get(name)
 
         if from_redis is None:
             return None
@@ -46,7 +41,7 @@ def fetch_from_redis(name: str) -> Optional[list]:
 
 def add_cache(name: str, json: list):
     try:
-        get_redis().set(
+        g.redis.set(
             name=name,
             value=dumps(json),
             ex=604800
@@ -86,7 +81,7 @@ def get_meal_data_by_codes(edu: str, school: str, date: str) -> Union[SearchMeal
 
         result = reformat(result)
 
-        if get_redis() is not None:
+        if g.redis is not None:
             add_cache(name, result)
 
     return result

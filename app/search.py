@@ -4,8 +4,8 @@ from typing import Union
 from typing import Optional
 from logging import getLogger
 
-from app.api import search_school_by_name
 from app.status import SchoolSearch
+from client.utils import search_school_by_name
 
 logger = getLogger()
 
