@@ -18,11 +18,11 @@ def create_app():
         logger.error("API 서버를 시작할 수 없습니다. '나이스 교육정보 개방 포털'의 API 키가 필요합니다.")
         exit(-1)
 
-    app.config['REDIS_URL'] = environ['REDIS_URL'].strip()
-
-    redis = Redis.from_url(
-        url=app.config['REDIS_URL']
-    )
+    try:
+        redis = Redis.from_url(app.config['REDIS_URL'].strip())
+    except KeyError:
+        logger.warning("REDIS_URL이 환경변수에 없습니다! redis 캐싱을 사용하지 않습니다.")
+        redis = None
 
     @app.before_request
     def before_request():
