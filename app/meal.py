@@ -62,7 +62,7 @@ def fetch_from_api(edu: str, school: str, date: str) -> Optional[dict]:
 
 
 def get_meal_data_by_codes(edu: str, school: str, date: str) -> Union[SearchMeal, list]:
-    name = f"{edu}#{school}#{date}"
+    name = f"chick0/meal-api:{edu}#{school}#{date}"
 
     result = fetch_from_redis(name)
 
