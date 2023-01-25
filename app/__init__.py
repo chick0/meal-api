@@ -19,7 +19,7 @@ def create_app():
         exit(-1)
 
     try:
-        redis = Redis.from_url(app.config['REDIS_URL'].strip())
+        redis = Redis.from_url(environ['REDIS_URL'].strip())
     except KeyError:
         logger.warning("REDIS_URL이 환경 변수에 없습니다! redis 캐싱을 사용하지 않습니다.")
         redis = None
