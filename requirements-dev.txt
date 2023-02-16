@@ -8,8 +8,6 @@ async-timeout==4.0.2
     # via redis
 click==8.1.3
     # via flask
-colorama==0.4.6
-    # via click
 flake8==6.0.0
     # via -r requirements-dev.in
 flask==2.2.2
@@ -34,5 +32,5 @@ redis==4.4.0
     # via -r requirements.in
 waitress==2.1.2
     # via -r requirements.in
-werkzeug==2.2.2
+werkzeug==2.2.3
     # via flask
